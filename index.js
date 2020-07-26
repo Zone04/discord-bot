@@ -38,8 +38,6 @@ client.on('message', message => {
         return message.channel.send(reply);
     }
 
-    // TODO: aliases
-
     try {
         command.execute(message, args);
     } catch (error) {
