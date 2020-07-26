@@ -1,7 +1,7 @@
 module.exports = {
-	name: 'ping',
-	description: 'Determine ping between command and reply',
-	execute(message, args) {
+    name: 'ping',
+    description: 'Determine ping between command and reply',
+    execute(message, args) {
         message.channel.send("Pinging...").then(m =>{
             var ping = m.createdTimestamp - message.createdTimestamp;
 
@@ -10,5 +10,5 @@ module.exports = {
             console.log("Erreur commande ping.");
             console.log(error);
         });
-	},
+    },
 };
