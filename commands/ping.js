@@ -5,7 +5,7 @@ module.exports = {
         message.channel.send("Pinging...").then(m =>{
             var ping = m.createdTimestamp - message.createdTimestamp;
 
-            m.edit(`**:ping_pong: Pong!**\n Le ping est de  \`${ping}ms\`. Temps d'exécution`);
+            m.edit(`**:ping_pong: Pong!**\n Le ping est de  \`${ping}ms\`.`);
         }).catch(error => {
             console.log("Erreur commande ping.");
             console.log(error);
