@@ -19,7 +19,7 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-    if (message.author.bot) return;
+    if (message.author.bot) { return };
     if (message.channel.type !== 'text') {
         return message.reply('Je suis un bot. Je ne répondrais pas ici !')
     }
