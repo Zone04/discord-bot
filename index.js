@@ -5,6 +5,8 @@ const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
 const { PassThrough } = require('stream');
 
+const utils = require('./utils.js');
+
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
