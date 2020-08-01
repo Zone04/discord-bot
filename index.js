@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env nodemon
 
 const fs = require('fs');
 const Discord = require('discord.js');
