@@ -2,11 +2,11 @@ module.exports = {
     convertUser: async function (message, arg) {
         let guildMember = await message.guild.members.fetch({ query: arg, limit: 1 }); // as name
         if (guildMember.size !== 0) {
-            return guildMember.first().user;
+            return guildMember.first();
         }
         try {
             guildMember = await message.guild.members.fetch(arg); // as ID
-            return guildMember.user;
+            return guildMember;
         } catch {}
         if (arg.startsWith('<@') && arg.endsWith('>')) { // as mention
             arg = arg.slice(2, -1);
@@ -16,7 +16,7 @@ module.exports = {
             }
             try {
                 guildMember = await message.guild.members.fetch(arg);
-                return guildMember.user;
+                return guildMember;
             } catch {}
         }
         throw 'Pas d\'utilisateur trouvé.';
