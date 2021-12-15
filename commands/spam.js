@@ -5,8 +5,8 @@ module.exports = {
     description: 'Spamme un utilisateur.',
     args: true,
     execute(message, args) {
-        utils.convertUser(message, args[0]).then(guildMember => {
-            spam(message.channel, guildMember.user, args[1], args[1])
+        utils.convertUser(message, args.slice(0,-1).join(' ')).then(guildMember => {
+            spam(message.channel, guildMember.user, args[args.length - 1], args[args.length - 1])
         }).catch (e => {
             message.channel.send('Erreur : ' + e);
         });
