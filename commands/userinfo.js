@@ -11,8 +11,7 @@ module.exports = {
             user = args[0];
         }
         utils.convertUser(message, user).then(guildMember => {
-            console.log(guildMember);
-            message.channel.send(`L'utilisateur s'appelle \`\`${guildMember.user.tag}\`\`\nStatut : \`\`${guildMember.presence.status}\`\`\nCompte créé le \`\`${guildMember.user.createdAt}\`\``);
+            message.channel.send(`L'utilisateur s'appelle \`\`${guildMember.user.tag}\`\`\nStatut : \`\`${guildMember.presence?.status ?? 'offline'}\`\`\nCompte créé le \`\`${guildMember.user.createdAt}\`\``);
         }).catch (e => {
             message.channel.send('Erreur : ' + e);
         });
