@@ -1,11 +1,20 @@
+const utils = require('../utils.js');
+
 module.exports = {
     name: 'userinfo',
     description: 'Information sur l\'utilisateur.',
-    args: true,
     execute(message, args) {
-        message.guild.members.fetch(args[0]).then(user => {
-            let name = user.user;
-            message.channel.send(`L'utilisateur ${args[0]} s'appelle  ${name}`);
+        let user;
+        if (!args.length) {
+            user = message.author.id;
+        } else {
+            user = args[0];
+        }
+        utils.convertUser(message, user).then(guildMember => {
+            console.log(guildMember);
+            message.channel.send(`L'utilisateur s'appelle \`\`${guildMember.user.tag}\`\`\nStatut : \`\`${guildMember.presence.status}\`\`\nCompte créé le \`\`${guildMember.user.createdAt}\`\``);
+        }).catch (e => {
+            message.channel.send('Erreur : ' + e);
         });
     },
 };
