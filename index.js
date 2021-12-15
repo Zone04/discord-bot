@@ -1,14 +1,14 @@
 #!/usr/bin/env nodemon
 
 const fs = require('fs');
-const Discord = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
 const { prefix, token } = require('./config.json');
 const { PassThrough } = require('stream');
 
 const utils = require('./utils.js');
 
-const client = new Discord.Client();
-client.commands = new Discord.Collection();
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES], partials: ['CHANNEL'] });
+client.commands = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -16,14 +16,14 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-client.once('ready', () => {
-    console.log('Ready!');
+client.once('ready', c => {
+    console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.on('message', message => {
+client.on('messageCreate', (message) => {
     if (message.author.bot) { return };
-    if (message.channel.type !== 'text') {
-        return message.reply('Je suis un bot. Je ne répondrais pas ici !')
+    if (message.channel.type !== 'GUILD_TEXT') {
+        return message.reply({ content: 'Je suis un bot. Je ne répondrais pas ici !', allowedMentions: { repliedUser: false }})
     }
     if (!message.content.startsWith(prefix)) return;
 
@@ -49,7 +49,7 @@ client.on('message', message => {
     } catch (error) {
         console.error(error);
         message.reply('Il y a eu une erreur dans l\'exécution de cette commande...');
-}
+    }
 
 });
 
