@@ -7,8 +7,8 @@ module.exports = {
     execute: async (message, args) => {
         guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '))
 
-        for (let i = 1; i <= parseInt(args[1]); i++) {
-            await message.channel.send(`${guildMember.user}, ${i} / ${args[1]}`)
+        for (let i = 1; i <= parseInt(args[args.length - 1]); i++) {
+            await message.channel.send(`${guildMember.user}, ${i} / ${args[args.length - 1]}`)
         }
     },
 };
