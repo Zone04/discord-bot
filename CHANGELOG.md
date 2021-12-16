@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Nothing yet
+### Added
+
+ - Added spam `everyone`
 
 ## [0.0.2.1]
 

@@ -5,7 +5,7 @@ let settings = {
     name: 'spam',
     description: 'Spamme un utilisateur.',
     args: true,
-    usage: 'USERNAME|ID|MENTION|random NUMBER',
+    usage: 'USERNAME|ID|MENTION|random|everyone NUMBER',
 }
 
 module.exports = {
@@ -24,17 +24,19 @@ module.exports = {
             return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de 100000 pings d'un coup`);
         }        
 
-        let guildMember;
+        let content;
 
         if (args[0] == 'random') {
             let guildMembers = await message.guild.members.fetch();
-            guildMember = guildMembers.random();
+            content = guildMembers.random().user;
+        } else if (args[0] == 'everyone') {
+            content = '@everyone';
         } else {
-            guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '))
+            content = await utils.convertUser(message, args.slice(0,-1).join(' ')).user;
         }
 
         for (let i = 1; i <= parseInt(args[args.length - 1]); i++) {
-            await message.channel.send(`${guildMember.user}, ${i} / ${args[args.length - 1]}`)
+            await message.channel.send(`${content}, ${i} / ${args[args.length - 1]}`)
         }
     },
 };
