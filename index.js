@@ -10,6 +10,7 @@ const utils = require('./utils.js');
 const client = new Client({ intents: [
     Intents.FLAGS.GUILDS,
     Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MEMBERS,
     Intents.FLAGS.DIRECT_MESSAGES,
     Intents.FLAGS.GUILD_PRESENCES
 ], partials: ['CHANNEL'] });
@@ -50,7 +51,8 @@ client.on('messageCreate', (message) => {
     }
 
     command.execute(message, args).catch( error => {
-        message.reply(error);
+        console.log(error);
+        message.reply(error.toString());
     });
 
 });

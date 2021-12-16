@@ -1,10 +1,11 @@
 const utils = require('../utils.js');
+const { prefix } = require('../config.json')
 
 let settings = {
     name: 'spam',
     description: 'Spamme un utilisateur.',
     args: true,
-    usage: 'USERNAME|ID|MENTION NUMBER',
+    usage: 'USERNAME|ID|MENTION|random NUMBER',
 }
 
 module.exports = {
@@ -23,7 +24,14 @@ module.exports = {
             return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de 100000 pings d'un coup`);
         }        
 
-        guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '))
+        let guildMember;
+
+        if (args[0] == 'random') {
+            let guildMembers = await message.guild.members.fetch();
+            guildMember = guildMembers.random();
+        } else {
+            guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '))
+        }
 
         for (let i = 1; i <= parseInt(args[args.length - 1]); i++) {
             await message.channel.send(`${guildMember.user}, ${i} / ${args[args.length - 1]}`)
