@@ -1,14 +1,23 @@
 const utils = require('../utils.js');
 
-module.exports = {
+let settings = {
     name: 'spam',
     description: 'Spamme un utilisateur.',
+    args: true,
+    usage: 'USERNAME|ID|MENTION NUMBER',
+}
+
+module.exports = {
+    name: settings.name,
+    description: settings.description,
+    args: settings.args,
+    usage: settings.usage,
     execute: async (message, args) => {
         if (args.length < 2) {
-            return message.channel.send(`Vous devez donner un utilisateur et un nombre de pings ${message.author}`);
+            return message.channel.send(`Usage: \`${prefix}${settings.name} ${settings.usage}\``);
         }
         if (isNaN(args[args.length - 1]) || parseInt(args[args.length - 1]) <= 0) {
-            return message.channel.send(`Vous devez donner un nombre de pings à envoyer ${message.author}`);
+            return message.channel.send(`Usage: \`${prefix}${settings.name} ${settings.usage}\``);
         }
         if (parseInt(args[args.length - 1]) > 100000) {
             return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de 100000 pings d'un coup`);
