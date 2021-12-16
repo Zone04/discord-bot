@@ -49,12 +49,9 @@ client.on('messageCreate', (message) => {
         return message.channel.send(reply);
     }
 
-    try {
-        command.execute(message, args);
-    } catch (error) {
-        console.error(error);
-        message.reply('Il y a eu une erreur dans l\'exécution de cette commande...');
-    }
+    command.execute(message, args).catch( error => {
+        message.reply(error);
+    });
 
 });
 
