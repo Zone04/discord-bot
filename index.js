@@ -57,4 +57,7 @@ client.on('messageCreate', (message) => {
 
 });
 
-client.login(token)
+client.login(token).catch(error => {
+    console.error(error);
+    process.exit(1);
+})

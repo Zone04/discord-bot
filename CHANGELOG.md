@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 
 Nothing yet
 
+## [0.0.2.1]
+
+### Fixed
+
+- exit process on failed login
+
 ## [0.0.2] - 2021-12-16
 
 ### Added 
