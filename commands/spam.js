@@ -4,20 +4,11 @@ module.exports = {
     name: 'spam',
     description: 'Spamme un utilisateur.',
     args: true,
-    execute(message, args) {
-        utils.convertUser(message, args.slice(0,-1).join(' ')).then(guildMember => {
-            spam(message.channel, guildMember.user, args[args.length - 1], args[args.length - 1])
-        }).catch (e => {
-            message.channel.send('Erreur : ' + e);
-        });
+    execute: async (message, args) => {
+        guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '))
+
+        for (let i = 1; i <= parseInt(args[1]); i++) {
+            await message.channel.send(`${guildMember.user}, ${i} / ${args[1]}`)
+        }
     },
 };
-
-function spam(channel, user, count, total) {
-    if (count > 0) {
-        count--;
-        channel.send(`${user}, ${count} pings restant sur ${total}`).then(() => {
-            spam(channel, user, count, total);
-        });
-    }
-}
