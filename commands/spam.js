@@ -32,7 +32,8 @@ module.exports = {
         } else if (args[0] == 'everyone') {
             content = '@everyone';
         } else {
-            content = await utils.convertUser(message, args.slice(0,-1).join(' ')).user;
+            let guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
+            content = guildMember.user;
         }
 
         for (let i = 1; i <= parseInt(args[args.length - 1]); i++) {

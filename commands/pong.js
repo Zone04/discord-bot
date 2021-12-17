@@ -10,7 +10,7 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
-    execute: async(message, args) => {
+    execute: (message, args) => {
         message.channel.send('Ping MDR :joy:');
     },
 };

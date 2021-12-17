@@ -27,7 +27,7 @@ client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.on('messageCreate', (message) => {
+client.on('messageCreate', async (message) => {
     if (message.author.bot) { return };
     if (message.channel.type !== 'GUILD_TEXT') {
         return message.reply({ content: 'Je suis un bot. Je ne répondrais pas ici !', allowedMentions: { repliedUser: false }})
@@ -51,10 +51,12 @@ client.on('messageCreate', (message) => {
         return message.channel.send(reply);
     }
 
-    command.execute(message, args).catch( error => {
+    try {
+        await command.execute(message, args)
+    } catch(error) {
         console.log(error);
-        message.reply(error.toString());
-    });
+        message.reply(error.message).catch(_ => {});
+    }
 
 });
 
