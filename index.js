@@ -15,6 +15,7 @@ const client = new Client({ intents: [
     Intents.FLAGS.GUILD_PRESENCES
 ], partials: ['CHANNEL'] });
 client.commands = new Collection();
+client.prefix = prefix;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -31,9 +32,9 @@ client.on('messageCreate', (message) => {
     if (message.channel.type !== 'GUILD_TEXT') {
         return message.reply({ content: 'Je suis un bot. Je ne répondrais pas ici !', allowedMentions: { repliedUser: false }})
     }
-    if (!message.content.startsWith(prefix)) return;
+    if (!message.content.startsWith(client.prefix)) return;
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const args = message.content.slice(client.prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
     if (!client.commands.has(commandName)) return;
@@ -44,7 +45,7 @@ client.on('messageCreate', (message) => {
         let reply = `Vous n'avez pas donné d'arguments, ${message.author} !`;
 
         if (command.usage) {
-            reply += `\nL'utilisation correcte est: \`${prefix}${command.name} ${command.usage}\``;
+            reply += `\nL'utilisation correcte est: \`${client.prefix}${command.name} ${command.usage}\``;
         }
 
         return message.channel.send(reply);
