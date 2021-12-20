@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
  - Added spam `everyone`
  - Prevent bot spamming
+ - Added `help` command (list + individual)
 
 ### Changed
 
