@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+ - Nothing yet
+
+## [0.0.3]
+
 ### Added
 
  - Added spam `everyone`
@@ -13,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
  - Better error management
+ - Reduced spam limit from 100k to 10k
 
 ## [0.0.2.1]
 
@@ -61,7 +66,9 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
-[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.2...HEAD
+[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.3...HEAD
+[0.0.3]: https://github.com/Zone04/discord-bot/compare/v0.0.2...v0.0.3
+[0.0.2.1]: https://github.com/Zone04/discord-bot/compare/v0.0.2...v0.0.2.1
 [0.0.2]: https://github.com/Zone04/discord-bot/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/Zone04/discord-bot/compare/v0.0.0...v0.0.1
 [0.0.0]: https://github.com/Zone04/discord-bot/releases/tag/v0.0.0
