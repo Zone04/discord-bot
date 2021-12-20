@@ -1,12 +1,14 @@
 const utils = require('../utils.js');
-const { prefix } = require('../config.json')
+const { prefix } = require('../config.json');
 
 let settings = {
     name: 'spam',
     description: 'Spamme un utilisateur.',
     args: true,
     usage: 'USERNAME|ID|MENTION|random|everyone NUMBER',
-}
+};
+
+let LIMIT = 10000;
 
 module.exports = {
     name: settings.name,
@@ -20,8 +22,8 @@ module.exports = {
         if (isNaN(args[args.length - 1]) || parseInt(args[args.length - 1]) <= 0) {
             return message.channel.send(`Usage: \`${prefix}${settings.name} ${settings.usage}\``);
         }
-        if (parseInt(args[args.length - 1]) > 10000) {
-            return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de 10000 pings d'un coup`);
+        if (parseInt(args[args.length - 1]) > LIMIT) {
+            return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de ${LIMIT} pings d'un coup`);
         }        
 
         let content;
