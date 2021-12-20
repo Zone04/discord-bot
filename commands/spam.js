@@ -30,11 +30,12 @@ module.exports = {
 
         if (args[0] == 'random') {
             let guildMembers = await message.guild.members.fetch();
-            content = guildMembers.random().user;
+            content = guildMembers.filter(member => !member.user.bot).random().user;
         } else if (args[0] == 'everyone') {
             content = '@everyone';
         } else {
             let guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
+            if (guildMember.user.bot) return message.reply("Je vais quand même pas spam un bot, ce serait inutile !");
             content = guildMember.user;
         }
 
