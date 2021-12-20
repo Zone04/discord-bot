@@ -14,24 +14,28 @@ module.exports = {
     usage: settings.usage,
     execute: async(message, args) => {
         let commands = message.client.commands;
+        if (args.length == 0) {
 
-        let helpEmbed = new MessageEmbed()
-            .setTitle(`Liste des commandes`)
-            .setColor('#FFFFFF');
+            let help = 'Liste des commandes :\n```'
 
-        commands.forEach(command => {
-            console.log(command.name);
-            helpEmbed.addFields({
-                name: `**${message.client.prefix}${command.name}**`,
-                value: `${command.description}`,
-                inline: true
+            commands.forEach(command => {
+                help += `${message.client.prefix}${command.name.concat(' ').padEnd(14, ' ')}${command.description}\n`
             });
-        });
 
-        helpEmbed.setTimestamp();
+            help += '```'
 
-        console.log(helpEmbed);
+            return message.reply(help);
+        } else {
+            const commandName = args[0];
+            if (!commands.has(commandName)) return message.reply('Pas de commande trouvée');
 
-        return message.reply({embeds: [helpEmbed]});
+            const command = commands.get(commandName);
+            let reply = `\`\`\`${message.client.prefix}${command.name} ${command.usage}\n\n`;
+            reply += 'ARG = Argument obligatoire\n'
+            reply += '[ARG] = Argument facultatif\n'
+            reply += 'ARG1|ARG2 = Choix entre ARG1 et ARG2\n'
+            reply += '\`\`\`'
+            message.reply(reply);
+        }
     },
 };

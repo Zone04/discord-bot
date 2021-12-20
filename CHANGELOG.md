@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
  - Added spam `everyone`
+ - Added `help` command (list + individual)
 
 ### Changed
 
