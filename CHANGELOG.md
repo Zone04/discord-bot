@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 ### Fixed
  - `undefined` in help of commands without `usage`
 
+### Changed
+ - `spam everyone` now works with `@everyone` too
+
 ## [0.0.3]
 
 ### Added

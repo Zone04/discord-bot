@@ -24,14 +24,14 @@ module.exports = {
         }
         if (parseInt(args[args.length - 1]) > LIMIT) {
             return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de ${LIMIT} pings d'un coup`);
-        }        
+        }
 
         let content;
 
         if (args[0] == 'random') {
             let guildMembers = await message.guild.members.fetch();
             content = guildMembers.filter(member => !member.user.bot).random().user;
-        } else if (args[0] == 'everyone') {
+        } else if (args[0] == 'everyone' || args[0] == '@everyone') {
             content = '@everyone';
         } else {
             let guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
