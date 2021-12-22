@@ -30,7 +30,7 @@ module.exports = {
             if (!commands.has(commandName)) return message.reply('Pas de commande trouvée');
 
             const command = commands.get(commandName);
-            let reply = `\`\`\`${message.client.prefix}${command.name} ${command.usage}\n\n`;
+            let reply = `\`\`\`${message.client.prefix}${command.name} ${command.usage??''}\n\n`;
             reply += 'ARG = Argument obligatoire\n'
             reply += '[ARG] = Argument facultatif\n'
             reply += 'ARG1|ARG2 = Choix entre ARG1 et ARG2\n'

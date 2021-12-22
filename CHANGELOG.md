@@ -4,18 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
- - Nothing yet
+### Fixed
+ - `undefined` in help of commands without `usage`
 
 ## [0.0.3]
 
 ### Added
 
  - Added spam `everyone`
- - Prevent bot spamming
  - Added `help` command (list + individual)
 
 ### Changed
 
+ - Prevent bot spamming
  - Better error management
  - Reduced spam limit from 100k to 10k
 
@@ -67,7 +68,7 @@ All notable changes to this project will be documented in this file.
 
 
 [unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.3...HEAD
-[0.0.3]: https://github.com/Zone04/discord-bot/compare/v0.0.2...v0.0.3
+[0.0.3]: https://github.com/Zone04/discord-bot/compare/v0.0.2.1...v0.0.3
 [0.0.2.1]: https://github.com/Zone04/discord-bot/compare/v0.0.2...v0.0.2.1
 [0.0.2]: https://github.com/Zone04/discord-bot/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/Zone04/discord-bot/compare/v0.0.0...v0.0.1
