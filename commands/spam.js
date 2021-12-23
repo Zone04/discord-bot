@@ -40,7 +40,7 @@ module.exports = {
         }
 
         for (let i = 1; i <= parseInt(args[args.length - 1]); i++) {
-            await message.channel.send(`${content}, ${i} / ${args[args.length - 1]}`)
+            await message.channel.send(`${content}, ${i} sur ${args[args.length - 1]}`)
         }
     },
 };
