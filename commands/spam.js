@@ -31,12 +31,15 @@ module.exports = {
         if (args[0] == 'random') {
             let guildMembers = await message.guild.members.fetch();
             content = guildMembers.filter(member => !member.user.bot).random().user;
+            console.log(`${message.author.tag} (${message.author.id}) spammed randomly ${content.tag} (${content.id})`);
         } else if (args[0] == 'everyone' || args[0] == '@everyone') {
             content = '@everyone';
+            console.log(`${message.author.tag} (${message.author.id}) spammed everyone`);
         } else {
             let guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
             if (guildMember.user.bot) return message.reply("Je vais quand même pas spam un bot, ce serait inutile !");
             content = guildMember.user;
+            console.log(`${message.author.tag} (${message.author.id}) spammed ${guildMember.user.tag} (${guildMember.user.id})`);
         }
 
         for (let i = 1; i <= parseInt(args[args.length - 1]); i++) {

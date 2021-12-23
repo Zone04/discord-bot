@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
  - `spam everyone` now works with `@everyone` too
+ - Added log on spam command
 
 ## [0.0.3]
 
