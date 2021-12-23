@@ -19,7 +19,7 @@ module.exports = {
                 return guildMember;
             } catch {}
         }
-        throw 'Pas d\'utilisateur trouvé.';
+        throw new Error('Pas d\'utilisateur trouvé.');
     },
 
     getHelpMessage: function (client, command) {
