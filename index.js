@@ -45,7 +45,14 @@ client.on('messageCreate', async (message) => {
         let reply = `Vous n'avez pas donné d'arguments, ${message.author} !`;
 
         if (command.usage) {
-            reply += `\nL'utilisation correcte est: \`${client.prefix}${command.name} ${command.usage}\``;
+            reply += `\n\`\`\`${message.client.prefix}${command.name}`
+            command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
+            reply += '\n\n'
+            command.usage?.forEach(arg => {
+                reply += `${arg.name}${arg.optional ? ' - optionnel':''}\n`;
+                reply += `  ${arg.description}\n`;
+            })
+            reply += '\`\`\`'
         }
 
         return message.channel.send(reply);

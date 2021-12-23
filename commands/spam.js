@@ -5,7 +5,16 @@ let settings = {
     name: 'spam',
     description: 'Spamme un utilisateur.',
     args: true,
-    usage: 'USERNAME|ID|MENTION|random|everyone NUMBER',
+    usage: [
+        {
+            name: 'USERNAME|ID|MENTION|random|everyone',
+            description: 'Utilisateur à spammer'
+        },
+        {
+            name: 'NUMBER',
+            description: 'Nombre de ping à envoyer',
+        }
+    ]
 };
 
 let LIMIT = 10000;

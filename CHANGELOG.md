@@ -4,12 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+ - Added log on spam command
+
 ### Fixed
  - `undefined` in help of commands without `usage`
 
 ### Changed
  - `spam everyone` now works with `@everyone` too
- - Added log on spam command
+ - `help` command shows details for each argument
 
 ## [0.0.3]
 

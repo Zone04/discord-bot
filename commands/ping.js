@@ -2,7 +2,7 @@ let settings = {
     name: 'ping',
     description: 'Determine ping between command and reply',
     args: false,
-    usage: '',
+    usage: [],
 }
 
 module.exports = {
