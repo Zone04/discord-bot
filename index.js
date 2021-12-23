@@ -3,7 +3,6 @@
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const { prefix, token } = require('./config.json');
-const { PassThrough } = require('stream');
 
 const utils = require('./utils.js');
 
@@ -42,20 +41,9 @@ client.on('messageCreate', async (message) => {
     const command = client.commands.get(commandName);
 
     if (command.args && !args.length) {
-        let reply = `Vous n'avez pas donné d'arguments, ${message.author} !`;
+        reply = utils.getHelpMessage(client, command);
 
-        if (command.usage) {
-            reply += `\n\`\`\`${message.client.prefix}${command.name}`
-            command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
-            reply += '\n\n'
-            command.usage?.forEach(arg => {
-                reply += `${arg.name}${arg.optional ? ' - optionnel':''}\n`;
-                reply += `  ${arg.description}\n`;
-            })
-            reply += '\`\`\`'
-        }
-
-        return message.channel.send(reply);
+        return message.reply(reply);
     }
 
     try {

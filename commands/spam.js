@@ -1,5 +1,4 @@
 const utils = require('../utils.js');
-const { prefix } = require('../config.json');
 
 let settings = {
     name: 'spam',
@@ -25,11 +24,8 @@ module.exports = {
     args: settings.args,
     usage: settings.usage,
     execute: async (message, args) => {
-        if (args.length < 2) {
-            return message.channel.send(`Usage: \`${prefix}${settings.name} ${settings.usage}\``);
-        }
-        if (isNaN(args[args.length - 1]) || parseInt(args[args.length - 1]) <= 0) {
-            return message.channel.send(`Usage: \`${prefix}${settings.name} ${settings.usage}\``);
+        if (args.length < 2 || isNaN(args[args.length - 1]) || parseInt(args[args.length - 1]) <= 0) {
+            return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
         }
         if (parseInt(args[args.length - 1]) > LIMIT) {
             return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de ${LIMIT} pings d'un coup`);

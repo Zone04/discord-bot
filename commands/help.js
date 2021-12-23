@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const utils = require('../utils.js');
 
 let settings = {
     name: 'help',
@@ -36,14 +36,7 @@ module.exports = {
             if (!commands.has(commandName)) return message.reply('Pas de commande trouvée');
 
             const command = commands.get(commandName);
-            let reply = `\`\`\`${message.client.prefix}${command.name}`
-            command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
-            reply += '\n\n'
-            command.usage?.forEach(arg => {
-                reply += `${arg.name}${arg.optional ? ' - optionnel':''}\n`;
-                reply += `  ${arg.description}\n`;
-            })
-            reply += '\`\`\`'
+            let reply = utils.getHelpMessage(message.client, command);
             message.reply(reply);
         }
     },

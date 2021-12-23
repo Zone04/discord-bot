@@ -1,4 +1,4 @@
-const { prefix } = require('../config.json')
+const utils = require('../utils.js');
 
 let settings = {
     name: 'clear',
@@ -19,7 +19,7 @@ module.exports = {
     usage: settings.usage,
     execute: async(message, args) => {
         if (isNaN(args[0]) || parseInt(args[0]) <= 0) {
-            return message.channel.send(`Usage: \`${prefix}${settings.name} ${settings.usage}\``);
+            return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
         }
 
         let toDelete = parseInt(args[0]) > 99 ? 100 : parseInt(args[0]) + 1;
