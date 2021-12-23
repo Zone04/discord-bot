@@ -2,7 +2,7 @@ let settings = {
     name: 'pong',
     description: 'ping ?',
     args: false,
-    usage: '',
+    usage: [],
 }
 
 module.exports = {

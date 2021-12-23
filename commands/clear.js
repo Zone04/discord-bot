@@ -4,7 +4,12 @@ let settings = {
     name: 'clear',
     description: 'Clear a specified number of messages',
     args: true,
-    usage: 'NUMBER',
+    usage: [
+        {
+            name: 'NUMBER',
+            description: 'Nombre de messages à supprimer (jusque 100)',
+        }
+    ],
 }
 
 module.exports = {

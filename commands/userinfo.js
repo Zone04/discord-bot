@@ -4,7 +4,13 @@ let settings = {
     name: 'userinfo',
     description: 'Information sur l\'utilisateur.',
     args: false,
-    usage: '[USERNAME|ID|MENTION]',
+    usage: [
+        {
+            name: 'USERNAME|ID|MENTION',
+            description: 'Utilisateur à récupérer',
+            optional: true
+        }
+    ],
 }
 module.exports = {
     name: settings.name,
