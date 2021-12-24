@@ -17,7 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     source: DataTypes.STRING,
     target: DataTypes.STRING,
     number: DataTypes.INTEGER,
-    progress: DataTypes.INTEGER,
+    progress: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     channel: DataTypes.STRING
   }, {
     sequelize,

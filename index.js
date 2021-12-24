@@ -3,6 +3,7 @@
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const { prefix, token } = require('./config.json');
+const db = require('./models/index.js');
 
 const utils = require('./utils.js');
 
@@ -15,6 +16,7 @@ const client = new Client({ intents: [
 ], partials: ['CHANNEL'] });
 client.commands = new Collection();
 client.prefix = prefix;
+client.db = db;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -53,6 +55,13 @@ client.on('messageCreate', async (message) => {
         message.reply(error.message).catch(_ => {});
     }
 
+});
+
+db.sequelize.authenticate().then(_ => {
+    console.log('Connection to the database has been established successfully.');
+}).catch(error => {
+    console.error('Unable to connect to the database:', error);
+    process.exit(1);
 });
 
 client.login(token).catch(error => {

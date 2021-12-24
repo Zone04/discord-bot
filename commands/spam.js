@@ -47,8 +47,14 @@ module.exports = {
             console.log(`${message.author.tag} (${message.author.id}) spammed ${guildMember.user.tag} (${guildMember.user.id})`);
         }
 
+        let spamInstance = await message.client.db.Spam.create({source: message.author.id, target: content.id?? 'other', number: parseInt(args[args.length - 1]), channel: message.channel.id});
+
         for (let i = 1; i <= parseInt(args[args.length - 1]); i++) {
             await message.channel.send(`${content}, ${i} sur ${args[args.length - 1]}`)
+            spamInstance.progress = i;
+            await spamInstance.save();
         }
+
+        await spamInstance.destroy();
     },
 };
