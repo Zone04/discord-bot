@@ -3,7 +3,7 @@
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const { prefix, token } = require('./config.json');
-const db = require('./models/index.js');
+const db = require('./database/index.js');
 
 const utils = require('./utils.js');
 
