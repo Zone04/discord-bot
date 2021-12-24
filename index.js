@@ -3,6 +3,7 @@
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const { prefix, token } = require('./config.json');
+const startupScripts = require('./startup/index.js');
 const db = require('./database/index.js');
 
 const utils = require('./utils.js');
@@ -26,6 +27,10 @@ for (const file of commandFiles) {
 
 client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
+    startupScripts.forEach(script => {
+        console.log(`Executing startup script: ${script.name}`);
+        script.execute(client);
+    })
 });
 
 client.on('messageCreate', async (message) => {
