@@ -30,7 +30,13 @@ client.once('ready', c => {
     startupScripts.forEach(script => {
         console.log(`Executing startup script: ${script.name}`);
         script.execute(client);
-    })
+    });
+    client.commands.forEach(command => {
+        if (command.startup) {
+            console.log(`Executing command startup script: ${command.name}`);
+            command.startup(client);
+        }
+    });
 });
 
 client.on('messageCreate', async (message) => {
