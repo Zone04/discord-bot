@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
  - Added log on spam command
+ - Added DB for saving spams in case of crash
+ - Added auto restart of crashed spams
 
 ### Fixed
  - `undefined` in help of commands without `usage`

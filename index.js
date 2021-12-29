@@ -3,6 +3,8 @@
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const { prefix, token } = require('./config.json');
+const startupScripts = require('./startup/index.js');
+const db = require('./database/index.js');
 
 const utils = require('./utils.js');
 
@@ -15,6 +17,7 @@ const client = new Client({ intents: [
 ], partials: ['CHANNEL'] });
 client.commands = new Collection();
 client.prefix = prefix;
+client.db = db;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
@@ -24,6 +27,16 @@ for (const file of commandFiles) {
 
 client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
+    startupScripts.forEach(script => {
+        console.log(`Executing startup script: ${script.name}`);
+        script.execute(client);
+    });
+    client.commands.forEach(command => {
+        if (command.startup) {
+            console.log(`Executing command startup script: ${command.name}`);
+            command.startup(client);
+        }
+    });
 });
 
 client.on('messageCreate', async (message) => {
@@ -53,6 +66,13 @@ client.on('messageCreate', async (message) => {
         message.reply(`Uh Oh... Une erreur est survenue !`).catch(_ => {});
     }
 
+});
+
+db.sequelize.authenticate().then(_ => {
+    console.log('Connection to the database has been established successfully.');
+}).catch(error => {
+    console.error('Unable to connect to the database:', error);
+    process.exit(1);
 });
 
 client.login(token).catch(error => {
