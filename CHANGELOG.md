@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
  - `undefined` in help of commands without `usage`
+ - Commands now stops triggering with uppercase and/or spaces between prefix and command name
 
 ### Changed
  - `spam everyone` now works with `@everyone` too

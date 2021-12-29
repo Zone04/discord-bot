@@ -46,8 +46,8 @@ client.on('messageCreate', async (message) => {
     }
     if (!message.content.startsWith(client.prefix)) return;
 
-    const args = message.content.slice(client.prefix.length).trim().split(/ +/);
-    const commandName = args.shift().toLowerCase();
+    const args = message.content.slice(client.prefix.length).replace(/ +$/,'').split(/ +/);
+    const commandName = args.shift();
 
     if (!client.commands.has(commandName)) return;
 
