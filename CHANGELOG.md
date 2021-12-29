@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+Nothing yet
+
+## [0.0.4]
+
 ### Added
  - Added log on spam command
  - Added DB for saving spams in case of crash
@@ -78,7 +82,8 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
-[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.3...HEAD
+[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/Zone04/discord-bot/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/Zone04/discord-bot/compare/v0.0.2.1...v0.0.3
 [0.0.2.1]: https://github.com/Zone04/discord-bot/compare/v0.0.2...v0.0.2.1
 [0.0.2]: https://github.com/Zone04/discord-bot/compare/v0.0.1...v0.0.2
