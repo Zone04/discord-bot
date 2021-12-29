@@ -50,7 +50,7 @@ client.on('messageCreate', async (message) => {
         await command.execute(message, args)
     } catch(error) {
         console.log(error);
-        message.reply(error.message).catch(_ => {});
+        message.reply(`Uh Oh... Une erreur est survenue !`).catch(_ => {});
     }
 
 });

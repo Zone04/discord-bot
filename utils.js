@@ -1,3 +1,5 @@
+const UserNotFoundError = require('./errors/UserNotFoundError.js');
+
 module.exports = {
     convertUser: async function (message, arg) {
         let guildMember = await message.guild.members.fetch({ query: arg, limit: 1 }); // as name
@@ -19,7 +21,7 @@ module.exports = {
                 return guildMember;
             } catch {}
         }
-        throw new Error('Pas d\'utilisateur trouvé.');
+        throw new UserNotFoundError('Pas d\'utilisateur trouvé.');
     },
 
     getHelpMessage: function (client, command) {

@@ -1,4 +1,5 @@
 const utils = require('../utils.js');
+const UserNotFoundError = require('../errors/UserNotFoundError.js');
 
 let settings = {
     name: 'spam',
@@ -41,7 +42,17 @@ module.exports = {
             content = '@everyone';
             console.log(`${message.author.tag} (${message.author.id}) spammed everyone`);
         } else {
-            let guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
+            let guildMember;
+            try {
+                guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
+            } catch(e) {
+                if (e instanceof UserNotFoundError) {
+                    message.reply(e.message);
+                    return;
+                } else {
+                    throw e;
+                }
+            }    
             if (guildMember.user.bot) return message.reply("Je vais quand même pas spam un bot, ce serait inutile !");
             content = guildMember.user;
             console.log(`${message.author.tag} (${message.author.id}) spammed ${guildMember.user.tag} (${guildMember.user.id})`);

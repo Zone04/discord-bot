@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
  - `spam everyone` now works with `@everyone` too
  - `help` command shows details for each argument
+ - Default message for unhandeld errors
 
 ## [0.0.3]
 
