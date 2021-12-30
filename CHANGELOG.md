@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Nothing yet
+### Changed
+ - Check permissions before `clear`
 
 ## [0.0.4]
 
