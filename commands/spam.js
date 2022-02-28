@@ -20,32 +20,43 @@ let settings = {
 
 let LIMIT = 10000;
 
-let startup = async (client) => {
-    const spams = await client.db.Spam.findAll();
-    spams.forEach(async spam => {
-        console.log('Found spam');
-        console.log(`${spam.source} spammed ${spam.target}, ${spam.progress} out of ${spam.number} in ${spam.channel}`);
-
-        channel = await client.channels.fetch(spam.channel);
-        fakeMessage = new Message(
-            client,
-            {
-                id: "fake",
-                author: { id: spam.source },
-                content: `${client.prefix}spam ${spam.id}`,
-                channel_id: spam.channel,
-                fake: true
+let cron = {
+    schedule: '* * * * *',
+    run: async (client) => {
+        const spams = await client.db.Spam.findAll({
+            where: {
+                updatedAt: {
+                    [client.db.Sequelize.Op.lt]: new Date(new Date() - 240*1000)
+                }
             }
-        );
-
-        execute(fakeMessage, [spam.id])
-            .catch(error => {
-                console.error(`Spam couldn't resume. Removing spam.`);
-                console.error(error);
-                spam.destroy();
-            });
-    });
-};
+        });
+        if (spams.length) {
+            console.log('Found %d stalled spam(s)', spams.length);
+        }
+    
+        spams.forEach(async spam => {
+            console.log('Resuming spam');
+            console.log(`${spam.source} spammed ${spam.target}, ${spam.progress} out of ${spam.number} in ${spam.channel}`);
+    
+            channel = await client.channels.fetch(spam.channel);
+            fakeMessage = new Message(
+                client,
+                {
+                    id: 0,
+                    author: { id: spam.source },
+                    content: `${client.prefix}spam ${spam.id}`,
+                    channel_id: spam.channel,
+                    fake: true
+                }
+            );
+    
+            execute(fakeMessage, [spam.id])
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    }
+}
 
 let execute = async (message, args) => {
 
@@ -53,7 +64,7 @@ let execute = async (message, args) => {
     let spamInstance;
 
     // Get infos from DB if we're resuming a spam
-    if (message.id == 'fake') {
+    if (message.id == 0) {
         spamInstance = await message.client.db.Spam.findByPk(args[0]);
         args = [spamInstance.target, spamInstance.number];
         start = spamInstance.progress + 1;
@@ -92,7 +103,7 @@ let execute = async (message, args) => {
         console.log(`${message.author.tag} (${message.author.id}) spammed ${guildMember.user.tag} (${guildMember.user.id})`);
     }
 
-    if (message.id != 'fake') {
+    if (message.id != 0) {
         spamInstance = await message.client.db.Spam.create({source: message.author.id, target: content.id?? 'other', number: parseInt(args[args.length - 1]), channel: message.channel.id});
     }
 
@@ -110,6 +121,6 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
-    startup: startup,
+    cron: cron,
     execute: execute,
 };

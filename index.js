@@ -5,6 +5,7 @@ const { Client, Collection, Intents } = require('discord.js');
 const { prefix, token } = require('./config.json');
 const startupScripts = require('./startup/index.js');
 const db = require('./database/index.js');
+const cron = require('node-cron');
 
 const utils = require('./utils.js');
 
@@ -31,6 +32,12 @@ client.once('ready', c => {
         console.log(`Executing startup script: ${script.name}`);
         script.execute(client);
     });
+    client.commands.forEach(command => {
+        if (command.cron) {
+            console.log(`Starting cron job for ${command.name}`);
+            cron.schedule(command.cron.schedule, async () => { command.cron.run(client) });
+        }
+    })
     client.commands.forEach(command => {
         if (command.startup) {
             console.log(`Executing command startup script: ${command.name}`);
