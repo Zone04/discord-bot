@@ -20,6 +20,11 @@ let settings = {
 
 let LIMIT = 10000;
 
+let getLimit = async (client, guildId) => {
+    let setting = await client.db.Setting.findByPk(guildId);
+    return setting?.spamLimit ?? LIMIT;
+}
+
 let cron = [
     {
         schedule: '0 * * * *', // Every whole hour
@@ -84,6 +89,7 @@ let cron = [
 let execute = async (message, args) => {
 
     let start = 1;
+    let limit = await getLimit(message.client, message.guild.id);
     let spamInstance;
 
     // Get infos from DB if we're resuming a spam
@@ -96,15 +102,15 @@ let execute = async (message, args) => {
     if (args.length < 2 || isNaN(args[args.length - 1]) || parseInt(args[args.length - 1]) <= 0) {
         return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
     }
-    if (parseInt(args[args.length - 1]) > LIMIT) {
-        return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de ${LIMIT} pings d'un coup`);
+    if (parseInt(args[args.length - 1]) > limit) {
+        return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de ${limit} pings d'un coup`);
     }
 
     let content;
 
     let rand = Math.random()
     if (rand < 0.01) {
-        args = [message.author.id, LIMIT];
+        args = [message.author.id, limit];
         await message.channel.send(`Ba alors ?`);
         await message.channel.send(`On a voulu spam ????`);
         await message.channel.send(`Dommage hein, mais pas cette fois.`);
