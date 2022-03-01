@@ -1,5 +1,3 @@
-const utils = require('../utils.js');
-
 let settings = {
     name: 'debug',
     description: 'Commande de debug',
