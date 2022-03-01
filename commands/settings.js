@@ -7,6 +7,7 @@ let settings = {
     usage: [
         {
             name: 'get|set|list',
+            description: 'Action',
             optional: false
         },
         {
