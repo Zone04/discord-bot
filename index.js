@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token, owner_id } = require('./config.json');
 const startupScripts = require('./startup/index.js');
 const db = require('./database/index.js');
 const cron = require('node-cron');
@@ -18,6 +18,7 @@ const client = new Client({ intents: [
 ], partials: ['CHANNEL'] });
 client.commands = new Collection();
 client.prefix = prefix;
+client.owner_id = owner_id;
 client.db = db;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));

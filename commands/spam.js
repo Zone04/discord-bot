@@ -32,10 +32,11 @@ let cron = [
                     }
                 }
             });
-            console.log(`Found ${spams.length} dead spams`);
+            console.log(`Found ${spams.length} dead spam(s)`);
             spams.forEach(async spam => {
                 spam.destroy();
             })
+            return `Found ${spams.length} dead spam(s)`;
         }
     },
     {
@@ -74,6 +75,8 @@ let cron = [
                         console.error(error);
                     });
             });
+
+            return `Found ${spams.length} stalled spam(s)`
         }
     }
 ];
@@ -134,7 +137,7 @@ let execute = async (message, args) => {
     }
 
     if (message.id != 0) {
-        spamInstance = await message.client.db.Spam.create({source: message.author.id, target: content.id?? 'other', number: parseInt(args[args.length - 1]), channel: message.channel.id});
+        spamInstance = await message.client.db.Spam.create({source: message.author.id, target: content.id?? 'everyone', number: parseInt(args[args.length - 1]), channel: message.channel.id});
     }
 
     for (let i = start; i <= parseInt(args[args.length - 1]); i++) {

@@ -1,4 +1,5 @@
 {
 	"prefix": ".",
-	"token": "your-token-here"
+	"token": "your-token-here",
+	"owner_id": "your-discord-id-here"
 }
