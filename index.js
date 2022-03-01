@@ -34,8 +34,10 @@ client.once('ready', c => {
     });
     client.commands.forEach(command => {
         if (command.cron) {
-            console.log(`Starting cron job for ${command.name}`);
-            cron.schedule(command.cron.schedule, async () => { command.cron.run(client) });
+            command.cron.forEach(cronJob => {
+                console.log(`Starting cron job for ${command.name}`);
+                cron.schedule(cronJob.schedule, async () => { cronJob.run(client) });
+            })
         }
     })
     client.commands.forEach(command => {
