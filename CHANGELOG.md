@@ -4,8 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+ - Cron job for restarting spams
+ - Secret functionnality
+ - Debug command
+ - Guild-wide settings + settings command
+ - Spam random number
+
 ### Changed
  - Check permissions before `clear`
+
+### Fixed
+ - Wrong logging function
+ - Fix ignored arguments in spam with everyone/random
 
 ## [0.0.4]
 
