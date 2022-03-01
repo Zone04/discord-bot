@@ -118,11 +118,11 @@ let execute = async (message, args) => {
         await message.channel.send(`Allez c'est cadeau c'est pour moi !`);
     }
 
-    if (args[0] == 'random') {
+    if (args.length == 2 && args[0] == 'random') {
         let guildMembers = await message.guild.members.fetch();
         content = guildMembers.filter(member => !member.user.bot).random().user;
         console.log(`${message.author.tag} (${message.author.id}) spammed randomly ${content.tag} (${content.id})`);
-    } else if (args[0] == 'everyone' || args[0] == '@everyone') {
+    } else if (args.length == 2 && (args[0] == 'everyone' || args[0] == '@everyone')) {
         content = '@everyone';
         console.log(`${message.author.tag} (${message.author.id}) spammed everyone`);
     } else {
