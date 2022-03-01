@@ -106,7 +106,7 @@ let execute = async (message, args) => {
         return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de ${limit} pings d'un coup`);
     }
 
-    if (args[args.length - 1] === 'random') { args[args.length - 1] = Math.floor(Math.random()*limit); }
+    if (args[args.length - 1] === 'random') { args[args.length - 1] = Math.ceil(Math.random()*limit); }
 
     let content;
 
