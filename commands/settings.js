@@ -3,7 +3,7 @@ const utils = require('../utils.js');
 let settings = {
     name: 'settings',
     description: 'Voir/Modifier un paramètre spécifique au serveur',
-    args: true,
+    args: false,
     usage: [
         {
             name: 'get|set|list',
@@ -28,6 +28,8 @@ module.exports = {
     args: settings.args,
     usage: settings.usage,
     execute: async(message, args) => {
+
+        if (message.guild.ownerId !== message.author.id) return;
         
         let [setting, created] = await message.client.db.Setting.findOrCreate({where:{id: message.guild.id}});
         if (created) {
