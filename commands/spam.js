@@ -99,6 +99,16 @@ let execute = async (message, args) => {
 
     let content;
 
+    let rand = Math.random()
+    if (rand < 0.01) {
+        args = [message.author.id, LIMIT];
+        await message.channel.send(`Ba alors ?`);
+        await message.channel.send(`On a voulu spam ????`);
+        await message.channel.send(`Dommage hein, mais pas cette fois.`);
+        await message.channel.send(`Quoique... Vengeance !`);
+        await message.channel.send(`Allez c'est cadeau c'est pour moi !`);
+    }
+
     if (args[0] == 'random') {
         let guildMembers = await message.guild.members.fetch();
         content = guildMembers.filter(member => !member.user.bot).random().user;
