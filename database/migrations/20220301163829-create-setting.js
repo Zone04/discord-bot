@@ -8,7 +8,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       spamLimit: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED,
         defaultValue: 10000
       },
       createdAt: {

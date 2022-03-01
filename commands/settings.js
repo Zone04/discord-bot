@@ -52,8 +52,10 @@ module.exports = {
             if (!(args[1] in setting)) {
                 return message.reply('Ce paramètre n\'a pas été trouvé.');
             }
-            await setting.update({[args[1]]: args[2]});
+            setting[args[1]] = args[2];
+            await setting.save();
             message.reply(`\`\`\`Paramètre modifié\`\`\``);
+
         } else if (args[0] === 'list') {
             let settingsName = Object.keys(setting.dataValues).filter(key => !(['id', 'createdAt', 'updatedAt'].includes(key)));
             let string = 'Liste des paramètres :\n```';

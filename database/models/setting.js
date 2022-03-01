@@ -14,7 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Setting.init({
-    spamLimit: DataTypes.INTEGER
+    spamLimit: {
+      type: DataTypes.INTEGER,
+      set(value) {
+        if (parseInt(value) <= 0) { throw new Error('Unauthorized value'); }
+        this.setDataValue('spamLimit', value);
+      }
+    }
   }, {
     sequelize,
     modelName: 'Setting',
