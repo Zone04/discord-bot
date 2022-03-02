@@ -1,6 +1,6 @@
-module.exports = class MyError extends Error {
+module.exports = class UserNotFoundError extends Error {
     constructor(message) {
         super(message);
-        this.name = 'MyError';
+        this.name = 'UserNotFoundError';
     }
 }
