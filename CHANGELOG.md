@@ -6,6 +6,14 @@ All notable changes to this project will be documented in this file.
 
 Nothing yet
 
+## [0.0.5.2]
+
+### Fixed
+ - Easter egg triggering on spam resume
+
+### Changed
+ - Removed unused API call
+
 ## [0.0.5.1]
 
 ### Fixed
@@ -103,7 +111,8 @@ Nothing yet
 - userinfo command
 
 
-[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.5.1...HEAD
+[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.5.2...HEAD
+[0.0.5.2]: https://github.com/Zone04/discord-bot/compare/v0.0.5.1...v0.0.5.2
 [0.0.5.1]: https://github.com/Zone04/discord-bot/compare/v0.0.5...v0.0.5.1
 [0.0.5]: https://github.com/Zone04/discord-bot/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/Zone04/discord-bot/compare/v0.0.3...v0.0.4
