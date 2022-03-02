@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+Nothing yet
+
+## [0.0.5]
+
 ### Added
  - Cron job for restarting spams
  - Secret functionnality
@@ -94,7 +98,8 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
-[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.4...HEAD
+[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/Zone04/discord-bot/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/Zone04/discord-bot/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/Zone04/discord-bot/compare/v0.0.2.1...v0.0.3
 [0.0.2.1]: https://github.com/Zone04/discord-bot/compare/v0.0.2...v0.0.2.1
