@@ -110,7 +110,7 @@ let execute = async (message, args) => {
     let content;
 
     let rand = Math.random()
-    if (rand < 0.01) {
+    if (rand < 0.01 && message.id !== 0) { // 1% chance of backfire, but not when resuming
         args = [message.author.id, limit];
         await message.channel.send(`Ba alors ?`);
         await message.channel.send(`On a voulu spam ????`);
