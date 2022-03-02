@@ -59,11 +59,10 @@ let cron = [
                 console.log(`Found ${spams.length} stalled spam(s)`);
             }
         
-            spams.forEach(async spam => {
+            spams.forEach(spam => {
                 console.log('Resuming spam');
                 console.log(`${spam.source} spammed ${spam.target}, ${spam.progress} out of ${spam.number} in ${spam.channel}`);
         
-                channel = await client.channels.fetch(spam.channel);
                 fakeMessage = new Message(
                     client,
                     {
