@@ -51,9 +51,12 @@ client.once('ready', c => {
 
 client.on('messageCreate', async (message) => {
     if (message.author.bot) { return };
-    if (message.channel.type !== 'GUILD_TEXT') {
+    // Tell no response if DM channel
+    if (message.channel.type === 'DM') {
         return message.reply({ content: 'Je suis un bot. Je ne répondrais pas ici !', allowedMentions: { repliedUser: false }})
     }
+    // Ignore all channels that are not guild text or thread
+    if (!(['GUILD_TEXT','GUILD_PUBLIC_THREAD','GUILD_PRIVATE_THREAD'].includes(message.channel.type))) return;
     if (!message.content.startsWith(client.prefix)) return;
 
     const args = message.content.slice(client.prefix.length).replace(/ +$/,'').split(/ +/);

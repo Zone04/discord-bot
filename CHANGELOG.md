@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 Nothing yet
 
+## [0.0.5.1]
+
+### Fixed
+ - Bad reaction with thread channels
+
 ## [0.0.5]
 
 ### Added
@@ -98,7 +103,8 @@ Nothing yet
 - userinfo command
 
 
-[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.5...HEAD
+[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.5.1...HEAD
+[0.0.5.1]: https://github.com/Zone04/discord-bot/compare/v0.0.5...v0.0.5.1
 [0.0.5]: https://github.com/Zone04/discord-bot/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/Zone04/discord-bot/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/Zone04/discord-bot/compare/v0.0.2.1...v0.0.3
