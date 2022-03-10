@@ -20,7 +20,6 @@ module.exports = {
     usage: settings.usage,
     execute: async(message, args) => {
         if (!message.member.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-            console.log(`User ${message.author} tried clearing messages in channel ${message.channel}`);
             return;
         }
 

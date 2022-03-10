@@ -4,7 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Nothing yet
+### Changed
+ - Delete stalled spams if UserNotFound
+ - Added more info in logs (guild and channel ID)
+ - Removed ambiguous logs when resuming spams
 
 ## [0.0.5.2]
 

@@ -37,7 +37,9 @@ let cron = [
                     }
                 }
             });
-            console.log(`Found ${spams.length} dead spam(s)`);
+            if (spams.length) {
+                console.log(`Found ${spams.length} dead spam(s)`);
+            }
             spams.forEach(async spam => {
                 spam.destroy();
             })
@@ -60,8 +62,7 @@ let cron = [
             }
         
             spams.forEach(spam => {
-                console.log('Resuming spam');
-                console.log(`${spam.source} spammed ${spam.target}, ${spam.progress} out of ${spam.number} in ${spam.channel}`);
+                console.log(`Attempt to resume spam ${spam.id}`);
         
                 fakeMessage = new Message(
                     client,
@@ -122,10 +123,10 @@ let execute = async (message, args) => {
     if (args.length == 2 && args[0] == 'random') {
         let guildMembers = await message.guild.members.fetch();
         content = guildMembers.filter(member => !member.user.bot).random().user;
-        console.log(`${message.author.tag} (${message.author.id}) spammed randomly ${content.tag} (${content.id})`);
+        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed randomly User ${content.id}`);
     } else if (args.length == 2 && (args[0] == 'everyone' || args[0] == '@everyone')) {
         content = '@everyone';
-        console.log(`${message.author.tag} (${message.author.id}) spammed everyone`);
+        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed everyone`);
     } else {
         let guildMember;
         try {
@@ -145,7 +146,7 @@ let execute = async (message, args) => {
         } 
         if (guildMember.user.bot) return message.reply("Je vais quand même pas spam un bot, ce serait inutile !");
         content = guildMember.user;
-        console.log(`${message.author.tag} (${message.author.id}) spammed ${guildMember.user.tag} (${guildMember.user.id})`);
+        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed User ${guildMember.user.id}`);
     }
 
     if (message.id != 0) {
