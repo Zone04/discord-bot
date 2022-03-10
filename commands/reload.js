@@ -23,11 +23,22 @@ module.exports = {
 
         if (args[0] == 'commands') {
             let commands = new Collection();
+
+            message.client.croncommands.forEach(cronjob => {cronjob.stop(); delete cronjob;});
+            message.client.croncommands = new Array();
+
             const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
             for (const file of commandFiles) {
                 delete require.cache[require.resolve(`../commands/${file}`)];
                 const command = require(`../commands/${file}`);
                 commands.set(command.name, command);
+
+                if (command.cron) {
+                    command.cron.forEach(cronJob => {
+                        console.log(`Starting cron job for ${command.name}`);
+                        message.client.croncommands.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(message.client) }));
+                    })
+                }
             }
             message.client.commands = commands;
             return message.reply('Commandes rafraichies !')

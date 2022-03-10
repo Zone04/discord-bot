@@ -19,6 +19,7 @@ const client = new Client({ intents: [
 ], partials: ['CHANNEL'] });
 client.commands = new Collection();
 client.cronjobs = new Array();
+client.croncommands = new Array();
 client.prefix = prefix;
 client.owner_id = owner_id;
 client.db = db;
@@ -49,7 +50,7 @@ client.once('ready', c => {
         if (command.cron) {
             command.cron.forEach(cronJob => {
                 console.log(`Starting cron job for ${command.name}`);
-                cron.schedule(cronJob.schedule, async () => { cronJob.run(client) });
+                client.croncommands.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(client) }));
             })
         }
     });
