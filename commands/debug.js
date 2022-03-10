@@ -42,16 +42,17 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
+    permitted: (client, message) => {
+        return client.owner_id == message.author.id;
+    },
     execute: async(message, args) => {
-        if (message.client.owner_id == message.author.id) {
-            try {
-                const evaled = eval(args.join(" "));
-                const cleaned = await clean(message.client, evaled);
-          
-                message.channel.send(`\`\`\`js\n${cleaned}\n\`\`\``);
-            } catch (err) {
-                message.channel.send(`\`\`\`js\n${err}\n\`\`\``);
-            }
+        try {
+            const evaled = eval(args.join(" "));
+            const cleaned = await clean(message.client, evaled);
+        
+            message.channel.send(`\`\`\`js\n${cleaned}\n\`\`\``);
+        } catch (err) {
+            message.channel.send(`\`\`\`js\n${err}\n\`\`\``);
         }
     },
 };

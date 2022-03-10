@@ -77,13 +77,14 @@ client.on('messageCreate', async (message) => {
         return message.reply(reply);
     }
 
-    try {
-        await command.execute(message, args)
-    } catch(error) {
-        console.error(error);
-        message.reply(`Uh Oh... Une erreur est survenue !`).catch(_ => {});
+    if (command.permitted(client, message)) {
+        try {
+            await command.execute(message, args)
+        } catch(error) {
+            console.error(error);
+            message.reply(`Uh Oh... Une erreur est survenue !`).catch(_ => {});
+        }
     }
-
 });
 
 db.sequelize.authenticate().then(_ => {

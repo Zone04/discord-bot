@@ -18,6 +18,9 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
+    permitted: (client, message) => {
+        return true;
+    },
     execute: async(message, args) => {
         let commands = message.client.commands;
         if (args.length == 0) {

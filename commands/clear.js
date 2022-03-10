@@ -18,11 +18,10 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
+    permitted: (client, message) => {
+        return message.member.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES);
+    },
     execute: async(message, args) => {
-        if (!message.member.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-            return;
-        }
-
         if (isNaN(args[0]) || parseInt(args[0]) <= 0) {
             return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
         }

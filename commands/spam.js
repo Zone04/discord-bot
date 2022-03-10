@@ -168,5 +168,8 @@ module.exports = {
     args: settings.args,
     usage: settings.usage,
     cron: cron,
+    permitted: (client, message) => {
+        return true;
+    },
     execute: execute,
 };

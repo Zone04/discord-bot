@@ -28,9 +28,10 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
+    permitted: (client, message) => {
+        return message.guild.ownerId == message.author.id;
+    },
     execute: async(message, args) => {
-
-        if (message.guild.ownerId !== message.author.id) return;
         
         let [setting, created] = await message.client.db.Setting.findOrCreate({where:{id: message.guild.id}});
         if (created) {

@@ -10,6 +10,9 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
+    permitted: (client, message) => {
+        return true;
+    },
     execute: async(message, args) => {
         let m = await message.channel.send("Pinging...")
 

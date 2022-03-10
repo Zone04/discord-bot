@@ -10,6 +10,9 @@ module.exports = {
     description: settings.description,
     args: settings.args,
     usage: settings.usage,
+    permitted: (client, message) => {
+        return true;
+    },
     execute: (message, args) => {
         message.channel.send('Ping MDR :joy:');
     },
