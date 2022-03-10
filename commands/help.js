@@ -28,7 +28,9 @@ module.exports = {
             let help = 'Liste des commandes :\n```'
 
             commands.forEach(command => {
-                help += `${message.client.prefix}${command.name.concat(' ').padEnd(14, ' ')}${command.description}\n`
+                if (command.permitted(message.client, message)) {
+                    help += `${message.client.prefix}${command.name.concat(' ').padEnd(14, ' ')}${command.description}\n`
+                }
             });
 
             help += '```'
@@ -39,6 +41,9 @@ module.exports = {
             if (!commands.has(commandName)) return message.reply('Pas de commande trouvée');
 
             const command = commands.get(commandName);
+
+            if (!command.permitted(message.client, message)) return message.reply('Pas de commande trouvée');
+
             let reply = utils.getHelpMessage(message.client, command);
             message.reply(reply);
         }
