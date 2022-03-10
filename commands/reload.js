@@ -1,6 +1,7 @@
 const utils = require('../utils.js');
 const fs = require('fs');
 const {Collection} = require('discord.js');
+const cron = require('node-cron');
 
 module.exports = {
     name: 'reload',
@@ -32,8 +33,15 @@ module.exports = {
             return message.reply('Commandes rafraichies !')
         }
         if (args[0] == 'cron') {
-            // TODO
-            return;
+            message.client.cronjobs.forEach(cronjob => {cronjob.stop(); delete cronjob;});
+            message.client.cronjobs = new Array();
+            delete require.cache[require.resolve('../cron/index.js')];
+            const cronScripts = require('../cron/index.js');
+            cronScripts.forEach(script => {
+                console.log(`Starting cron job: ${script.name}`);
+                message.client.cronjobs.push(cron.schedule(script.schedule, async() => { script.run(message.client) }));
+            });
+            return message.reply('Cron rafraichis !');
         }
         if (args[0] == 'config') {
             // TODO

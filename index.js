@@ -18,6 +18,7 @@ const client = new Client({ intents: [
     Intents.FLAGS.GUILD_PRESENCES
 ], partials: ['CHANNEL'] });
 client.commands = new Collection();
+client.cronjobs = new Array();
 client.prefix = prefix;
 client.owner_id = owner_id;
 client.db = db;
@@ -42,7 +43,7 @@ client.once('ready', c => {
     });
     cronScripts.forEach(script => {
         console.log(`Starting cron job: ${script.name}`);
-        cron.schedule(script.schedule, async() => { script.run(client) });
+        client.cronjobs.push(cron.schedule(script.schedule, async() => { script.run(client) }));
     });
     client.commands.forEach(command => {
         if (command.cron) {
