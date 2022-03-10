@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+ - `reload` command to reload all commands
+
 ### Changed
  - Delete stalled spams if UserNotFound
  - Added more info in logs (guild and channel ID)
