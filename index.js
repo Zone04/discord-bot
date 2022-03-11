@@ -33,7 +33,7 @@ client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
     startupScripts.forEach(script => {
         console.log(`Executing startup script: ${script.name}`);
-        script.execute(client);
+        script.run(client);
     });
     client.commands.forEach(command => {
         if (command.startup) {

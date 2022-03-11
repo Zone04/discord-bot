@@ -35,5 +35,16 @@ module.exports = {
         reply += '\`\`\`'
 
         return reply;
+    },
+
+    sendLogMessage: async function (client, guildId, text) {
+        let [setting, created] = await client.db.Setting.findOrCreate({where:{id: guildId}});
+        if (created) {
+            await setting.reload();
+        }
+        if (!setting.logChan) return;
+
+        let chan = client.channels.cache.get(setting.logChan);
+        chan.send({"content":text,"allowedMentions": { "users" : []}}).catch();
     }
 }

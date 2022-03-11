@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
- - `reload` command to reload all commands
+ - `reload` command to reload all commands, cron and config
+ - `easterProba` and `logChan` settings
+ - Log spams and reboot on configurable logging channels
 
 ### Changed
  - Delete stalled spams if UserNotFound
