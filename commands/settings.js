@@ -60,9 +60,12 @@ module.exports = {
 
         } else if (args[0] === 'list') {
             let settingsName = Object.keys(setting.dataValues).filter(key => !(['id', 'createdAt', 'updatedAt'].includes(key)));
-            let string = 'Liste des paramètres :\n```';
+            console.log(setting.dataValues);
+            console.log(settingsName);
+            let string = 'Liste des paramètres :\n```\n';
             settingsName.forEach(name => string += `${name}\n`);
             string += '```';
+            console.log(string);
 
             return message.reply(string);
 

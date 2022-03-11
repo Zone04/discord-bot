@@ -20,9 +20,9 @@ let settings = {
 
 let LIMIT = 10000;
 
-let getLimit = async (client, guildId) => {
+let getSetting = async (client, guildId) => {
     let setting = await client.db.Setting.findByPk(guildId);
-    return setting?.spamLimit ?? LIMIT;
+    return setting;
 }
 
 let cron = [
@@ -89,7 +89,8 @@ let cron = [
 let execute = async (message, args) => {
 
     let start = 1;
-    let limit = await getLimit(message.client, message.guild.id);
+    let setting = await getSetting(message.client, message.guild.id);
+    let limit = setting?.spamLimit ?? LIMIT
     let spamInstance;
 
     // Get infos from DB if we're resuming a spam
@@ -111,7 +112,7 @@ let execute = async (message, args) => {
     let content;
 
     let rand = Math.random()
-    if (rand < 0.01 && message.id !== 0) { // 1% chance of backfire, but not when resuming
+    if (rand < (setting.easterProba ?? 0.01) && message.id !== 0) { // 1% chance of backfire, but not when resuming
         args = [message.author.id, limit];
         await message.channel.send(`Ba alors ?`);
         await message.channel.send(`On a voulu spam ????`);
