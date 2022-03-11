@@ -20,6 +20,20 @@ module.exports = (sequelize, DataTypes) => {
         if (parseInt(value) <= 0) { throw new Error('Unauthorized value'); }
         this.setDataValue('spamLimit', value);
       }
+    },
+    logChan: {
+      type: DataTypes.STRING,
+      set(value) {
+        if (value == 'null') {value = null;}
+        this.setDataValue('logChan', value);
+      }
+    },
+    easterProba: {
+      type: DataTypes.FLOAT,
+      set(value) {
+        if (value > 1 || value < 0) { throw new Error('Unauthorized value'); }
+        this.setDataValue('easterProba', value);
+      }
     }
   }, {
     sequelize,
