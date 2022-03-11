@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
-const { prefix, token, owner_id } = require('./config.json');
+const config = require('./config.json');
 const startupScripts = require('./startup/index.js');
 const cronScripts = require('./cron/index.js')
 const db = require('./database/index.js');
@@ -20,8 +20,7 @@ const client = new Client({ intents: [
 client.commands = new Collection();
 client.cronjobs = new Array();
 client.croncommands = new Array();
-client.prefix = prefix;
-client.owner_id = owner_id;
+client.config = config;
 client.db = db;
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -64,9 +63,9 @@ client.on('messageCreate', async (message) => {
     }
     // Ignore all channels that are not guild text or thread
     if (!(['GUILD_TEXT','GUILD_PUBLIC_THREAD','GUILD_PRIVATE_THREAD'].includes(message.channel.type))) return;
-    if (!message.content.startsWith(client.prefix)) return;
+    if (!message.content.startsWith(client.config.prefix)) return;
 
-    const args = message.content.slice(client.prefix.length).replace(/ +$/,'').split(/ +/);
+    const args = message.content.slice(client.config.prefix.length).replace(/ +$/,'').split(/ +/);
     const commandName = args.shift();
 
     if (!client.commands.has(commandName)) return;

@@ -25,7 +25,7 @@ module.exports = {
     },
 
     getHelpMessage: function (client, command) {
-        let reply = `\`\`\`${client.prefix}${command.name}`
+        let reply = `\`\`\`${client.config.prefix}${command.name}`
         command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
         reply += '\n\n'
         command.usage?.forEach(arg => {

@@ -14,7 +14,7 @@ module.exports = {
         }
     ],
     permitted: (client, message) => {
-        return client.owner_id == message.author.id;
+        return client.config.owner_id == message.author.id;
     },
     execute: (message, args) => {
         if (args.length != 1) {
@@ -55,8 +55,9 @@ module.exports = {
             return message.reply('Cron rafraichis !');
         }
         if (args[0] == 'config') {
-            // TODO
-            return;
+            delete require.cache[require.resolve('../config.json')];
+            message.client.config = require('../config.json');
+            return message.reply('Configuration rafraichie !');
         }
 
         return message.reply(utils.getHelpMessage(message.client, message.client.commands.get('reload')));

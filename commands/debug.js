@@ -43,7 +43,7 @@ module.exports = {
     args: settings.args,
     usage: settings.usage,
     permitted: (client, message) => {
-        return client.owner_id == message.author.id;
+        return client.config.owner_id == message.author.id;
     },
     execute: async(message, args) => {
         try {

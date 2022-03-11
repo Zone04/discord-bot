@@ -69,7 +69,7 @@ let cron = [
                     {
                         id: 0,
                         author: { id: spam.source },
-                        content: `${client.prefix}spam ${spam.id}`,
+                        content: `${client.config.prefix}spam ${spam.id}`,
                         channel_id: spam.channel,
                         fake: true
                     }

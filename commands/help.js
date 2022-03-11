@@ -29,7 +29,7 @@ module.exports = {
 
             commands.forEach(command => {
                 if (command.permitted(message.client, message)) {
-                    help += `${message.client.prefix}${command.name.concat(' ').padEnd(14, ' ')}${command.description}\n`
+                    help += `${message.client.config.prefix}${command.name.concat(' ').padEnd(14, ' ')}${command.description}\n`
                 }
             });
 
