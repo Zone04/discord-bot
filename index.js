@@ -95,7 +95,7 @@ db.sequelize.authenticate().then(_ => {
     process.exit(1);
 });
 
-client.login(token).catch(error => {
+client.login(client.config.token).catch(error => {
     console.error(error);
     process.exit(1);
 })
