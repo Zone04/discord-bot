@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fix
+ - Failed spam resuming if spamLimit changed to be lower than resumed spams
+
 ### Added
  - `reload` command to reload all commands, cron and config
  - `easterProba` and `logChan` settings
@@ -15,7 +18,7 @@ All notable changes to this project will be documented in this file.
  - Removed ambiguous logs when resuming spams
  - `help` command only shows available commands
 
-## [0.0.5.2]
+## [0.0.5.2] 2022-03-02
 
 ### Fixed
  - Easter egg triggering on spam resume
@@ -23,12 +26,12 @@ All notable changes to this project will be documented in this file.
 ### Changed
  - Removed unused API call
 
-## [0.0.5.1]
+## [0.0.5.1] 2022-03-02
 
 ### Fixed
  - Bad reaction with thread channels
 
-## [0.0.5]
+## [0.0.5] 2022-03-02
 
 ### Added
  - Cron job for restarting spams
@@ -44,7 +47,7 @@ All notable changes to this project will be documented in this file.
  - Wrong logging function
  - Fix ignored arguments in spam with everyone/random
 
-## [0.0.4]
+## [0.0.4] 2021-12-29
 
 ### Added
  - Added log on spam command
@@ -60,7 +63,7 @@ All notable changes to this project will be documented in this file.
  - `help` command shows details for each argument
  - Default message for unhandeld errors
 
-## [0.0.3]
+## [0.0.3] 2021-12-20
 
 ### Added
 
@@ -73,7 +76,7 @@ All notable changes to this project will be documented in this file.
  - Better error management
  - Reduced spam limit from 100k to 10k
 
-## [0.0.2.1]
+## [0.0.2.1] 2021-12-16
 
 ### Fixed
 
