@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+Nothing yer
+
+## [0.0.6] 2022-03-15
+
 ### Fix
  - Failed spam resuming if spamLimit changed to be lower than resumed spams
 
@@ -11,6 +15,7 @@ All notable changes to this project will be documented in this file.
  - `reload` command to reload all commands, cron and config
  - `easterProba` and `logChan` settings
  - Log spams and reboot on configurable logging channels
+ - Added back update command
 
 ### Changed
  - Delete stalled spams if UserNotFound
@@ -123,7 +128,8 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
-[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.5.2...HEAD
+[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.6...HEAD
+[0.0.6]: https://github.com/Zone04/discord-bot/compare/v0.0.5.2...v0.0.6
 [0.0.5.2]: https://github.com/Zone04/discord-bot/compare/v0.0.5.1...v0.0.5.2
 [0.0.5.1]: https://github.com/Zone04/discord-bot/compare/v0.0.5...v0.0.5.1
 [0.0.5]: https://github.com/Zone04/discord-bot/compare/v0.0.4...v0.0.5
