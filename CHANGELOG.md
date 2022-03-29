@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-Nothing yer
+### Added
+ - Ban/Unban fake commands
+
+### Fix
+ - Fix logs showing for resumed spams
+ - Fix wrong log with spaced names
+ - Fix spams with float number of spams
 
 ## [0.0.6] 2022-03-15
 
