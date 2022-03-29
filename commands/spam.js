@@ -109,6 +109,8 @@ let execute = async (message, args) => {
 
     if (args[args.length - 1] === 'random') { args[args.length - 1] = Math.ceil(Math.random()*limit); }
 
+    args[args.length - 1] = parseInt(args[args.length - 1]);
+
     let content;
 
     let rand = Math.random()
@@ -125,12 +127,12 @@ let execute = async (message, args) => {
     if (args.length == 2 && args[0] == 'random') {
         let guildMembers = await message.guild.members.fetch();
         content = guildMembers.filter(member => !member.user.bot).random().user;
-        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed randomly ${args[1]} time(s) User ${content.id}`);
-        utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed randomly ${args[1]} time(s) User ${content}`);
+        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed randomly ${args[args.length - 1]} time(s) User ${content.id}`);
+        utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed randomly ${args[args.length - 1]} time(s) User ${content}`);
     } else if (args.length == 2 && (args[0] == 'everyone' || args[0] == '@everyone')) {
         content = '@everyone';
-        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[1]} time(s) everyone`);
-        utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[1]} time(s) everyone`);
+        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[args.length - 1]} time(s) everyone`);
+        utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[args.length - 1]} time(s) everyone`);
     } else {
         let guildMember;
         try {
@@ -150,8 +152,8 @@ let execute = async (message, args) => {
         } 
         if (guildMember.user.bot) return message.reply("Je vais quand même pas spam un bot, ce serait inutile !");
         content = guildMember.user;
-        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[1]} time(s) User ${guildMember.user.id}`);
-        utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[1]} time(s) User ${content}`);
+        console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[args.length - 1]} time(s) User ${guildMember.user.id}`);
+        utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[args.length - 1]} time(s) User ${content}`);
     }
 
     if (message.id != 0) {
