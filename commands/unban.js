@@ -37,6 +37,6 @@ module.exports = {
             }
         }
 
-        message.channel.send(`​${guildMember.user} est déban de mon coeur :heart:`​);
+        message.channel.send(`${guildMember.user} est déban de mon coeur :heart:`);
     },
 };
