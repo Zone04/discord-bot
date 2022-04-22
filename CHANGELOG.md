@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 ### Added
  - Ban/Unban fake commands
 
+### Changed
+ - Clear can remove arbitrary number of message
+
 ### Fix
  - Fix logs showing for resumed spams
  - Fix wrong log with spaced names

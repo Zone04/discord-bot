@@ -30,9 +30,13 @@ module.exports = {
             return message.reply(`Je n'ai pas la permission de supprimmer des messages ici :pensive:`);
         }
 
-        let toDelete = parseInt(args[0]) > 99 ? 100 : parseInt(args[0]) + 1;
+        let toDelete = parseInt(args[0]) // > 99 ? 100 : parseInt(args[0]) + 1;
 
-        messages = await message.channel.messages.fetch({ limit: toDelete });
-        await message.channel.bulkDelete(messages, true);
+        while (toDelete > 0) {
+            let temp = toDelete > 99 ? 100 : toDelete+1
+            messages = await message.channel.messages.fetch({ limit: temp });
+            await message.channel.bulkDelete(messages, true);
+            toDelete = toDelete - temp;
+        }
     },
 };
