@@ -1,5 +1,5 @@
-const utils = require('../utils.js');
-const UserNotFoundError = require('../errors/UserNotFoundError.js');
+const utils = require('../../utils.js');
+const UserNotFoundError = require('../../errors/UserNotFoundError.js');
 
 let settings = {
     name: 'ban',

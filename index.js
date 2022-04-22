@@ -23,11 +23,13 @@ client.croncommands = new Array();
 client.config = config;
 client.db = db;
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
-}
+fs.readdirSync('./commands/').forEach((dir) => {
+    const commandFiles = fs.readdirSync(`./commands/${dir}/`).filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+        const command = require(`./commands/${dir}/${file}`);
+        client.commands.set(command.name, command);
+    }
+})
 
 client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);

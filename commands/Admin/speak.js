@@ -1,8 +1,6 @@
-const utils = require('../utils.js');
-
 let settings = {
     name: 'speak',
-    description: 'Fait parler le bot dans unchan spécifique.',
+    description: 'Fait parler le bot dans un chan spécifique.',
     args: false,
     usage: [
         {

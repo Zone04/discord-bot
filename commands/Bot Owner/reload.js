@@ -1,4 +1,4 @@
-const utils = require('../utils.js');
+const utils = require('../../utils.js');
 const fs = require('fs');
 const {Collection} = require('discord.js');
 const cron = require('node-cron');
@@ -27,19 +27,21 @@ module.exports = {
             message.client.croncommands.forEach(cronjob => {cronjob.stop(); delete cronjob;});
             message.client.croncommands = new Array();
 
-            const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-            for (const file of commandFiles) {
-                delete require.cache[require.resolve(`../commands/${file}`)];
-                const command = require(`../commands/${file}`);
-                commands.set(command.name, command);
-
-                if (command.cron) {
-                    command.cron.forEach(cronJob => {
-                        console.log(`Starting cron job for ${command.name}`);
-                        message.client.croncommands.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(message.client) }));
-                    })
+            fs.readdirSync('./commands/').forEach((dir) => {
+                const commandFiles = fs.readdirSync(`./commands/${dir}`).filter(file => file.endsWith('.js'));
+                for (const file of commandFiles) {
+                    delete require.cache[require.resolve(`../../commands/${dir}/${file}`)];
+                    const command = require(`../../commands/${dir}/${file}`);
+                    commands.set(command.name, command);
+    
+                    if (command.cron) {
+                        command.cron.forEach(cronJob => {
+                            console.log(`Starting cron job for ${command.name}`);
+                            message.client.croncommands.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(message.client) }));
+                        })
+                    }
                 }
-            }
+            });
             message.client.commands = commands;
             return message.reply('Commandes rafraichies !')
         }
