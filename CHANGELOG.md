@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
  - Ban/Unban fake commands
+ - Speak command for guild owners
 
 ### Changed
  - Clear can remove arbitrary number of message
