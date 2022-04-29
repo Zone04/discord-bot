@@ -2,7 +2,7 @@ const utils = require('../../utils.js');
 
 let settings = {
     name: 'help',
-    description: 'Show list of commands / Usage of a command',
+    description: 'Liste les commandes / Utilisation d\'une commande',
     args: false,
     usage: [
         {

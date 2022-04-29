@@ -3,7 +3,7 @@ const utils = require('../../utils.js');
 
 let settings = {
     name: 'clear',
-    description: 'Clear a specified number of messages',
+    description: 'Efface autant de message que spécifié',
     args: true,
     usage: [
         {

@@ -1,6 +1,6 @@
 let settings = {
     name: 'ping',
-    description: 'Determine ping between command and reply',
+    description: 'Determine le ping bot/serveur',
     args: false,
     usage: [],
 }
