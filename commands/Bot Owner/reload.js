@@ -31,7 +31,8 @@ module.exports = {
                 const commandFiles = fs.readdirSync(`./commands/${dir}`).filter(file => file.endsWith('.js'));
                 for (const file of commandFiles) {
                     delete require.cache[require.resolve(`../../commands/${dir}/${file}`)];
-                    const command = require(`../../commands/${dir}/${file}`);
+                    let command = require(`../../commands/${dir}/${file}`);
+                    command.cat = dir;
                     commands.set(command.name, command);
     
                     if (command.cron) {

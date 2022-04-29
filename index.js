@@ -26,7 +26,8 @@ client.db = db;
 fs.readdirSync('./commands/').forEach((dir) => {
     const commandFiles = fs.readdirSync(`./commands/${dir}/`).filter(file => file.endsWith('.js'));
     for (const file of commandFiles) {
-        const command = require(`./commands/${dir}/${file}`);
+        let command = require(`./commands/${dir}/${file}`);
+        command.cat = dir;
         client.commands.set(command.name, command);
     }
 })

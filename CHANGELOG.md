@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
  - Clear can remove arbitrary number of message
+ - Reorganized function in groups
+ - Include category in help message
 
 ### Fix
  - Fix logs showing for resumed spams

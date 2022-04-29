@@ -25,10 +25,23 @@ module.exports = {
         let commands = message.client.commands;
         if (args.length == 0) {
 
+            commands = commands.sort((a,b)=>{
+                if (a.cat>b.cat)
+                    return 1;
+                if (a.cat<b.cat)
+                    return -1;
+                return a.name>b.name?1:-1;
+            });
+
             let help = 'Liste des commandes :\n```'
 
+            cat = '';
             commands.forEach(command => {
                 if (command.permitted(message.client, message)) {
+                    if (command.cat != cat){
+                        cat = command.cat;
+                        help += `\n${cat}\n`;
+                    }
                     help += `${message.client.config.prefix}${command.name.concat(' ').padEnd(14, ' ')}${command.description}\n`
                 }
             });
