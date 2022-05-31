@@ -1,7 +1,6 @@
 let settings = {
     name: 'speak',
     description: 'Fait parler le bot dans un chan spécifique.',
-    args: false,
     usage: [
         {
             name: 'CHAN_ID',
@@ -19,7 +18,11 @@ let settings = {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
+    check_args: (message, args) => {
+        if (args.length < 2)
+            return false;
+        return parseInt(args[0]) > 0
+    },
     usage: settings.usage,
     permitted: (client, message) => {
         return message.guild.ownerId == message.author.id;

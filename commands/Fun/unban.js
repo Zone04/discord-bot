@@ -4,7 +4,6 @@ const UserNotFoundError = require('../../errors/UserNotFoundError.js');
 let settings = {
     name: 'unban',
     description: 'Unban un utilisateur',
-    args: false,
     usage: [
         {
             name: 'USERNAME|ID|MENTION',
@@ -17,7 +16,9 @@ let settings = {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
+    check_args: (message, args) => {
+        return args.length >= 1;
+    },
     usage: settings.usage,
     permitted: (client, message) => {
         return true;

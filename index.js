@@ -75,7 +75,7 @@ client.on('messageCreate', async (message) => {
 
     const command = client.commands.get(commandName);
 
-    if (command.args && !args.length) {
+    if (!(command.check_args?.(message, args) ?? true)) {
         reply = utils.getHelpMessage(client, command);
 
         return message.reply(reply);

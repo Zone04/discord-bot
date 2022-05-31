@@ -3,7 +3,6 @@ const utils = require('../../utils.js');
 let settings = {
     name: 'help',
     description: 'Liste les commandes / Utilisation d\'une commande',
-    args: false,
     usage: [
         {
             name: 'COMMAND',
@@ -16,7 +15,9 @@ let settings = {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
+    check_args: (message, args) => {
+        return args.length >= 1;
+    },
     usage: settings.usage,
     permitted: (client, message) => {
         return true;

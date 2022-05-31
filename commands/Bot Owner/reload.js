@@ -13,14 +13,13 @@ module.exports = {
             optional: false
         }
     ],
+    check_args: (message, args) => {
+        return args.length == 1;
+    },
     permitted: (client, message) => {
         return client.config.owner_id == message.author.id;
     },
     execute: (message, args) => {
-        if (args.length != 1) {
-            return message.reply(utils.getHelpMessage(message.client, message.client.commands.get('reload')));
-        }
-
         if (args[0] == 'commands') {
             let commands = new Collection();
 

@@ -5,14 +5,13 @@ const { Message } = require('discord.js');
 let settings = {
     name: 'spam',
     description: 'Spamme un utilisateur.',
-    args: true,
     usage: [
         {
             name: 'USERNAME|ID|MENTION|random|everyone',
             description: 'Utilisateur à spammer'
         },
         {
-            name: 'NUMBER',
+            name: 'NUMBER|random',
             description: 'Nombre de ping à envoyer',
         }
     ]
@@ -100,9 +99,6 @@ let execute = async (message, args) => {
         start = spamInstance.progress + 1;
     }
 
-    if (args.length < 2 || ( args[args.length - 1] !== 'random' && (isNaN(args[args.length - 1]) || parseInt(args[args.length - 1]) <= 0))) {
-        return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
-    }
     if (parseInt(args[args.length - 1]) > limit && args[args.length - 1] !== 'random' && message.id != 0) { // Bypass check if resuming
         return message.channel.send(`Tu abuserais pas un peu là ${message.author} ? Je suis raisonnable moi, je fais pas plus de ${limit} pings d'un coup`);
     }
@@ -178,7 +174,10 @@ let execute = async (message, args) => {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
+    check_args: (message, args) => {
+        return args.length >= 2
+            && !( args[args.length - 1] !== 'random' && (isNaN(args[args.length - 1]) || parseInt(args[args.length - 1]) <= 0) )
+    },
     usage: settings.usage,
     cron: cron,
     permitted: (client, message) => {

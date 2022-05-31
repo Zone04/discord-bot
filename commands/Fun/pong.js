@@ -1,14 +1,12 @@
 let settings = {
     name: 'pong',
     description: 'ping ?',
-    args: false,
     usage: [],
 }
 
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
     usage: settings.usage,
     permitted: (client, message) => {
         return true;

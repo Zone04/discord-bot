@@ -4,7 +4,6 @@ const UserNotFoundError = require('../../errors/UserNotFoundError.js');
 let settings = {
     name: 'userinfo',
     description: 'Information sur l\'utilisateur.',
-    args: false,
     usage: [
         {
             name: 'USERNAME|ID|MENTION',
@@ -17,7 +16,6 @@ let settings = {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
     usage: settings.usage,
     permitted: (client, message) => {
         return true;

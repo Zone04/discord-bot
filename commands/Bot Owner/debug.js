@@ -1,7 +1,6 @@
 let settings = {
     name: 'debug',
     description: 'Commande de debug',
-    args: false,
     usage: [
         {
             name: 'CODE',
@@ -40,7 +39,9 @@ const clean = async (client, text) => {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
+    check_args: (message, args) => {
+        return args.length >= 1;
+    },
     usage: settings.usage,
     permitted: (client, message) => {
         return client.config.owner_id == message.author.id;
