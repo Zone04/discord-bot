@@ -16,7 +16,7 @@ module.exports = {
     name: settings.name,
     description: settings.description,
     check_args: (message, args) => {
-        return args.length >= 1;
+        return args.length <= 1;
     },
     usage: settings.usage,
     permitted: (client, message) => {
