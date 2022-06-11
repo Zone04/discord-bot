@@ -21,28 +21,7 @@ module.exports = {
     },
     execute: (message, args) => {
         if (args[0] == 'commands') {
-            let commands = new Collection();
-
-            message.client.croncommands.forEach(cronjob => {cronjob.stop(); delete cronjob;});
-            message.client.croncommands = new Array();
-
-            fs.readdirSync('./commands/').forEach((dir) => {
-                const commandFiles = fs.readdirSync(`./commands/${dir}`).filter(file => file.endsWith('.js'));
-                for (const file of commandFiles) {
-                    delete require.cache[require.resolve(`../../commands/${dir}/${file}`)];
-                    let command = require(`../../commands/${dir}/${file}`);
-                    command.cat = dir;
-                    commands.set(command.name, command);
-    
-                    if (command.cron) {
-                        command.cron.forEach(cronJob => {
-                            console.log(`Starting cron job for ${command.name}`);
-                            message.client.croncommands.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(message.client) }));
-                        })
-                    }
-                }
-            });
-            message.client.commands = commands;
+            message.client.commandsManager.reload();
             return message.reply('Commandes rafraichies !')
         }
         if (args[0] == 'cron') {

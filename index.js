@@ -19,11 +19,10 @@ const client = new Client({ intents: [
     Intents.FLAGS.GUILD_PRESENCES
 ], partials: ['CHANNEL'] });
 client.cronjobs = new Array();
-client.croncommands = new Array();
 client.config = config;
 client.db = db;
 
-client.commandsManager = new CommandsManager();
+client.commandsManager = new CommandsManager(client);
 
 client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
@@ -31,24 +30,12 @@ client.once('ready', c => {
         console.log(`Executing startup script: ${script.name}`);
         script.run(client);
     });
-    client.commandsManager.commands.forEach(command => {
-        if (command.startup) {
-            console.log(`Executing command startup script: ${command.name}`);
-            command.startup(client);
-        }
-    });
     cronScripts.forEach(script => {
         console.log(`Starting cron job: ${script.name}`);
         client.cronjobs.push(cron.schedule(script.schedule, async() => { script.run(client) }));
     });
-    client.commandsManager.commands.forEach(command => {
-        if (command.cron) {
-            command.cron.forEach(cronJob => {
-                console.log(`Starting cron job for ${command.name}`);
-                client.croncommands.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(client) }));
-            })
-        }
-    });
+    client.commandsManager.startup(client);
+    client.commandsManager.startcron(client);
 });
 
 client.on('messageCreate', async (message) => {
