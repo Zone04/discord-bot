@@ -23,7 +23,7 @@ module.exports = {
         return true;
     },
     execute: async(message, args) => {
-        let commands = message.client.commands;
+        let commands = message.client.commandsManager.commands;
         if (args.length == 0) {
 
             commands = commands.sort((a,b)=>{
