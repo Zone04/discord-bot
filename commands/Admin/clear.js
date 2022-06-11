@@ -27,7 +27,7 @@ module.exports = {
         }
 
         if (!message.guild.me.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-            return message.reply(`Je n'ai pas la permission de supprimmer des messages ici :pensive:`);
+            return message.reply(`Je n'ai pas la permission de supprimer des messages ici :pensive:`);
         }
 
         let toDelete = parseInt(args[0]) // > 99 ? 100 : parseInt(args[0]) + 1;
