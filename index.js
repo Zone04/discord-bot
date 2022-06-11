@@ -1,11 +1,12 @@
 #!/usr/bin/env nodemon
 
 const fs = require('fs');
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Intents } = require('discord.js');
+const { CommandsManager } = require('./commands');
 const config = require('./config.json');
-const startupScripts = require('./startup/index.js');
-const cronScripts = require('./cron/index.js')
-const db = require('./database/index.js');
+const startupScripts = require('./startup');
+const cronScripts = require('./cron')
+const db = require('./database');
 const cron = require('node-cron');
 
 const utils = require('./utils.js');
@@ -17,20 +18,12 @@ const client = new Client({ intents: [
     Intents.FLAGS.DIRECT_MESSAGES,
     Intents.FLAGS.GUILD_PRESENCES
 ], partials: ['CHANNEL'] });
-client.commands = new Collection();
 client.cronjobs = new Array();
 client.croncommands = new Array();
 client.config = config;
 client.db = db;
 
-fs.readdirSync('./commands/').forEach((dir) => {
-    const commandFiles = fs.readdirSync(`./commands/${dir}/`).filter(file => file.endsWith('.js'));
-    for (const file of commandFiles) {
-        let command = require(`./commands/${dir}/${file}`);
-        command.cat = dir;
-        client.commands.set(command.name, command);
-    }
-})
+client.commandsManager = new CommandsManager();
 
 client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
@@ -38,7 +31,7 @@ client.once('ready', c => {
         console.log(`Executing startup script: ${script.name}`);
         script.run(client);
     });
-    client.commands.forEach(command => {
+    client.commandsManager.commands.forEach(command => {
         if (command.startup) {
             console.log(`Executing command startup script: ${command.name}`);
             command.startup(client);
@@ -48,7 +41,7 @@ client.once('ready', c => {
         console.log(`Starting cron job: ${script.name}`);
         client.cronjobs.push(cron.schedule(script.schedule, async() => { script.run(client) }));
     });
-    client.commands.forEach(command => {
+    client.commandsManager.commands.forEach(command => {
         if (command.cron) {
             command.cron.forEach(cronJob => {
                 console.log(`Starting cron job for ${command.name}`);
@@ -71,9 +64,9 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(client.config.prefix.length).replace(/ +$/,'').split(/ +/);
     const commandName = args.shift();
 
-    if (!client.commands.has(commandName)) return;
+    if (!client.commandsManager.commands.has(commandName)) return;
 
-    const command = client.commands.get(commandName);
+    const command = client.commandsManager.commands.get(commandName);
 
     if (!(command.check_args?.(message, args) ?? true)) {
         reply = utils.getHelpMessage(client, command);
