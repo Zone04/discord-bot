@@ -14,6 +14,7 @@ class CommandsManager {
     }
 
     load() {
+        this.commands = new Collection();
         fs.readdirSync(__dirname, { withFileTypes: true })
             .filter(dirent => dirent.isDirectory())
             .map(dirent => dirent.name)
@@ -32,7 +33,6 @@ class CommandsManager {
     reload() {
         this.stopcron();
 
-        let commands = new Collection();
         fs.readdirSync(__dirname, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name)
@@ -40,12 +40,9 @@ class CommandsManager {
             const commandFiles = fs.readdirSync(path.join(__dirname,`${dir}/`)).filter(file => file.endsWith('.js'));
             for (const file of commandFiles) {
                 delete require.cache[require.resolve(`./${dir}/${file}`)];
-                let command = require(`./${dir}/${file}`);
-                command.cat = dir;
-                commands.set(command.name, command);
             }
         });
-        this.commands = commands;
+        this.load();
         this.startcron();
     }
 
