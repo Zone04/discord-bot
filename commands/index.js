@@ -38,7 +38,6 @@ class CommandsManager {
                             console.log(`Loaded subcommand ${dir}/${dirent.name}/${file}`);
                         }
                         this.commands.set(command.name, command);
-                        console.log(command);
                     }
                 }
             }
@@ -51,10 +50,17 @@ class CommandsManager {
         fs.readdirSync(__dirname, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
         .map(dirent => dirent.name)
-            .forEach((dir) => {
-            const commandFiles = fs.readdirSync(path.join(__dirname,`${dir}/`)).filter(file => file.endsWith('.js'));
-            for (const file of commandFiles) {
-                delete require.cache[require.resolve(`./${dir}/${file}`)];
+        .forEach((dir) => {
+            const commandDirents = fs.readdirSync(path.join(__dirname,`${dir}/`), { withFileTypes: true });
+            for (const dirent of commandDirents) {
+                if (dirent.name.endsWith('.js')) {
+                    delete require.cache[require.resolve(`./${dir}/${dirent.name}`)];
+                } else if (dirent.isDirectory()) {
+                    const subcommandFiles = fs.readdirSync(path.join(__dirname,`${dir}/${dirent.name}/`));
+                    for (const file of subcommandFiles) {
+                        delete require.cache[require.resolve(`./${dir}/${dirent.name}/${file}`)];
+                    }
+                }
             }
         });
         this.load();
