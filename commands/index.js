@@ -19,12 +19,27 @@ class CommandsManager {
             .filter(dirent => dirent.isDirectory())
             .map(dirent => dirent.name)
             .forEach((dir) => {
-                const commandFiles = fs.readdirSync(path.join(__dirname,`${dir}/`)).filter(file => file.endsWith('.js'));
-                for (const file of commandFiles) {
-                    let command = require(`./${dir}/${file}`);
-                    command.cat = dir;
-                    this.commands.set(command.name, command);
-                    console.log(`Loaded command ${dir}/${file}`)
+                const commandDirents = fs.readdirSync(path.join(__dirname,`${dir}/`), { withFileTypes: true });
+                for (const dirent of commandDirents) {
+                    if (dirent.name.endsWith('.js')) {
+                        let command = require(`./${dir}/${dirent.name}`);
+                        command.cat = dir;
+                        this.commands.set(command.name, command);
+                        console.log(`Loaded command ${dir}/${dirent.name}`);
+                    } else if (dirent.isDirectory()) {
+                        let command = require(`./${dir}/${dirent.name}`);
+                        command.cat = dir;
+                        command.subcommands = new Collection();
+                        const subcommandFiles = fs.readdirSync(path.join(__dirname,`${dir}/${dirent.name}/`));
+                        for (const file of subcommandFiles) {
+                            if (file == 'index.js') continue;
+                            let subcommand = require(`./${dir}/${dirent.name}/${file}`);
+                            command.subcommands.set(subcommand.name, subcommand);
+                            console.log(`Loaded subcommand ${dir}/${dirent.name}/${file}`);
+                        }
+                        this.commands.set(command.name, command);
+                        console.log(command);
+                    }
                 }
             }
         )
