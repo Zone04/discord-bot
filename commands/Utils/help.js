@@ -63,11 +63,23 @@ module.exports = {
             if (!commands.has(commandName)) return message.reply('Pas de commande trouvée');
 
             const command = commands.get(commandName);
+            if (!command.subcommands) {
+                if (!command.permitted(message.client, message)) return message.reply('Pas de commande trouvée');
+    
+                let reply = utils.getHelpMessage(message.client, command);
+                message.reply(reply);
+            } else {
+                let help = 'Liste des sous-commandes de `' + command.name + '` :\n```'
+                command.subcommands.forEach(subcommand => {
+                    if (subcommand.permitted(message.client, message)) {
+                        help += `${message.client.config.prefix}${command.name} ${subcommand.name.concat(' ').padEnd(14, ' ')}${subcommand.description}\n`
+                    }
+                });
+                help += '```'
+                message.reply(help);
+            }
+            
 
-            if (!command.permitted(message.client, message)) return message.reply('Pas de commande trouvée');
-
-            let reply = utils.getHelpMessage(message.client, command);
-            message.reply(reply);
         }
     },
 };
