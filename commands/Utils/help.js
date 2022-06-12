@@ -41,7 +41,6 @@ module.exports = {
                 let shouldPrint = false;
                 if (command.subcommands) {
                     command.subcommands.forEach(subcommand => {
-                        console.log(command.subcommands);
                         shouldPrint = shouldPrint || subcommand.permitted(message.client, message);
                     });
                 } else {
