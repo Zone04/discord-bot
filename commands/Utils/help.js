@@ -38,7 +38,16 @@ module.exports = {
 
             cat = '';
             commands.forEach(command => {
-                if (command.permitted(message.client, message)) {
+                let shouldPrint = false;
+                if (command.subcommands) {
+                    command.subcommands.forEach(subcommand => {
+                        console.log(command.subcommands);
+                        shouldPrint = shouldPrint || subcommand.permitted(message.client, message);
+                    });
+                } else {
+                    shouldPrint = command.permitted(message.client, message);
+                }
+                if (shouldPrint) {
                     if (command.cat != cat){
                         cat = command.cat;
                         help += `\n${cat}\n`;
