@@ -4,11 +4,10 @@ const utils = require('../../utils.js');
 let settings = {
     name: 'clear',
     description: 'Efface autant de message que spécifié',
-    args: true,
     usage: [
         {
             name: 'NUMBER',
-            description: 'Nombre de messages à supprimer (jusque 100)',
+            description: 'Nombre de messages à supprimer',
         }
     ],
 }
@@ -16,7 +15,9 @@ let settings = {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
+    check_args: (message, args) => {
+        return args.length == 1 && !isNaN(args[0]) && parseInt(args[0]) >= 2
+    },
     usage: settings.usage,
     permitted: (client, message) => {
         return message.member.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES);
