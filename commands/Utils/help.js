@@ -16,7 +16,7 @@ module.exports = {
     name: settings.name,
     description: settings.description,
     check_args: (message, args) => {
-        return args.length <= 1;
+        return args.length <= 2;
     },
     usage: settings.usage,
     permitted: (client, message) => {
@@ -69,14 +69,27 @@ module.exports = {
                 let reply = utils.getHelpMessage(message.client, command);
                 message.reply(reply);
             } else {
-                let help = 'Liste des sous-commandes de `' + command.name + '` :\n```'
-                command.subcommands.forEach(subcommand => {
-                    if (subcommand.permitted(message.client, message)) {
-                        help += `${message.client.config.prefix}${command.name} ${subcommand.name.concat(' ').padEnd(14, ' ')}${subcommand.description}\n`
-                    }
-                });
-                help += '```'
-                message.reply(help);
+                if (args.length < 2 || !command.subcommands.has(args[1])) {
+                    let shouldPrint = false;
+                    command.subcommands.forEach(subcommand => {
+                        shouldPrint = shouldPrint || subcommand.permitted(message.client, message);
+                    });
+                    if (!shouldPrint) return message.reply('Pas de commande trouvée');
+                    let help = 'Liste des sous-commandes de `' + command.name + '` :\n```'
+                    command.subcommands.forEach(subcommand => {
+                        if (subcommand.permitted(message.client, message)) {
+                            help += `${message.client.config.prefix}${command.name} ${subcommand.name.concat(' ').padEnd(14, ' ')}${subcommand.description}\n`
+                        }
+                    });
+                    help += '```'
+                    message.reply(help);
+                } else {
+                    const subcommand = command.subcommands.get(args[1]);
+                    if (!subcommand.permitted(message.client, message)) return;
+
+                    let reply = utils.getHelpMessage(message.client, subcommand, command);
+                    message.reply(reply);
+                }
             }
             
 

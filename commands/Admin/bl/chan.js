@@ -9,7 +9,7 @@ module.exports = {
     description: settings.description,
     usage: settings.usage,
     permitted: (client, message) => {
-        return true;
+        return message.guild.ownerId == message.author.id;
     },
     execute: (message, args) => {
         message.channel.send('BL CHAN');

@@ -24,15 +24,20 @@ module.exports = {
         throw new UserNotFoundError('Pas d\'utilisateur trouvé.');
     },
 
-    getHelpMessage: function (client, command) {
-        let reply = `\`\`\`${client.config.prefix}${command.name}`
+    getHelpMessage: function (client, command, topcommand=undefined) {
+        let reply;
+        if (topcommand) {
+            reply = `\`\`\`${client.config.prefix}${topcommand.name} ${command.name}`;
+        } else {
+            reply = `\`\`\`${client.config.prefix}${command.name}`;
+        }
         command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
-        reply += `\n\n${command.description}\n\n`
+        reply += `\n\n${command.description}\n\n`;
         command.usage?.forEach(arg => {
             reply += `${arg.name}${arg.optional ? ' - optionnel':''}\n`;
             reply += `  ${arg.description}\n`;
-        })
-        reply += '\`\`\`'
+        });
+        reply += '\`\`\`';
 
         return reply;
     },
