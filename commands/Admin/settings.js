@@ -3,7 +3,6 @@ const utils = require('../../utils.js');
 let settings = {
     name: 'settings',
     description: 'Voir/Modifier un paramètre spécifique au serveur',
-    args: false,
     usage: [
         {
             name: 'get|set|list',
@@ -26,7 +25,21 @@ let settings = {
 module.exports = {
     name: settings.name,
     description: settings.description,
-    args: settings.args,
+    check_args: (message, args) => {
+        if (args.length == 0) {
+            return false;
+        }
+        if (args[0] == 'list') {
+            return args.length == 1;
+        }
+        if (args[0] == 'get') {
+            return args.length == 2;
+        }
+        if (args[0] == 'set') {
+            return args.length == 3;
+        }
+        return false;
+    },
     usage: settings.usage,
     permitted: (client, message) => {
         return message.guild.ownerId == message.author.id;
