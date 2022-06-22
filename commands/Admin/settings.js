@@ -72,13 +72,11 @@ module.exports = {
             message.reply(`\`\`\`Paramètre modifié\`\`\``);
 
         } else if (args[0] === 'list') {
-            let settingsName = Object.keys(setting.dataValues).filter(key => !(['id', 'createdAt', 'updatedAt'].includes(key)));
-            console.log(setting.dataValues);
-            console.log(settingsName);
+            let attributes = message.client.db.Setting.attributes;
+            let settingsName = Object.keys(attributes);
             let string = 'Liste des paramètres :\n```\n';
-            settingsName.forEach(name => string += `${name}\n`);
+            settingsName.forEach(name => string += `${name.concat(' ').padEnd(14, ' ')}- ${attributes[name].description}\n`);
             string += '```';
-            console.log(string);
 
             return message.reply(string);
 
