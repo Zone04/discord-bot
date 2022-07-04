@@ -5,30 +5,34 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Setting extends Model {
     static attributes = {
-      spamLimit: {
-        type: DataTypes.INTEGER,
-        set(value) {
-          if (parseInt(value) <= 0) { throw new Error('Unauthorized value'); }
-          this.setDataValue('spamLimit', value);
+      Spam: {
+        easterProba: {
+          type: DataTypes.FLOAT,
+          set(value) {
+            if (value > 1 || value < 0) { throw new Error('Unauthorized value'); }
+            this.setDataValue('easterProba', value);
+          },
+          
+          description: "Probabilité de l'easter egg",
         },
-        description: "Taille maximale d'un spam",
+        spamLimit: {
+          type: DataTypes.INTEGER,
+          set(value) {
+            if (parseInt(value) <= 0) { throw new Error('Unauthorized value'); }
+            this.setDataValue('spamLimit', value);
+          },
+          description: "Taille maximale d'un spam",
+        },
       },
-      logChan: {
-        type: DataTypes.STRING,
-        set(value) {
-          if (value == 'null') {value = null;}
-          this.setDataValue('logChan', value);
+      Admin:{
+        logChan: {
+          type: DataTypes.STRING,
+          set(value) {
+            if (value == 'null') {value = null;}
+            this.setDataValue('logChan', value);
+          },
+          description: "ID du channel de logs pour le bot",
         },
-        description: "ID du channel de logs pour le bot",
-      },
-      easterProba: {
-        type: DataTypes.FLOAT,
-        set(value) {
-          if (value > 1 || value < 0) { throw new Error('Unauthorized value'); }
-          this.setDataValue('easterProba', value);
-        },
-        
-        description: "Probabilité de l'easter egg",
       }
     };
     /**
@@ -40,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Setting.init(Setting.attributes, {
+  Setting.init(Object.assign({},...Object.keys(Setting.attributes).map(cat=>Setting.attributes[cat])), {
     sequelize,
     modelName: 'Setting',
   });

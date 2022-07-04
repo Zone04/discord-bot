@@ -73,9 +73,14 @@ module.exports = {
 
         } else if (args[0] === 'list') {
             let attributes = message.client.db.Setting.attributes;
-            let settingsName = Object.keys(attributes);
+            let settingsCategories = Object.keys(attributes);
             let string = 'Liste des paramètres :\n```\n';
-            settingsName.forEach(name => string += `${name.concat(' ').padEnd(14, ' ')}- ${attributes[name].description}\n`);
+            settingsCategories.forEach(name => {
+                string += `\n${name}:\n`;
+                Object.keys(attributes[name]).forEach(s =>{
+                    string += `${s.concat(' ').padEnd(14, ' ')}- ${attributes[name][s].description}\n`;
+                });
+            });
             string += '```';
 
             return message.reply(string);
