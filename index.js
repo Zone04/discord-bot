@@ -57,12 +57,14 @@ client.on('messageCreate', async (message) => {
 
     if (command.subcommands) {
         const subcommandName = args.shift();
-        if (!command.subcommands.has(subcommandName)) return message.reply('Sous-commande inexistante');
+        if (!command.subcommands.has(subcommandName)) {
+            return message.reply('Sous-commande inexistante\n'+utils.getHelpMessage(message, command));
+        }
         command = command.subcommands.get(subcommandName);
     }
 
     if (!(command.check_args?.(message, args) ?? true)) {
-        reply = utils.getHelpMessage(client, command);
+        reply = utils.getHelpMessage(message, command);
 
         return message.reply(reply);
     }
