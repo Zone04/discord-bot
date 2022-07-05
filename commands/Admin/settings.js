@@ -52,18 +52,12 @@ module.exports = {
         }
 
         if (args[0] === 'get') {
-            if (args.length !== 2) {
-                return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
-            }
             if (!(args[1] in setting)) {
                 return message.reply('Ce paramètre n\'a pas été trouvé.');
             }
             message.reply(`\`\`\`${setting[args[1]]}\`\`\``);
 
         } else if (args[0] === 'set') {
-            if (args.length !== 3) {
-                return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
-            }
             if (!(args[1] in setting)) {
                 return message.reply('Ce paramètre n\'a pas été trouvé.');
             }
@@ -75,9 +69,9 @@ module.exports = {
             let attributes = message.client.db.Setting.attributes;
             let settingsCategories = Object.keys(attributes);
             let string = 'Liste des paramètres :\n```\n';
-            settingsCategories.forEach(name => {
+            settingsCategories.sort().forEach(name => {
                 string += `\n${name}:\n`;
-                Object.keys(attributes[name]).forEach(s =>{
+                Object.keys(attributes[name]).sort().forEach(s =>{
                     string += `${s.concat(' ').padEnd(14, ' ')}- ${attributes[name][s].description}\n`;
                 });
             });
@@ -85,9 +79,7 @@ module.exports = {
 
             return message.reply(string);
 
-        } else {
-            return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
-        }            
+        }         
 
     },
 };

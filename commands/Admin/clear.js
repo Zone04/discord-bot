@@ -16,16 +16,13 @@ module.exports = {
     name: settings.name,
     description: settings.description,
     check_args: (message, args) => {
-        return args.length == 1 && !isNaN(args[0]) && parseInt(args[0]) >= 2
+        return args.length == 1 && !isNaN(args[0]) && parseInt(args[0]) >= 1
     },
     usage: settings.usage,
     permitted: (client, message) => {
         return message.member.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES);
     },
     execute: async(message, args) => {
-        if (isNaN(args[0]) || parseInt(args[0]) <= 0) {
-            return message.reply(utils.getHelpMessage(message.client, message.client.commands.get(settings.name)));
-        }
 
         if (!message.guild.me.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES)) {
             return message.reply(`Je n'ai pas la permission de supprimer des messages ici :pensive:`);
