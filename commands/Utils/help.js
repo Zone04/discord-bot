@@ -66,7 +66,7 @@ module.exports = {
             if (!command.subcommands) {
                 if (!command.permitted(message.client, message)) return message.reply('Pas de commande trouvée');
     
-                let reply = utils.getHelpMessage(message.client, command);
+                let reply = utils.getHelpMessage(message, command);
                 message.reply(reply);
             } else {
                 if (args.length < 2 || !command.subcommands.has(args[1])) {
@@ -87,7 +87,7 @@ module.exports = {
                     const subcommand = command.subcommands.get(args[1]);
                     if (!subcommand.permitted(message.client, message)) return;
 
-                    let reply = utils.getHelpMessage(message.client, subcommand, command);
+                    let reply = utils.getHelpMessage(message, subcommand, command);
                     message.reply(reply);
                 }
             }
