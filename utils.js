@@ -24,20 +24,30 @@ module.exports = {
         throw new UserNotFoundError('Pas d\'utilisateur trouvé.');
     },
 
-    getHelpMessage: function (client, command, topcommand=undefined) {
+    getHelpMessage: function (message, command, topcommand=undefined) {
         let reply;
-        if (topcommand) {
-            reply = `\`\`\`${client.config.prefix}${topcommand.name} ${command.name}`;
+        if (command.subcommands) {
+            reply = 'Liste des sous-commandes de `' + command.name + '` :\n```'
+            command.subcommands.forEach(subcommand => {
+                if (subcommand.permitted(message.client, message)) {
+                    reply += `${message.client.config.prefix}${command.name} ${subcommand.name.concat(' ').padEnd(14, ' ')}${subcommand.description}\n`
+                }
+            });
+            reply += '\`\`\`';
         } else {
-            reply = `\`\`\`${client.config.prefix}${command.name}`;
+            if (topcommand) {
+                reply = `\`\`\`${message.client.config.prefix}${topcommand.name} ${command.name}`;
+            } else {
+                reply = `\`\`\`${message.client.config.prefix}${command.name}`;
+            }
+            command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
+            reply += `\n\n${command.description}\n\n`;
+            command.usage?.forEach(arg => {
+                reply += `${arg.name}${arg.optional ? ' - optionnel':''}\n`;
+                reply += `  ${arg.description}\n`;
+            });
+            reply += '\`\`\`';
         }
-        command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
-        reply += `\n\n${command.description}\n\n`;
-        command.usage?.forEach(arg => {
-            reply += `${arg.name}${arg.optional ? ' - optionnel':''}\n`;
-            reply += `  ${arg.description}\n`;
-        });
-        reply += '\`\`\`';
 
         return reply;
     },
