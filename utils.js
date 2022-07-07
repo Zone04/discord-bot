@@ -63,20 +63,31 @@ module.exports = {
         chan.send({"content":text,"allowedMentions": { "users" : []}}).catch();
     },
 
+    getChan: async function (message, arg) {
+        if (arg.startsWith('<#') && arg.endsWith('>')) {
+            arg = arg.slice(2, -1);
+        }
+        let chan = await message.client.channels.fetch(arg);
+        return chan;
+    },
+
+    getChanId: async function (message, arg) {
+        return (await this.getChan(message,arg)).id;
+    },
+
     checkChan: async function (message, arg) {
         if (!arg) return false;
-        // As mention
         if (arg.startsWith('<#') && arg.endsWith('>')) {
             arg = arg.slice(2, -1);
         }
         if (isNaN(arg) || parseInt(arg) < 0) return false;
-        // As ID
-        try {
-            let chan = await message.client.channels.fetch(arg);
+
+        // try {
+            let chan = await this.getChan(message, arg);
             return chan.guild.id == message.guild.id;
-        } catch {
-            return false;
-        }
+        // } catch {
+        //     return false;
+        // }
 
     }
 }

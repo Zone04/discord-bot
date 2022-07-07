@@ -27,6 +27,7 @@ module.exports = {
     description: settings.description,
     usage: settings.usage,
     check_args: async (message, args) => {
+        args = [...args]; // copy array
         let arg=undefined;
         if (args.length == 0) return true;
         else if (args[0] == 'view' || args[0] == 'reset') {
@@ -55,7 +56,29 @@ module.exports = {
     permitted: (client, message) => {
         return message.guild.ownerId == message.author.id;
     },
-    execute: (message, args) => {
-        message.channel.send('BL CHAN');
+    execute: async (message, args) => {
+        // Check the action
+        let action = 'toggle';
+        if (['toggle', 'view', 'edit'].includes(args[0])) {
+            action = args.shift();
+        }
+
+        // args now contains only chans and commands
+
+        let chans = [];
+        while (await utils.checkChan(message, arg = args.shift() )) {
+            chans.push(await utils.getChanId(message, arg));
+        }
+        if (chans.length == 0) {
+            chans.push(message.channel.id);
+        }
+
+        let commands = [];
+        while (arg) {
+            commands.push(arg);
+            arg = args.shift();
+        }
+
+        // Now we have everything sorted, switch case for action
     },
 };
