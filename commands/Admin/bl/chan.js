@@ -7,7 +7,7 @@ let settings = {
         {
             name: 'toggle|view|reset',
             description: 'Action. Valeur par défaut : toggle',
-            optional: false
+            optional: true
         },
         {
             name: 'CHANNEL(S)',

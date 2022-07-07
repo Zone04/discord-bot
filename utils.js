@@ -24,7 +24,7 @@ module.exports = {
         throw new UserNotFoundError('Pas d\'utilisateur trouvé.');
     },
 
-    getHelpMessage: function (message, command, topcommand=undefined) {
+    getHelpMessage: function (message, command) {
         let reply;
         if (command.subcommands) {
             reply = 'Liste des sous-commandes de `' + command.name + '` :\n```'
@@ -35,8 +35,8 @@ module.exports = {
             });
             reply += '\`\`\`';
         } else {
-            if (topcommand) {
-                reply = `\`\`\`${message.client.config.prefix}${topcommand.name} ${command.name}`;
+            if (command.parent) {
+                reply = `\`\`\`${message.client.config.prefix}${command.parent} ${command.name}`;
             } else {
                 reply = `\`\`\`${message.client.config.prefix}${command.name}`;
             }

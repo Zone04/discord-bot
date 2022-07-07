@@ -34,6 +34,7 @@ class CommandsManager {
                         for (const file of subcommandFiles) {
                             if (file == 'index.js') continue;
                             let subcommand = require(`./${dir}/${dirent.name}/${file}`);
+                            subcommand.parent = command.name;
                             command.subcommands.set(subcommand.name, subcommand);
                             console.log(`Loaded subcommand ${dir}/${dirent.name}/${file}`);
                         }

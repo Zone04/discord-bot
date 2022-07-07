@@ -87,7 +87,7 @@ module.exports = {
                     const subcommand = command.subcommands.get(args[1]);
                     if (!subcommand.permitted(message.client, message)) return;
 
-                    let reply = utils.getHelpMessage(message, subcommand, command);
+                    let reply = utils.getHelpMessage(message, subcommand);
                     message.reply(reply);
                 }
             }
