@@ -63,7 +63,7 @@ client.on('messageCreate', async (message) => {
         command = command.subcommands.get(subcommandName);
     }
 
-    if (!(command.check_args?.(message, args) ?? true)) {
+    if (!(await command.check_args?.(message, args) ?? true)) {
         reply = utils.getHelpMessage(message, command);
 
         return message.reply(reply);

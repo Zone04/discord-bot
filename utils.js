@@ -61,5 +61,22 @@ module.exports = {
 
         let chan = client.channels.cache.get(setting.logChan);
         chan.send({"content":text,"allowedMentions": { "users" : []}}).catch();
+    },
+
+    checkChan: async function (message, arg) {
+        if (!arg) return false;
+        // As mention
+        if (arg.startsWith('<#') && arg.endsWith('>')) {
+            arg = arg.slice(2, -1);
+        }
+        if (isNaN(arg) || parseInt(arg) < 0) return false;
+        // As ID
+        try {
+            let chan = await message.client.channels.fetch(arg);
+            return chan.guild.id == message.guild.id;
+        } catch {
+            return false;
+        }
+
     }
 }
