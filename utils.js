@@ -1,4 +1,5 @@
 const UserNotFoundError = require('./errors/UserNotFoundError.js');
+const { Op } = require("sequelize");
 
 module.exports = {
     convertUser: async function (message, arg) {
@@ -82,12 +83,31 @@ module.exports = {
         }
         if (isNaN(arg) || parseInt(arg) < 0) return false;
 
-        // try {
+        try {
             let chan = await this.getChan(message, arg);
             return chan.guild.id == message.guild.id;
-        // } catch {
-        //     return false;
-        // }
+        } catch {
+            return false;
+        }
+    },
 
+    getBlacklistChan: async function (client, chanId) {
+        let blacklist;
+        if (Array.isArray(chanId)) {
+            blacklist = await client.db.BlacklistChan.findAll({where:{chan: {[Op.in]: chanId}}});
+        } else {
+            blacklist = await client.db.BlacklistChan.findAll({where:{chan: chanId}});
+        }
+
+        // Remove entries with non-existing commands
+        blacklist = blacklist.filter(entry => {
+            if (!client.commandsManager.commands.has(entry.command)) {
+                entry.destroy().catch(error => {console.error("Could not delete BlacklistChan entry"); console.log(error)});
+                return false;
+            }
+            return true;
+        });
+
+        return blacklist;
     }
 }
