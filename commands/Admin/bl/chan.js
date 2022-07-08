@@ -59,7 +59,7 @@ module.exports = {
     execute: async (message, args) => {
         // Check the action
         let action = 'toggle';
-        if (['toggle', 'view', 'edit'].includes(args[0])) {
+        if (['toggle', 'view', 'reset'].includes(args[0])) {
             action = args.shift();
         }
 
@@ -97,7 +97,12 @@ module.exports = {
             message.reply(reply);
 
         } else if (action == 'reset') {
-
+            let reply = "";
+            for (const chan of chans) {
+                message.client.db.BlacklistChan.destroy({where: {chan: chan}});
+                reply += `<#${chan}>: Blacklist effacée\n`;
+            };
+            message.reply(reply);
         }
     },
 };
