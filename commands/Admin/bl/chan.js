@@ -80,5 +80,24 @@ module.exports = {
         }
 
         // Now we have everything sorted, switch case for action
+        if (action == 'toggle') {
+            
+        } else if (action == 'view') {
+            let reply = "";
+            for (const chan of chans) {
+                reply += `Commandes bloquées dans le chan <#${chan}>:\n`;
+                let bl = await utils.getBlacklistChan(message.client, chan);
+                if (bl.length == 0) {
+                    reply += "Aucune commande bloquée";
+                } else {
+                    reply += '`' + bl.map(entry => {return message.client.config.prefix + entry.command}).join(' ') + '`';
+                }
+                reply += `\n\n`
+            };
+            message.reply(reply);
+
+        } else if (action == 'reset') {
+
+        }
     },
 };
