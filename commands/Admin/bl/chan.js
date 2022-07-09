@@ -148,9 +148,13 @@ module.exports = {
 
                 let reply = '';
                 if (commands.length == 1) {
-                    reply += `La commande \``
-                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
-                    + `\` a été bloquée `;
+                    if (commands[0] == 'all commands') {
+                        reply += "Toutes les commandes ont été bloquées ";
+                    } else {
+                        reply += `La commande \``
+                        + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                        + `\` a été bloquée `;
+                    }
                 } else {
                     reply += `Les commandes \``
                     + commands.map(command => {return message.client.config.prefix + command}).join(' ')
@@ -175,6 +179,8 @@ module.exports = {
                 let bl = await utils.getBlacklistChan(message.client, chan);
                 if (bl.length == 0) {
                     reply += "Aucune commande bloquée";
+                } else if (bl[0].command == 'all commands') {
+                    reply += 'Toutes les commandes';
                 } else {
                     reply += '`' + bl.map(entry => {return message.client.config.prefix + entry.command}).join(' ') + '`';
                 }
