@@ -81,7 +81,53 @@ module.exports = {
 
         // Now we have everything sorted, switch case for action
         if (action == 'toggle') {
-            
+            // Check all commands are in the same state
+            bl = {};
+            for (chan of chans) {
+                bl[chan] = (await utils.getBlacklistChan(message.client, chan)).map(entry=> entry.command);
+            }
+            console.log(bl);
+
+            let allPresent = chans.every(chan => {
+                return commands.every(command => bl[chan].includes(command));
+            });
+            let allAbsent = chans.every(chan => {
+                return commands.every(command => !bl[chan].includes(command));
+            });
+
+            if (allPresent) {
+                return message.reply("Toutes les commandes dans la blacklist");
+            } else if (allAbsent) {
+                let toCreate = [];
+                for (chan of chans) {
+                    for (command of commands) {
+                        toCreate.push({chan: chan, command: command});
+                    }
+                }
+                await message.client.db.BlacklistChan.bulkCreate(toCreate);
+
+                let reply = '';
+                if (commands.length == 1) {
+                    reply += `La commande \``
+                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                    + `\` a été bloquée `;
+                } else {
+                    reply += `Les commandes \``
+                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                    + `\` ont été bloquées `;
+                }
+                if (chans.length == 1) {
+                    reply +=  `dans le chan `
+                    + chans.map(chan => {return '<#' + chan + '>'}).join(' ');
+                } else {
+                    reply +=  `dans les chans `
+                    + chans.map(chan => {return '<#' + chan + '>'}).join(' ');
+                }
+                return message.reply(reply);
+            } else {
+                return message.reply("Les commandes ne sont ni toutes absentes ni toutes présentes dans tous les chans spécififés.\nImpossible d'effectuer une modification.");
+            }
+
         } else if (action == 'view') {
             let reply = "";
             for (const chan of chans) {
