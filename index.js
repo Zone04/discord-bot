@@ -69,7 +69,7 @@ client.on('messageCreate', async (message) => {
         return message.reply(reply);
     }
 
-    if (command.permitted(client, message)) {
+    if (await utils.permitted(message, command)) {
         try {
             await command.execute(message, args)
         } catch(error) {

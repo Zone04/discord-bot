@@ -103,5 +103,19 @@ module.exports = {
         });
 
         return blacklist;
+    },
+
+    permitted: async function (message, command) {
+        let blacklist = await message.client.db.BlacklistChan.findAll({where: {chan: message.channel.id}});
+
+        // Guild owner not affected by blacklist
+        if (message.author.id !== message.guild.ownerId) {
+            // Check blacklist
+            let name = command.parent ?? command.name;
+            if (blacklist.some(entry => entry.command == 'all commands' || entry.command == name)){
+                return false;
+            }
+        }
+        return command.permitted(message.client, message);
     }
 }
