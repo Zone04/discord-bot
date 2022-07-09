@@ -29,7 +29,7 @@ module.exports = {
     usage: settings.usage,
     cron: [
         {
-            schedule: '* * * * *', //'0 0 * * *', // Every day
+            schedule: '0 0 * * *', // Every day
             description: 'Remove blacklist entries with deleted chans',
             run: async (client) => {
                 const blacklist = await client.db.BlacklistChan.findAll();
