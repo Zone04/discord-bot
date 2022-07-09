@@ -85,6 +85,16 @@ class CommandsManager {
                     this._cron.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(this._client) }));
                 })
             }
+            if (command.subcommands) {
+                command.subcommands.forEach(command => {
+                    if (command.cron) {
+                        command.cron.forEach(cronJob => {
+                            console.log(`Starting cron job for ${command.parent} ${command.name}`);
+                            this._cron.push(cron.schedule(cronJob.schedule, async () => { cronJob.run(this._client) }));
+                        })
+                    }
+                })
+            }
         });
     }
 
