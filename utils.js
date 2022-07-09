@@ -1,5 +1,4 @@
 const UserNotFoundError = require('./errors/UserNotFoundError.js');
-const { Op } = require("sequelize");
 
 module.exports = {
     convertUser: async function (message, arg) {

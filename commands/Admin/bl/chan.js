@@ -1,4 +1,5 @@
 const utils = require('../../../utils');
+const { Op } = require("sequelize");
 
 let settings = {
     name: 'chan',
@@ -96,7 +97,35 @@ module.exports = {
             });
 
             if (allPresent) {
-                return message.reply("Toutes les commandes dans la blacklist");
+                await message.client.db.BlacklistChan.destroy({
+                    where: {
+                        chan: {
+                            [Op.in]: chans
+                        },
+                        command: {
+                            [Op.in]: commands
+                        }
+                    }
+                });
+
+                let reply = '';
+                if (commands.length == 1) {
+                    reply += `La commande \``
+                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                    + `\` a été retirée de la blacklist `;
+                } else {
+                    reply += `Les commandes \``
+                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                    + `\` ont été retirées de la blacklist `;
+                }
+                if (chans.length == 1) {
+                    reply +=  `dans le chan `
+                    + chans.map(chan => {return '<#' + chan + '>'}).join(' ');
+                } else {
+                    reply +=  `dans les chans `
+                    + chans.map(chan => {return '<#' + chan + '>'}).join(' ');
+                }
+                return message.reply(reply);
             } else if (allAbsent) {
                 let toCreate = [];
                 for (chan of chans) {
