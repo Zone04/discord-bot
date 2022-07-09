@@ -27,6 +27,24 @@ module.exports = {
     name: settings.name,
     description: settings.description,
     usage: settings.usage,
+    cron: [
+        {
+            schedule: '* * * * *', //'0 0 * * *', // Every day
+            description: 'Remove blacklist entries with deleted chans',
+            run: async (client) => {
+                const blacklist = await client.db.BlacklistChan.findAll();
+                let c = 0;
+                for (entry of blacklist){
+                    if (!client.channels.resolve(entry.chan)) {
+                        entry.destroy();
+                        c += 1;
+                    }
+                }
+                console.log(`Found ${c} blacklist entries associated to deleted channels`);
+                return `Found ${c} blacklist entries associated to deleted channels`;
+            }
+        },
+    ],
     check_args: async (message, args) => {
         args = [...args]; // copy array
         let arg=undefined;
