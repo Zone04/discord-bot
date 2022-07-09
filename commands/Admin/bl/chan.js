@@ -79,6 +79,7 @@ module.exports = {
             commands.push(arg);
             arg = args.shift();
         }
+        if (commands.length == 0) commands.push('all commands');
 
         // Now we have everything sorted, switch case for action
         if (action == 'toggle') {
@@ -95,6 +96,9 @@ module.exports = {
             let allAbsent = chans.every(chan => {
                 return commands.every(command => !bl[chan].includes(command));
             });
+            if (commands[0] == 'all commands') {
+                allAbsent = chans.every(chan => bl[chan].length == 0);
+            }
 
             if (allPresent) {
                 await message.client.db.BlacklistChan.destroy({
@@ -110,9 +114,13 @@ module.exports = {
 
                 let reply = '';
                 if (commands.length == 1) {
-                    reply += `La commande \``
-                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
-                    + `\` a été retirée de la blacklist `;
+                    if (commands[0] == 'all commands') {
+                        reply += 'Les commandes ont été activées '
+                    } else {
+                        reply += `La commande \``
+                        + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                        + `\` a été retirée de la blacklist `;
+                    }
                 } else {
                     reply += `Les commandes \``
                     + commands.map(command => {return message.client.config.prefix + command}).join(' ')
@@ -127,6 +135,9 @@ module.exports = {
                 }
                 return message.reply(reply);
             } else if (allAbsent) {
+                if (chans.some(chan => bl[chan].includes('all commands'))) {
+                    return message.reply("Toutes les commandes sont bloquées dans au moins un des chans spécifiés. Impossible d'ajouter une commande spécifique.");
+                }
                 let toCreate = [];
                 for (chan of chans) {
                     for (command of commands) {

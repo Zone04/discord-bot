@@ -95,7 +95,7 @@ module.exports = {
 
         // Remove entries with non-existing commands
         blacklist = blacklist.filter(entry => {
-            if (!client.commandsManager.commands.has(entry.command)) {
+            if (!client.commandsManager.commands.has(entry.command) && entry.command != 'all commands') {
                 entry.destroy().catch(error => {console.error("Could not delete BlacklistChan entry"); console.error(error)});
                 return false;
             }
