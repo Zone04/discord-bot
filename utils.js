@@ -110,13 +110,17 @@ module.exports = {
     },
 
     permitted: async function (message, command) {
-        let blacklist = await message.client.db.BlacklistChan.findAll({where: {chan: message.channel.id}});
+        let blacklistChan = await message.client.db.BlacklistChan.findAll({where: {chan: message.channel.id}});
+        let blacklistUser = await message.client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
 
         // Guild owner not affected by blacklist
         if (message.author.id !== message.guild.ownerId) {
-            // Check blacklist
+            // Check blacklistChan
             let name = command.parent ?? command.name;
-            if (blacklist.some(entry => entry.command == 'all commands' || entry.command == name)){
+            if (blacklistChan.some(entry => entry.command == 'all commands' || entry.command == name)){
+                return false;
+            }
+            if (blacklistUser.some(entry => entry.user == message.author.id)) {
                 return false;
             }
         }
