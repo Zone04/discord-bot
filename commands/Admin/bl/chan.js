@@ -209,7 +209,7 @@ module.exports = {
         } else if (action == 'reset') {
             let reply = "";
             for (const chan of chans) {
-                message.client.db.BlacklistChan.destroy({where: {chan: chan}});
+                await message.client.db.BlacklistChan.destroy({where: {chan: chan}});
                 reply += `<#${chan}>: Blacklist effacée\n`;
             };
             message.reply(reply);
