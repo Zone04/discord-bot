@@ -1,5 +1,6 @@
 const utils = require('../../utils.js');
 const UserNotFoundError = require('../../errors/UserNotFoundError.js');
+const TooManyUsersError = require('../../errors/TooManyUsersError.js');
 
 let settings = {
     name: 'ban',
@@ -30,7 +31,7 @@ module.exports = {
         try {
             guildMember = await utils.convertUser(message, user);
         } catch(e) {
-            if (e instanceof UserNotFoundError) {
+            if (e instanceof UserNotFoundError || e instanceof TooManyUsersError) {
                 message.reply(e.message);
                 return;
             } else {

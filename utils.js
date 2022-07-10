@@ -1,8 +1,12 @@
 const UserNotFoundError = require('./errors/UserNotFoundError.js');
+const TooManyUsersError = require('./errors/TooManyUsersError.js');
 
 module.exports = {
     convertUser: async function (message, arg) {
-        let guildMember = await message.guild.members.fetch({ query: arg, limit: 1 }); // as name
+        let guildMember = await message.guild.members.fetch({ query: arg, limit: 2 }); // as name
+        if (guildMember.size == 2) {
+            throw new TooManyUsersError(`La recherche \`${arg}\` a retourné plus d'un utilisateur. Affinez votre recherche.`);
+        }
         if (guildMember.size !== 0) {
             return guildMember.first();
         }

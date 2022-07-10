@@ -141,7 +141,7 @@ let execute = async (message, args) => {
         try {
             guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
         } catch(e) {
-            if (e instanceof UserNotFoundError) {
+            if (e instanceof UserNotFoundError) { // Do not catch TooManyUsersError here as this should not happen
                 // If we were trying to resume and this happens, it means user left the guild, so we instantly delete the spam
                 if (message.id == 0) {
                     spamInstance.destroy();
