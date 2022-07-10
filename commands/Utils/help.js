@@ -37,14 +37,14 @@ module.exports = {
             let help = 'Liste des commandes :\n```'
 
             cat = '';
-            commands.forEach(command => {
+            for ([_,command] of commands) {
                 let shouldPrint = false;
                 if (command.subcommands) {
-                    command.subcommands.forEach(subcommand => {
-                        shouldPrint = shouldPrint || subcommand.permitted(message.client, message);
-                    });
+                    for ([_,subcommand] of command.subcommands) {
+                        shouldPrint = shouldPrint || await utils.permitted(message, subcommand);
+                    };
                 } else {
-                    shouldPrint = command.permitted(message.client, message);
+                    shouldPrint = await utils.permitted(message, command);
                 }
                 if (shouldPrint) {
                     if (command.cat != cat){
@@ -53,7 +53,7 @@ module.exports = {
                     }
                     help += `${message.client.config.prefix}${command.name.concat(' ').padEnd(14, ' ')}${command.description}\n`
                 }
-            });
+            };
 
             help += '```'
 
@@ -64,28 +64,28 @@ module.exports = {
 
             const command = commands.get(commandName);
             if (!command.subcommands) {
-                if (!command.permitted(message.client, message)) return message.reply('Pas de commande trouvée');
+                if (!await utils.permitted(message, command)) return message.reply('Pas de commande trouvée');
     
                 let reply = utils.getHelpMessage(message, command);
                 message.reply(reply);
             } else {
                 if (args.length < 2 || !command.subcommands.has(args[1])) {
                     let shouldPrint = false;
-                    command.subcommands.forEach(subcommand => {
-                        shouldPrint = shouldPrint || subcommand.permitted(message.client, message);
-                    });
+                    for (subcommand of command.subcommands) {
+                        shouldPrint = shouldPrint || await utils.permitted(message, subcommand);
+                    };
                     if (!shouldPrint) return message.reply('Pas de commande trouvée');
                     let help = 'Liste des sous-commandes de `' + command.name + '` :\n```'
-                    command.subcommands.forEach(subcommand => {
-                        if (subcommand.permitted(message.client, message)) {
+                    for (subcommand of command.subcommands) {
+                        if (await utils.permitted(message, subcommand)) {
                             help += `${message.client.config.prefix}${command.name} ${subcommand.name.concat(' ').padEnd(14, ' ')}${subcommand.description}\n`
                         }
-                    });
+                    };
                     help += '```'
                     message.reply(help);
                 } else {
                     const subcommand = command.subcommands.get(args[1]);
-                    if (!subcommand.permitted(message.client, message)) return;
+                    if (!await utils.permitted(message, subcommand)) return;
 
                     let reply = utils.getHelpMessage(message, subcommand);
                     message.reply(reply);
