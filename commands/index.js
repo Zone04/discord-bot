@@ -14,7 +14,7 @@ class CommandsManager {
     }
 
     load() {
-        this.commands = new Collection();
+        let commands = new Collection();
         fs.readdirSync(__dirname, { withFileTypes: true })
             .filter(dirent => dirent.isDirectory())
             .map(dirent => dirent.name)
@@ -24,7 +24,7 @@ class CommandsManager {
                     if (dirent.name.endsWith('.js')) {
                         let command = require(`./${dir}/${dirent.name}`);
                         command.cat = dir;
-                        this.commands.set(command.name, command);
+                        commands.set(command.name, command);
                         console.log(`Loaded command ${dir}/${dirent.name}`);
                     } else if (dirent.isDirectory()) {
                         let command = require(`./${dir}/${dirent.name}`);
@@ -38,11 +38,12 @@ class CommandsManager {
                             command.subcommands.set(subcommand.name, subcommand);
                             console.log(`Loaded subcommand ${dir}/${dirent.name}/${file}`);
                         }
-                        this.commands.set(command.name, command);
+                        commands.set(command.name, command);
                     }
                 }
             }
         )
+        this.commands = commands;
     };
 
     reload() {
@@ -64,8 +65,11 @@ class CommandsManager {
                 }
             }
         });
-        this.load();
-        this.startcron();
+        try {
+            this.load();
+        } finally {
+            this.startcron();
+        }
     }
 
     startup() {
