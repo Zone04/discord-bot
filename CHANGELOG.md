@@ -2,21 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.0.0]
 
 ### Added
  - Ban/Unban fake commands
  - Speak command for guild owners
+ - Added function for checking command arguments
+ - Added `kiss` command
+ - Added 8-ball command
+ - Added roll command
+ - Added NSFW commands (accessible only in NSFW channels)
+ - Added roulette command
+ - Added subcommands system (including loading/reloading/help/cron)
+ - Added description to settings
+ - Added blacklist command for commands in individual channels
+ - Added blacklist command for users across guilds
 
 ### Changed
  - Clear can remove arbitrary number of message
  - Reorganized function in groups
  - Include category in help message
+ - Gestion of commands as an object
+ - Reorganized settings in groups
 
 ### Fix
  - Fix logs showing for resumed spams
  - Fix wrong log with spaced names
  - Fix spams with float number of spams
+ - Translated commands descriptions
 
 ## [0.0.6] 2022-03-15
 
@@ -140,7 +153,7 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
-[unreleased]: https://github.com/Zone04/discord-bot/compare/v0.0.6...HEAD
+[1.0.0]: https://github.com/Zone04/discord-bot/compare/v0.0.6...v1.0.0
 [0.0.6]: https://github.com/Zone04/discord-bot/compare/v0.0.5.2...v0.0.6
 [0.0.5.2]: https://github.com/Zone04/discord-bot/compare/v0.0.5.1...v0.0.5.2
 [0.0.5.1]: https://github.com/Zone04/discord-bot/compare/v0.0.5...v0.0.5.1
