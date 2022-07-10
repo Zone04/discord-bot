@@ -109,15 +109,18 @@ let execute = async (message, args) => {
 
     let content;
 
-    let rand = Math.random()
-    if (rand < (setting.easterProba ?? 0.01) && message.id !== 0) { // 1% chance of backfire, but not when resuming
-        args = [message.author.id, limit];
-        await message.channel.send(`Ba alors ?`);
-        await message.channel.send(`On a voulu spam ????`);
-        await message.channel.send(`Dommage hein, mais pas cette fois.`);
-        await message.channel.send(`Quoique... Vengeance !`);
-        await message.channel.send(`Allez c'est cadeau c'est pour moi !`);
-        utils.sendLogMessage(message.client, message.guild.id, `Easter egg triggered on ${message.author}`);
+    // No easter egg if command is currently blacklisted
+    if (!(await utils.getBlacklistChan(message.client, message.channel.id)).some(entry => entry.command == 'spam' || entry.command == 'all commands')) {
+        let rand = Math.random()
+        if (rand < (setting.easterProba ?? 0.01) && message.id !== 0) { // 1% chance of backfire, but not when resuming
+            args = [message.author.id, limit];
+            await message.channel.send(`Ba alors ?`);
+            await message.channel.send(`On a voulu spam ????`);
+            await message.channel.send(`Dommage hein, mais pas cette fois.`);
+            await message.channel.send(`Quoique... Vengeance !`);
+            await message.channel.send(`Allez c'est cadeau c'est pour moi !`);
+            utils.sendLogMessage(message.client, message.guild.id, `Easter egg triggered on ${message.author}`);
+        }
     }
 
     if (args.length == 2 && args[0] == 'random') {
