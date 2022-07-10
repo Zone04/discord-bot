@@ -25,7 +25,7 @@ module.exports = {
                 return guildMember;
             } catch {}
         }
-        throw new UserNotFoundError('Pas d\'utilisateur trouvé.');
+        throw new UserNotFoundError(`Pas d'utilisateur trouvé pour la recherche \`${arg}\`.`);
     },
 
     getHelpMessage: function (message, command) {

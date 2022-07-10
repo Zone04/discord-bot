@@ -165,7 +165,7 @@ let execute = async (message, args) => {
                 utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed randomly ${args[args.length - 1]} time(s) User ${content}`);
             }
         } else {
-            console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[args.length - 1]} time(s) User ${guildMember.user.id}`);
+            console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[args.length - 1]} time(s) User ${content.id}`);
             utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[args.length - 1]} time(s) User ${content}`);
         }
     }
