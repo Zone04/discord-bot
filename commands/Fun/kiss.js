@@ -1,4 +1,3 @@
-const utils = require('../../utils.js');
 const TooManyUsersError = require('../../errors/TooManyUsersError.js');
 const UserNotFoundError = require('../../errors/UserNotFoundError.js');
 
@@ -30,7 +29,7 @@ module.exports = {
 
             let guildMember;
             try {
-                guildMember = await utils.convertUser(message, user);
+                guildMember = await message.client.utils.convertUser(message, user);
             } catch(e) {
                 if (e instanceof UserNotFoundError || e instanceof TooManyUsersError) {
                     message.reply(e.message);

@@ -1,4 +1,3 @@
-const utils = require('../../../utils');
 const { Op } = require("sequelize");
 
 let settings = {
@@ -47,26 +46,27 @@ module.exports = {
     ],
     check_args: async (message, args) => {
         args = [...args]; // copy array
+        let client = message.client;
         let arg=undefined;
         if (args.length == 0) return true;
         else if (args[0] == 'view' || args[0] == 'reset') {
             args.shift();
             while (arg = args.shift()) { // all remaining args should be channels mention/ID
-                let ans = await utils.checkChan(message, arg);
+                let ans = await client.utils.checkChan(message, arg);
                 if (!ans) {
                     return false;
                 }
             }
             return true;
-        } else if (args[0] == 'toggle' || await utils.checkChan(message, args[0])) {
+        } else if (args[0] == 'toggle' || await client.utils.checkChan(message, args[0])) {
             args.shift();
-            while (await utils.checkChan(message, arg = args.shift() )) {}
+            while (await client.utils.checkChan(message, arg = args.shift() )) {}
             // Still need to check if all remaining args are commands. This is done after the big if to account for the case where the first argument is a command
         } else {
             arg = args.shift();
         }
         while (arg) {
-            if (!message.client.commandsManager.commands.has(arg)) return false;
+            if (!client.commandsManager.commands.has(arg)) return false;
             arg = args.shift();
         }
         return true
@@ -77,6 +77,7 @@ module.exports = {
     },
     execute: async (message, args) => {
         // Check the action
+        let client = message.client;
         let action = 'toggle';
         if (['toggle', 'view', 'reset'].includes(args[0])) {
             action = args.shift();
@@ -85,8 +86,8 @@ module.exports = {
         // args now contains only chans and commands
 
         let chans = [];
-        while (await utils.checkChan(message, arg = args.shift() )) {
-            chans.push(await utils.getChanId(message, arg));
+        while (await client.utils.checkChan(message, arg = args.shift() )) {
+            chans.push(await client.utils.getChanId(message, arg));
         }
         if (chans.length == 0) {
             chans.push(message.channel.id);
@@ -104,7 +105,7 @@ module.exports = {
             // Check all commands are in the same state
             bl = {};
             for (chan of chans) {
-                bl[chan] = (await utils.getBlacklistChan(message.client, chan)).map(entry=> entry.command);
+                bl[chan] = (await client.utils.getBlacklistChan(client, chan)).map(entry=> entry.command);
             }
             console.log(bl);
 
@@ -119,7 +120,7 @@ module.exports = {
             }
 
             if (allPresent) {
-                await message.client.db.BlacklistChan.destroy({
+                await client.db.BlacklistChan.destroy({
                     where: {
                         chan: {
                             [Op.in]: chans
@@ -136,12 +137,12 @@ module.exports = {
                         reply += 'Les commandes ont été activées '
                     } else {
                         reply += `La commande \``
-                        + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                        + commands.map(command => {return client.config.prefix + command}).join(' ')
                         + `\` a été retirée de la blacklist `;
                     }
                 } else {
                     reply += `Les commandes \``
-                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                    + commands.map(command => {return client.config.prefix + command}).join(' ')
                     + `\` ont été retirées de la blacklist `;
                 }
                 if (chans.length == 1) {
@@ -162,7 +163,7 @@ module.exports = {
                         toCreate.push({chan: chan, command: command});
                     }
                 }
-                await message.client.db.BlacklistChan.bulkCreate(toCreate);
+                await client.db.BlacklistChan.bulkCreate(toCreate);
 
                 let reply = '';
                 if (commands.length == 1) {
@@ -170,12 +171,12 @@ module.exports = {
                         reply += "Toutes les commandes ont été bloquées ";
                     } else {
                         reply += `La commande \``
-                        + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                        + commands.map(command => {return client.config.prefix + command}).join(' ')
                         + `\` a été bloquée `;
                     }
                 } else {
                     reply += `Les commandes \``
-                    + commands.map(command => {return message.client.config.prefix + command}).join(' ')
+                    + commands.map(command => {return client.config.prefix + command}).join(' ')
                     + `\` ont été bloquées `;
                 }
                 if (chans.length == 1) {
@@ -194,13 +195,13 @@ module.exports = {
             let reply = "";
             for (const chan of chans) {
                 reply += `Commandes bloquées dans le chan <#${chan}>:\n`;
-                let bl = await utils.getBlacklistChan(message.client, chan);
+                let bl = await client.utils.getBlacklistChan(client, chan);
                 if (bl.length == 0) {
                     reply += "Aucune commande bloquée";
                 } else if (bl[0].command == 'all commands') {
                     reply += 'Toutes les commandes';
                 } else {
-                    reply += '`' + bl.map(entry => {return message.client.config.prefix + entry.command}).join(' ') + '`';
+                    reply += '`' + bl.map(entry => {return client.config.prefix + entry.command}).join(' ') + '`';
                 }
                 reply += `\n\n`
             };
@@ -209,7 +210,7 @@ module.exports = {
         } else if (action == 'reset') {
             let reply = "";
             for (const chan of chans) {
-                await message.client.db.BlacklistChan.destroy({where: {chan: chan}});
+                await client.db.BlacklistChan.destroy({where: {chan: chan}});
                 reply += `<#${chan}>: Blacklist effacée\n`;
             };
             message.reply(reply);

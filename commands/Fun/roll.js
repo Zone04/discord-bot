@@ -1,5 +1,3 @@
-const utils = require('../../utils.js');
-
 let settings = {
     name: 'roll',
     description: 'Tire un nombre aléatoire',

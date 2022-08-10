@@ -21,6 +21,7 @@ const client = new Client({ intents: [
 client.cronjobs = new Array();
 client.config = config;
 client.db = db;
+client.utils = utils;
 
 client.commandsManager = new CommandsManager(client);
 
@@ -58,18 +59,18 @@ client.on('messageCreate', async (message) => {
     if (command.subcommands) {
         const subcommandName = args.shift();
         if (!command.subcommands.has(subcommandName)) {
-            return message.reply('Sous-commande inexistante\n'+utils.getHelpMessage(message, command));
+            return message.reply('Sous-commande inexistante\n'+client.utils.getHelpMessage(message, command));
         }
         command = command.subcommands.get(subcommandName);
     }
 
     if (!(await command.check_args?.(message, args) ?? true)) {
-        reply = utils.getHelpMessage(message, command);
+        reply = client.utils.getHelpMessage(message, command);
 
         return message.reply(reply);
     }
 
-    if (await utils.permitted(message, command)) {
+    if (await client.utils.permitted(message, command)) {
         try {
             await command.execute(message, args)
         } catch(error) {
