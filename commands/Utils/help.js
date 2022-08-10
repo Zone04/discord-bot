@@ -71,17 +71,11 @@ module.exports = {
             } else {
                 if (args.length < 2 || !command.subcommands.has(args[1])) {
                     let shouldPrint = false;
-                    for (subcommand of command.subcommands) {
+                    for ([_, subcommand] of command.subcommands) {
                         shouldPrint = shouldPrint || await utils.permitted(message, subcommand);
                     };
                     if (!shouldPrint) return message.reply('Pas de commande trouvée');
-                    let help = 'Liste des sous-commandes de `' + command.name + '` :\n```'
-                    for (subcommand of command.subcommands) {
-                        if (await utils.permitted(message, subcommand)) {
-                            help += `${message.client.config.prefix}${command.name} ${subcommand.name.concat(' ').padEnd(14, ' ')}${subcommand.description}\n`
-                        }
-                    };
-                    help += '```'
+                    let help = utils.getHelpMessage(message, command);
                     message.reply(help);
                 } else {
                     const subcommand = command.subcommands.get(args[1]);
