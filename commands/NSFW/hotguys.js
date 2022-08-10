@@ -1,12 +1,12 @@
 const axios = require('axios');
 
 let settings = {
-    name: 'pussy',
-    description: '( ಠ ͜ʖಠ)',
+    name: 'hotguys',
+    description: 'Des hommes, normalement sans images sous la ceinture',
     usage: [
         {
             name: 'NOMBRE',
-            description: 'Nombre de pussy, default 1, max 5',
+            description: 'Nombre d\'hommes, default 1, max 5',
             optional: true
         }
     ],
@@ -26,7 +26,7 @@ module.exports = {
     execute: async(message, args) => {
         let number = 1;
         
-        let res = await axios.get('https://reddit.com/r/pussy/top.json?limit=100');
+        let res = await axios.get('https://reddit.com/r/HotGuys/top.json?limit=100');
         
         if (args.length) {
             number = Math.min(parseInt(args[0]), res.data.data.children.length);

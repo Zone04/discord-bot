@@ -1,6 +1,4 @@
-const utils = require('../../utils.js');
 const axios = require('axios');
-const UserNotFoundError = require('../../errors/UserNotFoundError.js');
 
 let settings = {
     name: 'ass',

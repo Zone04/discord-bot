@@ -1,12 +1,12 @@
 const axios = require('axios');
 
 let settings = {
-    name: 'pussy',
-    description: '( ಠ ͜ʖಠ)',
+    name: 'softmen',
+    description: 'ABDOS',
     usage: [
         {
             name: 'NOMBRE',
-            description: 'Nombre de pussy, default 1, max 5',
+            description: 'Nombre d\'hommes, default 1, max 5',
             optional: true
         }
     ],
@@ -26,7 +26,7 @@ module.exports = {
     execute: async(message, args) => {
         let number = 1;
         
-        let res = await axios.get('https://reddit.com/r/pussy/top.json?limit=100');
+        let res = await axios.get('https://reddit.com/r/GayEyeBleach/top.json?limit=100&t=month');
         
         if (args.length) {
             number = Math.min(parseInt(args[0]), res.data.data.children.length);
