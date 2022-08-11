@@ -21,6 +21,9 @@ module.exports = {
     permitted: (client, message) => {
         return true;
     },
+    check_args: (message, args) => {
+        return true;
+    },
     execute: async(message, args) => {
         let user;
         if (!args.length) {
@@ -34,8 +37,7 @@ module.exports = {
             guildMember = await utils.convertUser(message, user);
         } catch(e) {
             if (e instanceof UserNotFoundError || e instanceof TooManyUsersError) {
-                message.reply(e.message);
-                return;
+                return message.reply(e.message);
             } else {
                 throw e;
             }

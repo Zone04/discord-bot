@@ -21,7 +21,7 @@ module.exports = {
     check_args: (message, args) => {
         if (args.length < 2)
             return false;
-        return parseInt(args[0]) > 0
+        return parseInt(args[0]) > 0;
     },
     usage: settings.usage,
     permitted: (client, message) => {

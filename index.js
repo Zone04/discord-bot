@@ -65,7 +65,7 @@ client.on('messageCreate', async (message) => {
     }
     if (!(await utils.permitted(message, command))) return;
 
-    if (!(await command.check_args?.(message, args) ?? true)) {
+    if (!(await command.check_args?.(message, args) ?? args.length==0)) {
         reply = utils.getHelpMessage(message, command);
 
         return message.reply(reply);
