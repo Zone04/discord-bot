@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1]
+
+### Added
+ - Some more NSFW commands
+
+### Fixed
+ - Help not working with subcommands
+ - Wrong gestion of the permissions of commands
+ - Fix commands callable with args when not needed
+ - Renamed bl view as bl list
+
 ## [1.0.0]
 
 ### Added
