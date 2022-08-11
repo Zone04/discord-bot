@@ -59,24 +59,24 @@ client.on('messageCreate', async (message) => {
     if (command.subcommands) {
         const subcommandName = args.shift();
         if (!command.subcommands.has(subcommandName)) {
+            if (!(await utils.permitted(message, command))) return;
             return message.reply('Sous-commande inexistante\n'+client.utils.getHelpMessage(message, command));
         }
         command = command.subcommands.get(subcommandName);
     }
+    if (!(await utils.permitted(message, command))) return;
 
-    if (!(await command.check_args?.(message, args) ?? true)) {
+    if (!(await command.check_args?.(message, args) ?? args.length==0)) {
         reply = client.utils.getHelpMessage(message, command);
 
         return message.reply(reply);
     }
 
-    if (await client.utils.permitted(message, command)) {
-        try {
-            await command.execute(message, args)
-        } catch(error) {
-            console.error(error);
-            message.reply(`Uh Oh... Une erreur est survenue !`).catch(_ => {});
-        }
+    try {
+        await command.execute(message, args)
+    } catch(error) {
+        console.error(error);
+        message.reply(`Uh Oh... Une erreur est survenue !`).catch(_ => {});
     }
 });
 

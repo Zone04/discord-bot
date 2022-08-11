@@ -124,6 +124,11 @@ module.exports = {
                 return false;
             }
         }
-        return command.permitted(message.client, message);
+
+        if (!command.subcommands) {
+            return command.permitted(message.client, message);
+        } else {
+            return command.subcommands.some(subcommand => subcommand.permitted(message.client, message));
+        }
     }
 }

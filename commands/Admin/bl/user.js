@@ -5,8 +5,8 @@ let settings = {
     description: 'Ajoute un utilisateur à la liste noire',
     usage: [
         {
-            name: 'USERNAME|ID|MENTION|everyone|reset|view',
-            description: 'Utilisateurs à ajouter/retirer. "everyone" pour ajouter tout le monde. "reset" pour effacer la liste. "view" ou vide pour voir la liste',
+            name: 'USERNAME|ID|MENTION|everyone|reset|list',
+            description: 'Utilisateurs à ajouter/retirer. "everyone" pour ajouter tout le monde. "reset" pour effacer la liste. "list" ou vide pour voir la liste',
             optional: true
         }
     ],
@@ -21,7 +21,7 @@ module.exports = {
     },
     check_args: (message, args) => {
         args = [...args]; // copy array
-        if (args.includes('reset') || args.includes('view')) {
+        if (args.includes('reset') || args.includes('list')) {
             return args.length == 1;
         }
         // other args should be users and will be checked for existence when executing
@@ -34,7 +34,7 @@ module.exports = {
             await client.db.BlacklistUser.destroy({where: {guild_id: message.guild.id}});
             return message.reply(`Blacklist d'utilisateur effacée`);
         }
-        if (args.includes('view') || args.length == 0) {
+        if (args.includes('list') || args.length == 0) {
             let bl = await client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
             let reply = 'Liste des utilisateurs blacklistés :\n';
             if (bl.length == 0) {
