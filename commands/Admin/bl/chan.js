@@ -6,7 +6,7 @@ let settings = {
     description: 'Ajoute un chan à la liste noire',
     usage: [
         {
-            name: 'toggle|view|reset',
+            name: 'toggle|list|reset',
             description: 'Action. Valeur par défaut : toggle',
             optional: true
         },
@@ -49,7 +49,7 @@ module.exports = {
         args = [...args]; // copy array
         let arg=undefined;
         if (args.length == 0) return true;
-        else if (args[0] == 'view' || args[0] == 'reset') {
+        else if (args[0] == 'list' || args[0] == 'reset') {
             args.shift();
             while (arg = args.shift()) { // all remaining args should be channels mention/ID
                 let ans = await utils.checkChan(message, arg);
@@ -78,7 +78,7 @@ module.exports = {
     execute: async (message, args) => {
         // Check the action
         let action = 'toggle';
-        if (['toggle', 'view', 'reset'].includes(args[0])) {
+        if (['toggle', 'list', 'reset'].includes(args[0])) {
             action = args.shift();
         }
 
@@ -190,7 +190,7 @@ module.exports = {
                 return message.reply("Les commandes ne sont ni toutes absentes ni toutes présentes dans tous les chans spécififés.\nImpossible d'effectuer une modification.");
             }
 
-        } else if (action == 'view') {
+        } else if (action == 'list') {
             let reply = "";
             for (const chan of chans) {
                 reply += `Commandes bloquées dans le chan <#${chan}>:\n`;
