@@ -31,7 +31,7 @@ module.exports = {
     getHelpMessage: function (message, command) {
         let reply;
         if (command.subcommands) {
-            reply = 'Liste des sous-commandes de `' + command.name + '` :\n```'
+            reply = 'Liste des sous-commandes de `' + command.name + '` :\n```\n'
             command.subcommands.forEach(subcommand => {
                 if (subcommand.permitted(message.client, message)) {
                     reply += `${message.client.config.prefix}${command.name} ${subcommand.name.concat(' ').padEnd(14, ' ')}${subcommand.description}\n`
@@ -40,9 +40,9 @@ module.exports = {
             reply += '\`\`\`';
         } else {
             if (command.parent) {
-                reply = `\`\`\`${message.client.config.prefix}${command.parent} ${command.name}`;
+                reply = `\`\`\`\n${message.client.config.prefix}${command.parent} ${command.name}`;
             } else {
-                reply = `\`\`\`${message.client.config.prefix}${command.name}`;
+                reply = `\`\`\`\n${message.client.config.prefix}${command.name}`;
             }
             command.usage?.forEach(arg => { reply += ` ${arg.optional ? '[':''}${arg.name}${arg.optional ? ']':''}`; });
             reply += `\n\n${command.description}\n\n`;

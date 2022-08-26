@@ -106,7 +106,6 @@ module.exports = {
             for (chan of chans) {
                 bl[chan] = (await utils.getBlacklistChan(message.client, chan)).map(entry=> entry.command);
             }
-            console.log(bl);
 
             let allPresent = chans.every(chan => {
                 return commands.every(command => bl[chan].includes(command));
