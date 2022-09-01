@@ -81,6 +81,7 @@ module.exports = {
 
     checkChan: async function (message, arg) {
         if (!arg) return false;
+        if (arg == 'all') return true;
         if (arg.startsWith('<#') && arg.endsWith('>')) {
             arg = arg.slice(2, -1);
         }
@@ -109,7 +110,23 @@ module.exports = {
         return blacklist;
     },
 
+    getBlacklistGuild: async function (client, guildId) {
+        let blacklist = await client.db.BlacklistGuild.findAll({where:{guildId: guildId}});
+
+        // Remove entries with non-existing commands
+        blacklist = blacklist.filter(entry => {
+            if (!client.commandsManager.commands.has(entry.command) && entry.command != 'all commands') {
+                entry.destroy().catch(error => {console.error("Could not delete BlacklistChan entry"); console.error(error)});
+                return false;
+            }
+            return true;
+        });
+
+        return blacklist;
+    },
+
     permitted: async function (message, command) {
+        let blacklistGuild = await message.client.db.BlacklistGuild.findAll({where: {guildId: message.guild.id}});
         let blacklistChan = await message.client.db.BlacklistChan.findAll({where: {chan: message.channel.id}});
         let blacklistUser = await message.client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
 
@@ -117,6 +134,9 @@ module.exports = {
         if (message.author.id !== message.guild.ownerId) {
             // Check blacklistChan
             let name = command.parent ?? command.name;
+            if (blacklistGuild.some(entry => entry.command == 'all commands' || entry.command == name)){
+                return false;
+            }
             if (blacklistChan.some(entry => entry.command == 'all commands' || entry.command == name)){
                 return false;
             }
