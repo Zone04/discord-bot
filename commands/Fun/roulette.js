@@ -24,10 +24,10 @@ module.exports = {
         message.channel.send(`${message.author} *place l'arme contre sa tempe...*`)
         .then(_ => setTimeout(_ => {
             if (Math.random() > 0.75) {
-                message.channel.send(`*Et tire. La balle part. Il meurt.* :skull:`);
+                message.channel.send(`*Et tire. La balle part. ${message.author} meurt.* :skull:`);
                 message.member.timeout(60*1000, 'roulette');
             } else {
-                message.channel.send(`*Et tire. La chambre était vide ! Il a survécu !* :tada:`);
+                message.channel.send(`*Et tire. La chambre était vide ! ${message.author} a survécu !* :tada:`);
             }
         }, 2000)
         );

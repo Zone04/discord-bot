@@ -29,6 +29,6 @@ module.exports = {
             limit = parseInt(args[0]);
         }
 
-        message.reply(`Dé à ${limit} faces... Le résultat est ${Math.ceil(Math.random()*limit)} !`);
+        return message.reply(`Dé à ${limit} faces... Le résultat est ${Math.ceil(Math.random()*limit)} !`);
     },
 };

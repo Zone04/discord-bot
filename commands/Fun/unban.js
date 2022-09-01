@@ -39,6 +39,9 @@ module.exports = {
             }
         }
 
-        message.channel.send(`${guildMember.user} est déban de mon coeur :heart:`);
+        if (guildMember.user.id == message.client.user.id) {
+            return message.reply('Très drôle...')
+        }
+        return message.channel.send(`${guildMember.user} est déban de mon coeur :heart:`);
     },
 };

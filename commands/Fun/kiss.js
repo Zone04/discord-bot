@@ -40,9 +40,9 @@ module.exports = {
                 }
             }
 
-            message.channel.send(`:kissing_heart: ${guildMember.user} Tout plein de bisous pour toi :3`);
+            return message.channel.send(`:kissing_heart: ${guildMember.user} Tout plein de bisous pour toi :3`);
         } else {
-            message.channel.send(`:kissing_heart: Tout plein de bisous pour tout le monde :3`);
+            return message.channel.send(`:kissing_heart: Tout plein de bisous pour tout le monde :3`);
         }
     },
 };

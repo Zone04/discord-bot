@@ -12,6 +12,6 @@ module.exports = {
         return true;
     },
     execute: (message, args) => {
-        message.channel.send('Ping MDR :joy:');
+        return message.channel.send('Ping MDR :joy:');
     },
 };
