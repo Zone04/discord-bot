@@ -110,25 +110,6 @@ let execute = async (message, args) => {
 
     let content;
 
-    // No easter egg if command is currently blacklisted
-    let blacklisted = 
-        (await utils.getBlacklistChan(message.client, message.channel.id))
-            .some(entry => entry.command == 'spam' || entry.command == 'all commands')
-        || (await utils.getBlacklistGuild(message.client, message.guild.id))
-            .some(entry => entry.command == 'spam' || entry.command == 'all commands');
-    if (!blacklisted) {
-        let rand = Math.random()
-        if (rand < (setting.easterProba ?? 0.01) && message.id !== 0) { // 1% chance of backfire, but not when resuming
-            args = [message.author.id, limit];
-            await message.channel.send(`Ba alors ?`);
-            await message.channel.send(`On a voulu spam ????`);
-            await message.channel.send(`Dommage hein, mais pas cette fois.`);
-            await message.channel.send(`Quoique... Vengeance !`);
-            await message.channel.send(`Allez c'est cadeau c'est pour moi !`);
-            utils.sendLogMessage(message.client, message.guild.id, `Easter egg triggered on ${message.author}`);
-        }
-    }
-
     if (args.length == 2 && args[0] == 'random') {
         let guildMembers = (await message.guild.members.fetch()).filter(member => !member.user.bot);
         guildMembers.set('everyone',{user: '@everyone'});
@@ -140,12 +121,15 @@ let execute = async (message, args) => {
         try {
             guildMember = await utils.convertUser(message, args.slice(0,-1).join(' '));
         } catch(e) {
-            if (e instanceof UserNotFoundError || e instanceof TooManyUsersError) {
+            if (e instanceof UserNotFoundError) {
                 // If we were trying to resume and this happens, it means user left the guild, so we instantly delete the spam
                 if (message.id == 0) {
                     spamInstance.destroy();
                     return;
                 }
+                message.reply(e.message);
+                return;
+            } else if (e instanceof TooManyUsersError) {
                 message.reply(e.message);
                 return;
             } else {
@@ -154,6 +138,21 @@ let execute = async (message, args) => {
         } 
         if (guildMember.user.bot) return message.reply("Je vais quand même pas spam un bot, ce serait inutile !");
         content = guildMember.user;
+    }
+
+    // No easter egg if command is currently blacklisted
+    let blacklisted = 
+        (await utils.getBlacklistChan(message.client, message.channel.id))
+            .some(entry => entry.command == 'spam' || entry.command == 'all commands')
+        || (await utils.getBlacklistGuild(message.client, message.guild.id))
+            .some(entry => entry.command == 'spam' || entry.command == 'all commands');
+    if (!blacklisted) {
+        let rand = Math.random()
+        if (rand < (setting.easterProba ?? 0.01) && message.id !== 0) { // 1% chance of backfire, but not when resuming
+            args = [message.author.id, limit];
+            await message.channel.send(`https://tenor.com/view/reverse-nozumi-uno-jojo-card-gif-15706915`);
+            utils.sendLogMessage(message.client, message.guild.id, `Easter egg triggered on ${message.author}`);
+        }
     }
 
     if (message.id !== 0) {
