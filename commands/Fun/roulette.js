@@ -21,15 +21,14 @@ module.exports = {
         if (!message.member.moderatable) {
             return message.reply(`Impossible pour moi de te rendre muet :pensive:`);
         }
-        message.channel.send(`${message.author} *place l'arme contre sa tempe...*`)
-        .then(_ => setTimeout(_ => {
-            if (Math.random() > 0.75) {
-                message.channel.send(`*Et tire. La balle part. ${message.author} meurt.* :skull:`);
-                message.member.timeout(60*1000, 'roulette');
-            } else {
-                message.channel.send(`*Et tire. La chambre était vide ! ${message.author} a survécu !* :tada:`);
-            }
-        }, 2000)
-        );
+
+        await message.channel.send(`${message.author} *place l'arme contre sa tempe...*`);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        if (Math.random() > 0.75) {
+            await message.channel.send(`*Et tire. La balle part. ${message.author} meurt.* :skull:`);
+            await message.member.timeout(60*1000, 'roulette');
+        } else {
+            await message.channel.send(`*Et tire. La chambre était vide ! ${message.author} a survécu !* :tada:`);
+        }
     },
 };
