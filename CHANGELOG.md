@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.2]
+
+### Fixed
+ - Help message with bad display for commands without argument
+
+### Added
+ - Blacklist for all chans at once
+
+### Changed
+ - Return value for all commands
+ - Special sentence for ban/unban bot itself
+ - Spam easter egg cannot happen if no/too many user(s) would have been found
+ - Only users having access to a chan can be chosen as spam target
+
 ## [1.0.1]
 
 ### Added
@@ -164,6 +178,8 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
+[1.0.2]: https://github.com/Zone04/discord-bot/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/Zone04/discord-bot/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Zone04/discord-bot/compare/v0.0.6...v1.0.0
 [0.0.6]: https://github.com/Zone04/discord-bot/compare/v0.0.5.2...v0.0.6
 [0.0.5.2]: https://github.com/Zone04/discord-bot/compare/v0.0.5.1...v0.0.5.2
