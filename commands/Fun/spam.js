@@ -111,7 +111,12 @@ let execute = async (message, args) => {
     let content;
 
     // No easter egg if command is currently blacklisted
-    if (!(await utils.getBlacklistChan(message.client, message.channel.id)).some(entry => entry.command == 'spam' || entry.command == 'all commands')) {
+    let blacklisted = 
+        (await utils.getBlacklistChan(message.client, message.channel.id))
+            .some(entry => entry.command == 'spam' || entry.command == 'all commands')
+        || (await utils.getBlacklistGuild(message.client, message.guild.id))
+            .some(entry => entry.command == 'spam' || entry.command == 'all commands');
+    if (!blacklisted) {
         let rand = Math.random()
         if (rand < (setting.easterProba ?? 0.01) && message.id !== 0) { // 1% chance of backfire, but not when resuming
             args = [message.author.id, limit];
