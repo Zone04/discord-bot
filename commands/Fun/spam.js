@@ -111,7 +111,7 @@ let execute = async (message, args) => {
     let content;
 
     if (args.length == 2 && args[0] == 'random') {
-        let guildMembers = (await message.guild.members.fetch()).filter(member => !member.user.bot);
+        let guildMembers = (await message.channel.members).filter(member => !member.user.bot);
         guildMembers.set('everyone',{user: '@everyone'});
         content = guildMembers.random().user;
     } else if (args.length == 2 && (args[0] == 'everyone' || args[0] == '@everyone')) {
@@ -135,7 +135,8 @@ let execute = async (message, args) => {
             } else {
                 throw e;
             }
-        } 
+        }
+        if (!message.channel.members.has(guildMember.user.id)) return message.reply("Cet utilisateur n'a pas accès à ce chan, je ne vais pas le spam dans le vide !");
         if (guildMember.user.bot) return message.reply("Je vais quand même pas spam un bot, ce serait inutile !");
         content = guildMember.user;
     }
@@ -150,6 +151,7 @@ let execute = async (message, args) => {
         let rand = Math.random()
         if (rand < (setting.easterProba ?? 0.01) && message.id !== 0) { // 1% chance of backfire, but not when resuming
             args = [message.author.id, limit];
+            content = message.author;
             await message.channel.send(`https://tenor.com/view/reverse-nozumi-uno-jojo-card-gif-15706915`);
             utils.sendLogMessage(message.client, message.guild.id, `Easter egg triggered on ${message.author}`);
         }
