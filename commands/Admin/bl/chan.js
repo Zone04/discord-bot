@@ -130,7 +130,7 @@ module.exports = {
             }
             blGuild = [];
             if (guild.length) {
-                blGuild = (await utils.getBlacklistGuild(message.client, guild[0])).map(entry=> entry.command);
+                blGuild = (await client.utils.getBlacklistGuild(message.client, guild[0])).map(entry=> entry.command);
             }
 
             let allPresent = chans.every(chan => {
@@ -200,9 +200,6 @@ module.exports = {
                     if (guild.length) {
                         toCreateGuild.push({guildId: guild[0], command: command})
                     }
-                    if (guild.length) {
-                        toCreateGuild.push({guildId: guild[0], command: command})
-                    }
                 }
                 await client.db.BlacklistChan.bulkCreate(toCreateChan);
                 await client.db.BlacklistGuild.bulkCreate(toCreateGuild);
@@ -243,7 +240,7 @@ module.exports = {
             let reply = "";
             if (guild.length) {
                 reply += `Commandes bloquées dans tous les chans:\n`;
-                let bl = await utils.getBlacklistGuild(message.client, guild[0]);
+                let bl = await client.utils.getBlacklistGuild(message.client, guild[0]);
                 console.log(bl);
                 if (bl.length == 0) {
                     reply += "Aucune commande bloquée";
