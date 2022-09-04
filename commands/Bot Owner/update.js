@@ -11,12 +11,17 @@ module.exports = {
         let msg = await message.channel.send('Running git fetch');
         console.log('Running git fetch --tags');
         console.log(execSync('git fetch --tags').toString());
-        // TODO Add logging
         msg = await msg.edit(msg.content + '\nGit fetch done');
-        let version = execSync('git describe --tags `git rev-list --tags --max-count=1`').toString();
+        let version = execSync('git describe --abbrev=0').toString();
         msg = await msg.edit(msg.content + '\nLatest version: ' + version);
         console.log('Running git checkout');
         console.log(execSync(`git checkout ${version}`).toString());
+        msg = await msg.edit(msg.content + '\nRunning npm install');
+        console.log('Running npm install');
+        console.log(execSync(`npm install`).toString());
+        msg = await msg.edit(msg.content + '\nnpm install done');
+        msg = await msg.edit(msg.content + '\nRunning migrations');
+        console.log(execSync(`cd database && npx sequelize-cli db:migrate`));
         msg = await msg.edit(msg.content + '\nVersion updated. Ready to reboot.');
     },
 };
