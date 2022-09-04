@@ -1,5 +1,4 @@
 const { Op } = require("sequelize");
-const utils = require("../../../utils");
 
 let settings = {
     name: 'user',
@@ -29,13 +28,14 @@ module.exports = {
         return true;
     },
     execute: async (message, args) => {
+        let client = message.client;
         if (args.includes('reset')) {
             // Erase the blacklist of current server
-            await message.client.db.BlacklistUser.destroy({where: {guild_id: message.guild.id}});
+            await client.db.BlacklistUser.destroy({where: {guild_id: message.guild.id}});
             return message.reply(`Blacklist d'utilisateur effacée`);
         }
         if (args.includes('list') || args.length == 0) {
-            let bl = await message.client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
+            let bl = await client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
             let reply = 'Liste des utilisateurs blacklistés :\n';
             if (bl.length == 0) {
                 reply += '`Aucun utilisateur`';
@@ -64,7 +64,7 @@ module.exports = {
             } else {
                 let guildMember;
                 try {
-                    guildMember = await utils.convertUser(message, arg);
+                    guildMember = await client.utils.convertUser(message, arg);
                 } catch(e) {
                     if (e instanceof UserNotFoundError || e instanceof TooManyUsersError) {
                         message.reply(e.message);
@@ -81,7 +81,7 @@ module.exports = {
         }
 
         // Check all in or all not in blacklist
-        let bl = await message.client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
+        let bl = await client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
         bl = bl.map(entry => entry.user);
         let allPresent = users.every(user => bl.includes(user));
         let allAbsent = users.every(user => !bl.includes(user));
@@ -91,7 +91,7 @@ module.exports = {
             for (user of users) {
                 toCreate.push({guild_id: message.guild.id, user: user});
             }
-            await message.client.db.BlacklistUser.bulkCreate(toCreate);
+            await client.db.BlacklistUser.bulkCreate(toCreate);
 
             let reply = 'Utilisateur(s) ajouté(s) à la blacklist :\n';
             if (users.some(user => user == 'everyone')) {
@@ -107,7 +107,7 @@ module.exports = {
             return message.reply(reply);
 
         } else if (allPresent) {
-            await message.client.db.BlacklistUser.destroy({
+            await client.db.BlacklistUser.destroy({
                 where: {
                     guild_id: message.guild.id,
                     user: {

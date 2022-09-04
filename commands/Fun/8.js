@@ -1,5 +1,3 @@
-const utils = require('../../utils.js');
-
 let settings = {
     name: '8',
     description: 'Pose une question à la boule magique',

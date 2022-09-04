@@ -1,5 +1,4 @@
 const { Permissions } = require("discord.js");
-const utils = require('../../utils.js');
 
 let settings = {
     name: 'clear',

@@ -1,5 +1,3 @@
-const utils = require('../../utils.js');
-
 let settings = {
     name: 'help',
     description: 'Liste les commandes / Utilisation d\'une commande',
@@ -24,6 +22,7 @@ module.exports = {
     },
     execute: async(message, args) => {
         let commands = message.client.commandsManager.commands;
+        let utils = message.client.utils;
         if (args.length == 0) {
 
             commands = commands.sort((a,b)=>{
