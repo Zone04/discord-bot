@@ -1,7 +1,7 @@
 #!/usr/bin/env nodemon
 
 const fs = require('fs');
-const { Client, Intents } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, ChannelType } = require('discord.js');
 const { CommandsManager } = require('./commands');
 const config = require('./config.json');
 const startupScripts = require('./startup');
@@ -12,12 +12,13 @@ const cron = require('node-cron');
 const utils = require('./utils.js');
 
 const client = new Client({ intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.DIRECT_MESSAGES,
-    Intents.FLAGS.GUILD_PRESENCES
-], partials: ['CHANNEL'] });
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.MessageContent,
+], partials: [Partials.Channel, Partials.Message, Partials.Reaction] });
 client.cronjobs = new Array();
 client.config = config;
 client.db = db;
@@ -39,13 +40,14 @@ client.once('ready', c => {
 });
 
 client.on('messageCreate', async (message) => {
-    if (message.author.bot) { return };
+    if (message.partial) return;
+    if (message.author.bot) return;
     // Tell no response if DM channel
-    if (message.channel.type === 'DM') {
+    if (message.channel.type === ChannelType.DM) {
         return message.reply({ content: 'Je suis un bot. Je ne répondrais pas ici !', allowedMentions: { repliedUser: false }})
     }
     // Ignore all channels that are not guild text or thread
-    if (!(['GUILD_TEXT','GUILD_PUBLIC_THREAD','GUILD_PRIVATE_THREAD'].includes(message.channel.type))) return;
+    if (!([ChannelType.GuildText, ChannelType.GuildPublicThread, ChannelType.GuildPrivateThread].includes(message.channel.type))) return;
     if (!message.content.startsWith(client.config.prefix)) return;
 
     const args = message.content.slice(client.config.prefix.length).replace(/ +$/,'').split(/ +/);
