@@ -8,7 +8,7 @@ const basename = path.basename(__filename);
 class HandlersManager {
     constructor(client) {
         this.handlers = new Collection();
-        this._client = client
+        this._client = client;
         this.load();
     }
 

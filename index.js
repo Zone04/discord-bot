@@ -1,6 +1,6 @@
 #!/usr/bin/env nodemon
 
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 const { CommandsManager } = require('./commands');
 const { HandlersManager } = require('./handlers');
 const config = require('./config.json');
@@ -8,6 +8,7 @@ const startupScripts = require('./startup');
 const cronScripts = require('./cron')
 const db = require('./database');
 const cron = require('node-cron');
+const { ReactionRoleManager } = require('./modules/reactionrole.js');
 
 const utils = require('./utils.js');
 
@@ -25,6 +26,8 @@ client.config = config;
 client.db = db;
 client.utils = utils;
 
+client.modules = new Collection();
+client.modules.set('ReactionRoleManager', new ReactionRoleManager(client));
 client.commandsManager = new CommandsManager(client);
 client.handlersManager = new HandlersManager(client);
 
