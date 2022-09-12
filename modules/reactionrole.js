@@ -5,11 +5,13 @@ const NoReactionRoleError = require('../errors/NoReactionRoleError.js');
 
 class ReactionRole {
     constructor(client, reactionrolemessage, reactionrolereactions) {
-        // reactionrolemessage should be a ReactionRoleMessage from DB
         this._client = client;
         this._message = reactionrolemessage;
         this._type = reactionrolemessage.type;
         this._reactions = new Collection();
+        for (const rrEmoji of reactionrolereactions) {
+            this._reactions.set(rrEmoji.emoji, rrEmoji);
+        }
     }
 
     addReaction(reaction, role) {
@@ -21,16 +23,16 @@ class ReactionRole {
     }
 
     async react(reaction, user) {
-        if (reaction.message.id == this._message.messageId && this._reactions.has(reaction.emoji.name)) {
+        if (reaction.message.id == this._message.messageId && this._reactions.has(reaction.emoji.id)) {
             let member = await reaction.message.guild.members.fetch(user.id);
-            member.roles.add(this._reactions.get(reaction.emoji.name));
+            member.roles.add(this._reactions.get(reaction.emoji.id).roleId);
         }
     }
 
     async unreact(reaction, user) {
-        if (reaction.message.id == this._message.messageId && this._reactions.has(reaction.emoji.name)) {
+        if (reaction.message.id == this._message.messageId && this._reactions.has(reaction.emoji.id)) {
             let member = await reaction.message.guild.members.fetch(user.id);
-            member.roles.remove(this._reactions.get(reaction.emoji.name));
+            member.roles.remove(this._reactions.get(reaction.emoji.id).roleId);
         }
     }
 }
@@ -50,13 +52,15 @@ class ReactionRoleManager {
         if (rrMessage == null) {
             throw new NoReactionRoleError('Pas de ReactionRole trouvé pour ce message');
         } else {
-            return new ReactionRole(this._client, rrMessage, null);
+            const rrEmojis = await rrMessage.getReactionRoleEmojis();
+            return new ReactionRole(this._client, rrMessage, rrEmojis);
         }
     }
 
     async create(message, type) {
         const rrMessage = await this._client.db.ReactionRoleMessage.create({ chanId: message.channel.id, messageId: message.id, type: type });
-        return new ReactionRole(this._client, rrMessage);
+        const rrEmojis = await rrMessage.getReactionRoleEmojis();
+        return new ReactionRole(this._client, rrMessage, rrEmojis);
     }
 
     async delete(message) {

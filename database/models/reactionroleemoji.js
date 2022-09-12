@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class ReactionRoleMessage extends Model {
+  class ReactionRoleEmoji extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.ReactionRoleMessage.hasMany(models.ReactionRoleEmoji, {
+      models.ReactionRoleEmoji.belongsTo(models.ReactionRoleMessage, {
         foreignKey: {
           name: 'rrId',
           allowNull: false,
@@ -21,16 +21,13 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  ReactionRoleMessage.init({
-    chanId: DataTypes.STRING,
-    messageId: DataTypes.STRING,
-    type: {
-      type: DataTypes.ENUM,
-      values: ['single', 'multiple'],
-    }
+  ReactionRoleEmoji.init({
+    rrId: {type: DataTypes.INTEGER, primaryKey: true},
+    roleId: {type: DataTypes.STRING, primaryKey: true},
+    emoji: {type: DataTypes.STRING, primaryKey: true}
   }, {
     sequelize,
-    modelName: 'ReactionRoleMessage',
+    modelName: 'ReactionRoleEmoji',
   });
-  return ReactionRoleMessage;
+  return ReactionRoleEmoji;
 };
