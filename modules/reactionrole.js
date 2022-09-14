@@ -14,25 +14,46 @@ class ReactionRole {
         }
     }
 
-    addReaction(reaction, role) {
-        this._reactions.set(reaction, role);
+    async addReaction(reaction, role) {
+        let emoji;
+        if (reaction.emoji.id != null) {
+            emoji = reaction.emoji.id;
+        } else {
+            emoji = reaction.emoji.name;
+        }
+        let rrE = await this._message.createReactionRoleEmoji({emoji: emoji, roleId: role});
+        this._reactions.set(emoji, rrE);
     }
 
-    removeReaction(role) {
-        this._reactions.delete(this._reactions.filter(r => r == role).firstKey());
+    async removeReaction(role) {
+        let rrEs = await this._message.getReactionRoleEmojis({where: {roleId: role}});
+        await Promise.all(rrEs.map(rrE => rrE.destroy()));
+        this._reactions.filter(r => r.roleId == role).map((r,k) => this._reactions.delete(k));
     }
 
     async react(reaction, user) {
-        if (reaction.message.id == this._message.messageId && this._reactions.has(reaction.emoji.id)) {
+        let emoji;
+        if (reaction.emoji.id != null) {
+            emoji = reaction.emoji.id;
+        } else {
+            emoji = reaction.emoji.name;
+        }
+        if (reaction.message.id == this._message.messageId && this._reactions.has(emoji)) {
             let member = await reaction.message.guild.members.fetch(user.id);
-            member.roles.add(this._reactions.get(reaction.emoji.id).roleId);
+            member.roles.add(this._reactions.get(emoji).roleId);
         }
     }
 
     async unreact(reaction, user) {
-        if (reaction.message.id == this._message.messageId && this._reactions.has(reaction.emoji.id)) {
+        let emoji;
+        if (reaction.emoji.id != null) {
+            emoji = reaction.emoji.id;
+        } else {
+            emoji = reaction.emoji.name;
+        }
+        if (reaction.message.id == this._message.messageId && this._reactions.has(emoji)) {
             let member = await reaction.message.guild.members.fetch(user.id);
-            member.roles.remove(this._reactions.get(reaction.emoji.id).roleId);
+            member.roles.remove(this._reactions.get(emoji).roleId);
         }
     }
 }
