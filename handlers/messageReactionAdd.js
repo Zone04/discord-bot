@@ -26,9 +26,7 @@ module.exports = {
                 let rr = await reaction.client.modules.get('ReactionRoleManager').search(reaction.message);
                 rr.react(reaction, user);
             } catch (error) {
-                if (error instanceof NoReactionRoleError) {
-                    console.error('Error while fetching rr:', error);
-                } else {
+                if (!(error instanceof NoReactionRoleError)) {
                     throw error;
                 }
             }
