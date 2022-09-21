@@ -40,7 +40,17 @@ class ReactionRole {
         }
         if (reaction.message.id == this._message.messageId && this._reactions.has(emoji)) {
             let member = await reaction.message.guild.members.fetch(user.id);
-            member.roles.add(this._reactions.get(emoji).roleId);
+            if (this._message.type == 'single') {
+                await Promise.all(this._reactions.map(rrEmoji => {
+                    if (rrEmoji.emoji == emoji) {
+                        return member.roles.add(this._reactions.get(emoji).roleId);
+                    }
+                    return Promise.all([member.roles.remove(rrEmoji.roleId), reaction.message.reactions.resolve(rrEmoji.emoji).users.remove(user)]);
+                }));
+            }
+            if (this._message.type == 'multiple') {
+                member.roles.add(this._reactions.get(emoji).roleId);
+            }
         }
     }
 
@@ -55,6 +65,11 @@ class ReactionRole {
             let member = await reaction.message.guild.members.fetch(user.id);
             member.roles.remove(this._reactions.get(emoji).roleId);
         }
+    }
+
+    async createReact() {
+        let message = await this._client.channels.cache.get(this._message.chanId).messages.fetch(this._message.messageId);
+        await Promise.all(this._reactions.map(rrEmoji => message.react(rrEmoji.emoji)));
     }
 }
 
