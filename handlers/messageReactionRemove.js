@@ -4,6 +4,16 @@ module.exports = {
     name: 'Role reaction Remove',
     event: 'messageReactionRemove',
     callback: async (reaction, user) => {
+        if (user.partial) {
+            try {
+                await user.fetch();
+            } catch (error) {
+                console.error('Something went wrong when fetching the user:', error);
+                return;
+            }
+        }
+        if (user.bot) return;
+
         if (reaction.partial) {
             try {
                 await reaction.fetch();

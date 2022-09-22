@@ -15,6 +15,8 @@ module.exports = {
                 return;
             }
         }
+        if (user.bot) return;
+
         if (reaction.partial) {
             try {
                 await reaction.fetch();
@@ -32,7 +34,6 @@ module.exports = {
             }
         }
 
-        if (user.bot) return;
         if (reaction.client.modules.has('ReactionRoleManager')) {
             try {
                 let rr = await reaction.client.modules.get('ReactionRoleManager').search(reaction.message);

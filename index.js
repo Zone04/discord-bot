@@ -20,7 +20,7 @@ const client = new Client({ intents: [
     GatewayIntentBits.GuildPresences,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMessageReactions,
-], partials: [Partials.Channel, Partials.Message, Partials.Reaction] });
+], partials: [Partials.Channel, Partials.Message, Partials.Reaction, Partials.User] });
 client.cronjobs = new Array();
 client.config = config;
 client.db = db;
