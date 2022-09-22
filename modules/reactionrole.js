@@ -1,7 +1,10 @@
 'use strict';
 
 const { Collection, PermissionsBitField } = require('discord.js');
-const NoReactionRoleError = require('../errors/NoReactionRoleError.js');
+const MissingPermissionError = require('../errors/MissingPermissionError');
+const NoReactionRoleError = require('../errors/NoReactionRoleError');
+const RoleNotFoundError = require('../errors/RoleNotFoundError');
+const UnassignableRoleError = require('../errors/UnassignableRoleError');
 
 class ReactionRole {
     constructor(client, reactionrolemessage, reactionrolereactions) {
@@ -23,9 +26,9 @@ class ReactionRole {
         }
         let guild = reaction.message.guild;
         let role = await guild.roles.fetch(roleId);
-        if (role == null) {throw new Error('Error fetching role')}
-        if (role.managed) {throw new Error('Unassignable role')}
-        if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new Error('Role position too high')}
+        if (role == null) {throw new RoleNotFoundError('Error fetching role')}
+        if (role.managed) {throw new UnassignableRoleError('Role managed by an external service')}
+        if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high')}
         let message = await this._client.channels.cache.get(this._message.chanId).messages.fetch(this._message.messageId);
         let rrE = await this._message.createReactionRoleEmoji({emoji: emoji, roleId: roleId});
         await message.react(emoji);
@@ -40,7 +43,7 @@ class ReactionRole {
 
     async react(reaction, user) {
         let guild = reaction.message.guild;
-        if (!guild.members.me.permissions.has(PermissionsBitField.Flags.MANAGE_ROLES)) {throw new Error('Not enough permission')}
+        if (!guild.members.me.permissions.has(PermissionsBitField.Flags.ManageRoles)) {throw new MissingPermissionError('Not enough permission')}
         let emoji;
         if (reaction.emoji.id != null) {
             emoji = reaction.emoji.id;
@@ -52,9 +55,9 @@ class ReactionRole {
             if (this._message.type == 'single') {
                 await Promise.all(this._reactions.map(async rrEmoji => {
                     let role = await guild.roles.fetch(rrEmoji.roleId);
-                    if (role == null) {throw new Error('Error fetching role')}
-                    if (role.managed) {throw new Error('Unassignable role')}
-                    if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new Error('Role position too high')}
+                    if (role == null) {throw new RoleNotFoundError('Error fetching role')}
+                    if (role.managed) {throw new UnassignableRoleError('Role managed by an external service')}
+                    if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high')}
                     if (rrEmoji.emoji == emoji) {
                         return member.roles.add(rrEmoji.roleId);
                     }
@@ -63,9 +66,9 @@ class ReactionRole {
             }
             if (this._message.type == 'multiple') {
                 let role = await guild.roles.fetch(this._reactions.get(emoji).roleId);
-                if (role == null) {throw new Error('Error fetching role')}
-                if (role.managed) {throw new Error('Unassignable role')}
-                if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new Error('Role position too high')}
+                if (role == null) {throw new RoleNotFoundError('Error fetching role')}
+                if (role.managed) {throw new UnassignableRoleError('Role managed by an external service')}
+                if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high')}
                 await member.roles.add(role.id);
             }
         }
@@ -73,7 +76,7 @@ class ReactionRole {
 
     async unreact(reaction, user) {
         let guild = reaction.message.guild;
-        if (!guild.members.me.permissions.has(PermissionsBitField.Flags.ManageRoles)) {throw new Error('Not enough permission')}
+        if (!guild.members.me.permissions.has(PermissionsBitField.Flags.ManageRoles)) {throw new MissingPermissionError('Not enough permission')}
         let emoji;
         if (reaction.emoji.id != null) {
             emoji = reaction.emoji.id;
@@ -82,9 +85,9 @@ class ReactionRole {
         }
         if (reaction.message.id == this._message.messageId && this._reactions.has(emoji)) {
             let role = await guild.roles.fetch(this._reactions.get(emoji).roleId);
-            if (role == null) {throw new Error('Error fetching role')}
-            if (role.managed) {throw new Error('Unassignable role')}
-            if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new Error('Role position too high')}
+            if (role == null) {throw new RoleNotFoundError('Error fetching role')}
+            if (role.managed) {throw new UnassignableRoleError('Role managed by an external service')}
+            if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high')}
             let member = await reaction.message.guild.members.fetch(user.id);
             await member.roles.remove(role.id);
         }

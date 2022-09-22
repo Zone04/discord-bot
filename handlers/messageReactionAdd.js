@@ -1,4 +1,7 @@
+const MissingPermissionError = require("../errors/MissingPermissionError");
 const NoReactionRoleError = require("../errors/NoReactionRoleError");
+const RoleNotFoundError = require("../errors/RoleNotFoundError");
+const UnassignableRoleError = require("../errors/UnassignableRoleError");
 
 module.exports = {
     name: 'Role reaction add',
@@ -35,8 +38,18 @@ module.exports = {
                 let rr = await reaction.client.modules.get('ReactionRoleManager').search(reaction.message);
                 rr.react(reaction, user);
             } catch (error) {
-                if (!(error instanceof NoReactionRoleError)) {
-                    throw error;
+                if (error instanceof NoReactionRoleError) {}
+                else if (error instanceof UnassignableRoleError) {
+                    console.error(error);
+                    // Send message to admin log chan
+                } else if (error instanceof RoleNotFoundError) {
+                    console.error(error);
+                    // Send message to admin log chan
+                } else if (error instanceof MissingPermissionError) {
+                    console.error(error)
+                    // Send message to admin log chan
+                } else {
+                    console.error(error);
                 }
             }
         }
