@@ -61,7 +61,7 @@ class ReactionRole {
                     if (rrEmoji.emoji == emoji) {
                         return member.roles.add(rrEmoji.roleId);
                     }
-                    return Promise.all([member.roles.remove(rrEmoji.roleId), reaction.message.reactions.resolve(rrEmoji.emoji).users.remove(user)]);
+                    return Promise.all([member.roles.remove(rrEmoji.roleId), reaction.message.reactions.resolve(rrEmoji.emoji)?.users.remove(user)]);
                 }));
             }
             if (this._message.type == 'multiple') {
