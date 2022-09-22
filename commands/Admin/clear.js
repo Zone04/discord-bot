@@ -1,4 +1,4 @@
-const { Permissions } = require("discord.js");
+const { PermissionsBitField } = require("discord.js");
 
 let settings = {
     name: 'clear',
@@ -19,11 +19,11 @@ module.exports = {
     },
     usage: settings.usage,
     permitted: (client, message) => {
-        return message.member.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES);
+        return message.member.permissionsIn(message.channel).has(PermissionsBitField.Flags.ManageMessages);
     },
     execute: async(message, args) => {
 
-        if (!message.guild.me.permissionsIn(message.channel).has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+        if (!message.guild.members.me.permissionsIn(message.channel).has(PermissionsBitField.Flags.ManageMessages)) {
             return message.reply(`Je n'ai pas la permission de supprimer des messages ici :pensive:`);
         }
 

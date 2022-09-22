@@ -1,4 +1,4 @@
-const { Permissions } = require("discord.js");
+const { PermissionsBitField } = require("discord.js");
 
 let settings = {
     name: 'roulette',
@@ -15,7 +15,7 @@ module.exports = {
         return true;
     },
     execute: async(message, args) => {
-        if (!message.guild.me.permissionsIn(message.channel).has(Permissions.FLAGS.MODERATE_MEMBERS)) {
+        if (!message.guild.members.me.permissionsIn(message.channel).has(PermissionsBitField.Flags.ModerateMembers)) {
             return message.reply(`Je n'ai pas la permission rendre muet ici :pensive:`);
         }
         if (!message.member.moderatable) {
