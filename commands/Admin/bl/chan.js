@@ -1,3 +1,4 @@
+const { DiscordAPIError } = require("discord.js");
 const { Op } = require("sequelize");
 
 let settings = {
@@ -34,9 +35,13 @@ module.exports = {
                 const blacklist = await client.db.BlacklistChan.findAll();
                 let c = 0;
                 for (entry of blacklist){
-                    if (!client.channels.resolve(entry.chan)) {
-                        entry.destroy();
-                        c += 1;
+                    try { await client.channels.fetch(entry.chan) } catch (error) {
+                        if (error instanceof DiscordAPIError && (error.code == 10003 || error.code == 50001)) { // Unknown channel / Missing permission
+                            entry.destroy();
+                            c += 1;
+                        } else {
+                            throw error;
+                        }
                     }
                 }
                 console.log(`Found ${c} blacklist entries associated to deleted channels`);
@@ -50,9 +55,13 @@ module.exports = {
                 const blacklist = await client.db.BlacklistGuild.findAll();
                 let c = 0;
                 for (entry of blacklist){
-                    if (!client.guilds.resolve(entry.guildId)) {
-                        entry.destroy();
-                        c += 1;
+                    try { await client.guilds.fetch(entry.guildId) } catch (error) {
+                        if (error instanceof DiscordAPIError && error.code == 50001) { // Missing permission
+                            entry.destroy();
+                            c += 1;
+                        } else {
+                            throw error;
+                        }
                     }
                 }
                 console.log(`Found ${c} blacklist entries associated to deleted channels`);
