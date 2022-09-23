@@ -3,7 +3,7 @@ const { DiscordAPIError } = require("discord.js");
 module.exports = {
     name: 'reactionRoleCheck',
     description: 'Delete ReactionRole no longer usable because of deleted elements',
-    schedule: '*/30 * * * * *', // Every day at midnight
+    schedule: '0 0 * * *', // Every day at midnight
     run: async (client) => {
         let rrMs = await client.db.ReactionRoleMessage.findAll();
         rrMs.forEach(async rrM => {
