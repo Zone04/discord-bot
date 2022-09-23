@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   ReactionRoleEmoji.init({
     rrId: {type: DataTypes.INTEGER, primaryKey: true},
-    roleId: {type: DataTypes.STRING, primaryKey: true},
+    roleId: {type: DataTypes.STRING},
     emoji: {type: DataTypes.STRING, primaryKey: true}
   }, {
     sequelize,

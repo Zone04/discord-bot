@@ -14,7 +14,6 @@ module.exports = {
       },
       roleId: {
         type: Sequelize.STRING,
-        primaryKey: true,
       },
       emoji: {
         type: Sequelize.STRING,
