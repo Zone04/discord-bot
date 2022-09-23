@@ -1,5 +1,6 @@
 const UserNotFoundError = require('./errors/UserNotFoundError.js');
 const TooManyUsersError = require('./errors/TooManyUsersError.js');
+const emojiregex = require('emoji-regex');
 
 module.exports = {
     convertUser: async function (message, arg) {
@@ -150,5 +151,10 @@ module.exports = {
         } else {
             return command.subcommands.some(subcommand => subcommand.permitted(message.client, message));
         }
+    },
+
+    isUnicodeEmoji: function (string) {
+        const emojis = [...string.matchAll(emojiregex())];
+        return emojis.length == 1 && emojis[0][0].length == string.length;
     }
 }
