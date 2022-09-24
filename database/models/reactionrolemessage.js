@@ -19,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
+      models.ReactionRoleMessage.hasMany(models.ReactionRoleIgnore, {
+        foreignKey: {
+          name: 'rrId',
+          allowNull: false,
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      });
     }
   }
   ReactionRoleMessage.init({

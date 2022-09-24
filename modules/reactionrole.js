@@ -8,13 +8,30 @@ const TooManyReactionsError = require('../errors/TooManyReactionsError');
 const UnassignableRoleError = require('../errors/UnassignableRoleError');
 
 class ReactionRole {
-    constructor(client, reactionrolemessage, reactionrolereactions) {
+    constructor(client, reactionrolemessage, reactionrolereactions, reactionroleignores) {
         this._client = client;
         this._message = reactionrolemessage;
         this._type = reactionrolemessage.type;
         this._reactions = new Collection();
         for (const rrEmoji of reactionrolereactions) {
             this._reactions.set(rrEmoji.emoji, rrEmoji);
+        }
+        this._ignores = new Collection();
+        for (const rrIgnore of reactionroleignores) {
+            this._ignores.set(rrIgnore.userId, rrIgnore);
+        }
+    }
+
+    async addIgnore(userId) {
+        let rrI = await this._message.createReactionRoleIgnore({userId: userId});
+        this._ignores.set(userId, rrI);
+    }
+
+    async removeIgnore(userId) {
+        if (this._ignores.has(userId)) {
+            let rrI = this._ignores.get(userId);
+            await rrI.destroy();
+            this._ignores.delete(userId);
         }
     }
 
@@ -54,6 +71,8 @@ class ReactionRole {
     }
 
     async react(reaction, user) {
+        if (this._ignores.has(user.id)) return;
+
         let guild = reaction.message.guild;
         if (!guild.members.me.permissions.has(PermissionsBitField.Flags.ManageRoles)) {throw new MissingPermissionError('Not enough permission')}
         let emoji;
@@ -89,6 +108,8 @@ class ReactionRole {
     }
 
     async unreact(reaction, user) {
+        if (this._ignores.has(user.id)) return;
+
         let guild = reaction.message.guild;
         if (!guild.members.me.permissions.has(PermissionsBitField.Flags.ManageRoles)) {throw new MissingPermissionError('Not enough permission')}
         let emoji;
@@ -138,7 +159,8 @@ class ReactionRoleManager {
             throw new NoReactionRoleError('Pas de ReactionRole trouvé pour ce message');
         } else {
             const rrEmojis = await rrMessage.getReactionRoleEmojis();
-            return new ReactionRole(this._client, rrMessage, rrEmojis);
+            const rrIgnores = await rrMessage.getReactionRoleIgnores();
+            return new ReactionRole(this._client, rrMessage, rrEmojis, rrIgnores);
         }
     }
 
