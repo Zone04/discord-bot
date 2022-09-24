@@ -23,6 +23,14 @@ module.exports = (sequelize, DataTypes) => {
           },
           description: "Taille maximale d'un spam",
         },
+        logChanSpam: {
+          type: DataTypes.STRING,
+          set(value) {
+            if (value == 'null') {value = null;}
+            this.setDataValue('logChanSpam', value);
+          },
+          description: "ID du channel où log les spams",
+        },
       },
       Admin:{
         logChan: {

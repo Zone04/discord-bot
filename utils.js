@@ -65,7 +65,18 @@ module.exports = {
         if (!setting.logChan) return;
 
         let chan = client.channels.cache.get(setting.logChan);
-        chan.send({"content":text,"allowedMentions": { "users" : []}}).catch();
+        chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
+    },
+
+    sendLogSpamMessage: async function (client, guildId, text) {
+        let [setting, created] = await client.db.Setting.findOrCreate({where:{id: guildId}});
+        if (created) {
+            await setting.reload();
+        }
+        if (!setting.logChanSpam) return;
+
+        let chan = client.channels.cache.get(setting.logChanSpam);
+        chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
     },
 
     getChan: async function (message, arg) {

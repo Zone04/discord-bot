@@ -153,7 +153,7 @@ let execute = async (message, args) => {
             args = [message.author.id, limit];
             content = message.author;
             await message.channel.send(`https://tenor.com/view/reverse-nozumi-uno-jojo-card-gif-15706915`);
-            utils.sendLogMessage(message.client, message.guild.id, `Easter egg triggered on ${message.author}`);
+            utils.sendLogSpamMessage(message.client, message.guild.id, `Easter egg triggered on ${message.author}`);
         }
     }
 
@@ -161,18 +161,18 @@ let execute = async (message, args) => {
         spamInstance = await message.client.db.Spam.create({source: message.author.id, target: content.id?? 'everyone', number: parseInt(args[args.length - 1]), channel: message.channel.id});
         if (args[0] == 'everyone' || args[0] == '@everyone') {
             console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[args.length - 1]} time(s) everyone`);
-            utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[args.length - 1]} time(s) everyone`);
+            utils.sendLogSpamMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[args.length - 1]} time(s) everyone`);
         } else if (args[0] == 'random') {
             if (content == '@everyone') {
                 console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed randomly ${args[args.length - 1]} time(s) everyone`);
-                utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed randomly ${args[args.length - 1]} time(s) everyone`);
+                utils.sendLogSpamMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed randomly ${args[args.length - 1]} time(s) everyone`);
             } else {
                 console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed randomly ${args[args.length - 1]} time(s) User ${content.id}`);
-                utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed randomly ${args[args.length - 1]} time(s) User ${content}`);
+                utils.sendLogSpamMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed randomly ${args[args.length - 1]} time(s) User ${content}`);
             }
         } else {
             console.log(`[GUILD ${message.guild.id}][CHANNEL ${message.channel.id}] User ${message.author.id} spammed ${args[args.length - 1]} time(s) User ${content.id}`);
-            utils.sendLogMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[args.length - 1]} time(s) User ${content}`);
+            utils.sendLogSpamMessage(message.client, message.guild.id, `[CHANNEL ${message.channel}] User ${message.author} spammed ${args[args.length - 1]} time(s) User ${content}`);
         }
     }
 
