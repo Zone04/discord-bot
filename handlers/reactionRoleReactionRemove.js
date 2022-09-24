@@ -42,16 +42,12 @@ module.exports = {
                 if (error instanceof NoReactionRoleError) {}
                 else if (error instanceof UnassignableRoleError) {
                     reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to edit role ${error.role} for ${user}: ${error.message}`);
-                    console.error(error);
                 } else if (error instanceof RoleNotFoundError) {
                     reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to fetch role ${error.roleId}: ${error.message}`);
-                    console.error(error);
                 } else if (error instanceof MissingPermissionError) {
                     reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to edit roles for ${user}: ${error.message}`);
-                    console.error(error)
-                } else {
-                    console.error(error);
                 }
+                console.error(error);
             }
         }
     },

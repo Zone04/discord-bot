@@ -1,9 +1,10 @@
 'use strict';
 
-const { Collection, PermissionsBitField } = require('discord.js');
+const { Collection, PermissionsBitField, DiscordAPIError } = require('discord.js');
 const MissingPermissionError = require('../errors/MissingPermissionError');
 const NoReactionRoleError = require('../errors/NoReactionRoleError');
 const RoleNotFoundError = require('../errors/RoleNotFoundError');
+const TooManyReactionsError = require('../errors/TooManyReactionsError');
 const UnassignableRoleError = require('../errors/UnassignableRoleError');
 
 class ReactionRole {
@@ -18,6 +19,9 @@ class ReactionRole {
     }
 
     async addReaction(reaction, roleId) {
+        if (this._reactions.size >= 20) {
+            throw new TooManyReactionsError('Too many roles are registered for this message');
+        }
         let emoji;
         if (reaction.emoji.id != null) {
             emoji = reaction.emoji.id;
@@ -31,7 +35,15 @@ class ReactionRole {
         if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high', role)}
         let message = await this._client.channels.cache.get(this._message.chanId).messages.fetch(this._message.messageId);
         let rrE = await this._message.createReactionRoleEmoji({emoji: emoji, roleId: roleId});
-        await message.react(emoji);
+        try {
+            await message.react(emoji);
+        } catch (error) {
+            if (error instanceof DiscordAPIError && error.code == 30010) {
+                throw new TooManyReactionsError('Unable to add the reaction to the message. Try removing all reactions and recreate them.');
+            } else {
+                throw error;
+            }
+        }
         this._reactions.set(emoji, rrE);
     }
 
@@ -98,7 +110,15 @@ class ReactionRole {
 
     async createReact() {
         let message = await this._client.channels.cache.get(this._message.chanId).messages.fetch(this._message.messageId);
-        await Promise.all(this._reactions.map(rrEmoji => message.react(rrEmoji.emoji)));
+        try {
+            await Promise.all(this._reactions.map(rrEmoji => message.react(rrEmoji.emoji)));
+        } catch (error) {
+            if (error instanceof DiscordAPIError && error.code == 30010) {
+                throw new TooManyReactionsError('Unable to add the reaction to the message. Try removing all reactions and recreate them.');
+            } else {
+                throw error;
+            }
+        }
     }
 }
 
