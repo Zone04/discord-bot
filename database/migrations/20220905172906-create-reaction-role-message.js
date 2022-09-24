@@ -26,6 +26,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    }, {
+      uniqueKeys: {
+        rrM_unique: {
+          fields: ['chanId', 'messageId']
+        }
+      }
     });
   },
   async down(queryInterface, Sequelize) {

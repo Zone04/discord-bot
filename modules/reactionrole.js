@@ -3,6 +3,7 @@
 const { Collection, PermissionsBitField, DiscordAPIError } = require('discord.js');
 const MissingPermissionError = require('../errors/MissingPermissionError');
 const NoReactionRoleError = require('../errors/NoReactionRoleError');
+const ReactionRoleDuplicateError = require('../errors/ReactionRoleDuplicateError');
 const RoleNotFoundError = require('../errors/RoleNotFoundError');
 const TooManyReactionsError = require('../errors/TooManyReactionsError');
 const UnassignableRoleError = require('../errors/UnassignableRoleError');
@@ -165,9 +166,18 @@ class ReactionRoleManager {
     }
 
     async create(message, type) {
+        try {
+            this.search(message);
+            throw new ReactionRoleDuplicateError('ReactionRoleMessage already existing');
+        } catch (error) {
+            if (!(error instanceof NoReactionRoleError)) {
+                throw error;
+            }
+        }
         const rrMessage = await this._client.db.ReactionRoleMessage.create({ chanId: message.channel.id, messageId: message.id, type: type });
         const rrEmojis = await rrMessage.getReactionRoleEmojis();
-        return new ReactionRole(this._client, rrMessage, rrEmojis);
+        const rrIgnores = await rrMessage.getReactionRoleIgnores();
+        return new ReactionRole(this._client, rrMessage, rrEmojis, rrIgnores);
     }
 
     async delete(message) {
