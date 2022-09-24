@@ -37,18 +37,18 @@ module.exports = {
         if (reaction.client.modules.has('ReactionRoleManager')) {
             try {
                 let rr = await reaction.client.modules.get('ReactionRoleManager').search(reaction.message);
-                rr.react(reaction, user);
+                await rr.react(reaction, user);
             } catch (error) {
                 if (error instanceof NoReactionRoleError) {}
                 else if (error instanceof UnassignableRoleError) {
+                    reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to edit role ${error.role} for ${user}: ${error.message}`);
                     console.error(error);
-                    // Send message to admin log chan
                 } else if (error instanceof RoleNotFoundError) {
+                    reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to fetch role ${error.roleId}: ${error.message}`);
                     console.error(error);
-                    // Send message to admin log chan
                 } else if (error instanceof MissingPermissionError) {
+                    reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to edit roles for ${user}: ${error.message}`);
                     console.error(error)
-                    // Send message to admin log chan
                 } else {
                     console.error(error);
                 }
