@@ -167,7 +167,7 @@ class ReactionRoleManager {
 
     async create(message, type) {
         try {
-            this.search(message);
+            await this.search(message);
             throw new ReactionRoleDuplicateError('ReactionRoleMessage already existing');
         } catch (error) {
             if (!(error instanceof NoReactionRoleError)) {
@@ -181,8 +181,8 @@ class ReactionRoleManager {
     }
 
     async delete(message) {
-        const rrMessage = this.search(message);
-        await rrMessage.destroy();
+        const rrMessage =  await this.search(message);
+        await rrMessage._message.destroy();
     }
 }
 
