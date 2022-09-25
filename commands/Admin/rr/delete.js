@@ -3,7 +3,7 @@ const NoReactionRoleError = require("../../../errors/NoReactionRoleError");
 
 let settings = {
     name: 'delete',
-    description: 'Initialise un ReactionRole',
+    description: 'Supprime un ReactionRole',
     usage: [
         {
             name: 'ChannelMention|ChannelID',
