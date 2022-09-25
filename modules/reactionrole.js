@@ -36,17 +36,10 @@ class ReactionRole {
         }
     }
 
-    async addReaction(reaction, roleId) {
+    async addReaction(emoji, roleId, guild) {
         if (this._reactions.size >= 20) {
             throw new TooManyReactionsError('Too many roles are registered for this message');
         }
-        let emoji;
-        if (reaction.emoji.id != null) {
-            emoji = reaction.emoji.id;
-        } else {
-            emoji = reaction.emoji.name;
-        }
-        let guild = reaction.message.guild;
         let role = await guild.roles.fetch(roleId);
         if (role == null) {throw new RoleNotFoundError('Error fetching role', roleId)}
         if (role.managed) {throw new UnassignableRoleError('Role managed by an external service', role)}
