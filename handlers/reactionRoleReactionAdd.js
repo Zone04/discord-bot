@@ -46,8 +46,9 @@ module.exports = {
                     reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to fetch role ${error.roleId}: ${error.message}`);
                 } else if (error instanceof MissingPermissionError) {
                     reaction.client.utils.sendLogMessage(reaction.client, reaction.message.guildId, `[REACTION ROLE] Unable to edit roles for ${user}: ${error.message}`);
+                } else {
+                    console.error(error);
                 }
-                console.error(error);
             }
         }
     },

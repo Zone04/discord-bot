@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require("discord.js");
+const NoReactionRoleError = require("../../../errors/NoReactionRoleError"); 
 const RoleNotFoundError = require("../../../errors/RoleNotFoundError");
 const TooManyReactionsError = require("../../../errors/TooManyReactionsError");
 const UnassignableRoleError = require("../../../errors/UnassignableRoleError");
@@ -98,12 +99,14 @@ module.exports = {
                 rId = match[1];
             }
 
-            let rrM = await message.client.modules.get('ReactionRoleManager').search(m);
             try {
+                let rrM = await message.client.modules.get('ReactionRoleManager').search(m);
                 await rrM.addReaction(emoji, rId, message.guild);
                 return message.reply('Rôle ajouté');
             } catch (error) {
-                if (error instanceof TooManyReactionsError) {
+                if (error instanceof NoReactionRoleError) {
+                    return message.reply('Pas de ReactionRole trouvé pour ce message');
+                } else if (error instanceof TooManyReactionsError) {
                     return message.reply('Impossible d\'ajouter le rôle : trop de rôles enregistrés pour ce message');
                 } else if (error instanceof RoleNotFoundError) {
                     return message.reply('Rôle non trouvé. Ce message ne doit normalement jamais apparaitre');
