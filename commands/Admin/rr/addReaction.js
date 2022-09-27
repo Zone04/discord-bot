@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require("discord.js");
+const MissingPermissionError = require("../../../errors/MissingPermissionError");
 const NoReactionRoleError = require("../../../errors/NoReactionRoleError"); 
 const RoleNotFoundError = require("../../../errors/RoleNotFoundError");
 const TooManyReactionsError = require("../../../errors/TooManyReactionsError");
@@ -112,6 +113,8 @@ module.exports = {
                     return message.reply('Rôle non trouvé. Ce message ne doit normalement jamais apparaitre');
                 } else if (error instanceof UnassignableRoleError) {
                     return message.reply('Ce rôle ne peut pas être manuellement attribué');
+                } else if (error instanceof MissingPermissionError) {
+                    return message.reply('Impossible d\'ajouter la réaction au message, permission manquante.');
                 } else {
                     throw error;
                 }

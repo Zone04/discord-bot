@@ -1,8 +1,7 @@
 const { PermissionsBitField } = require("discord.js");
+const MissingPermissionError = require("../../../errors/MissingPermissionError");
 const NoReactionRoleError = require("../../../errors/NoReactionRoleError"); 
-const RoleNotFoundError = require("../../../errors/RoleNotFoundError");
 const TooManyReactionsError = require("../../../errors/TooManyReactionsError");
-const UnassignableRoleError = require("../../../errors/UnassignableRoleError");
 
 let settings = {
     name: 'resetReact',
@@ -44,14 +43,20 @@ module.exports = {
             let m = await chan.messages.fetch(args[1]);
 
             try {
+                let permManageMessage = message.guild.members.me.permissionsIn(chan).has(PermissionsBitField.Flags.ManageMessages);
+                if (permManageMessage) {
+                    await m.reactions.removeAll();
+                }
                 let rrM = await message.client.modules.get('ReactionRoleManager').search(m);
                 await rrM.createReact();
-                return message.reply('Réaction réinitialisée');
+                return message.reply('Réactions réinitialisées');
             } catch (error) {
                 if (error instanceof NoReactionRoleError) {
                     return message.reply('Pas de ReactionRole trouvé pour ce message');
                 } else if (error instanceof TooManyReactionsError) {
                     return message.reply('Impossible d\'ajouter toutes les réactions. Essayer de supprimer manuellement toutes les réactions avant de recommencer');
+                } else if (error instanceof MissingPermissionError) {
+                    return message.reply('Impossible d\'ajouter des réactions, permission manquante.');
                 } else {
                     throw error;
                 }

@@ -46,6 +46,9 @@ class ReactionRole {
         if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high', role)}
         let message = await this._client.channels.cache.get(this._message.chanId).messages.fetch(this._message.messageId);
         let rrE = await this._message.createReactionRoleEmoji({emoji: emoji, roleId: roleId});
+        if (!guild.members.me.permissionsIn(this._message.chanId).has(PermissionsBitField.Flags.AddReactions)) {
+            throw new MissingPermissionError('Cannot add reactions');
+        }
         try {
             await message.react(emoji);
         } catch (error) {
@@ -76,8 +79,12 @@ class ReactionRole {
             emoji = reaction.emoji.name;
         }
         if (reaction.message.id == this._message.messageId && this._reactions.has(emoji)) {
-            let member = await reaction.message.guild.members.fetch(user.id);
+            let member = await guild.members.fetch(user.id);
             if (this._message.type == 'single') {
+                let permManageMessage = guild.members.me.permissionsIn(this._message.chanId).has(PermissionsBitField.Flags.ManageMessages);
+                if (!permManageMessage) {
+                    this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] Missing ManageMessages Permission in <#${this._message.chanId}>. Cannot remove reactions`);
+                }
                 await Promise.all(this._reactions.map(async rrEmoji => {
                     let role = await guild.roles.fetch(rrEmoji.roleId);
                     if (role == null) {throw new RoleNotFoundError('Error fetching role', rrEmoji.roleId)}
@@ -87,7 +94,21 @@ class ReactionRole {
                         this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] User ${member.user} claimed role ${role}`);
                         return member.roles.add(rrEmoji.roleId);
                     }
-                    return Promise.all([member.roles.remove(rrEmoji.roleId), reaction.message.reactions.resolve(rrEmoji.emoji)?.users.remove(user)]);
+                    return Promise.all(
+                        [
+                            (()=>{
+                                if (member.roles.resolve(rrEmoji.roleId)) {
+                                    this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] User ${member.user} removed role ${role}`);
+                                    return member.roles.remove(rrEmoji.roleId);
+                                }
+                            })(),
+                            (()=>{
+                                if (permManageMessage) {
+                                    return reaction.message.reactions.resolve(rrEmoji.emoji)?.users.remove(user);
+                                }
+                            })(),
+                        ]
+                    );
                 }));
             }
             if (this._message.type == 'multiple') {
@@ -118,12 +139,17 @@ class ReactionRole {
             if (role.managed) {throw new UnassignableRoleError('Role managed by an external service', role)}
             if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high', role)}
             let member = await reaction.message.guild.members.fetch(user.id);
-            this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] User ${member.user} removed role ${role}`);
-            await member.roles.remove(role.id);
+            if (member.roles.resolve(role.id)) {
+                this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] User ${member.user} removed role ${role}`);
+                await member.roles.remove(role.id);
+            }
         }
     }
 
     async createReact() {
+        if (!this._client.channels.cache.get(this._message.chanId).guild.members.me.permissionsIn(this._message.chanId).has(PermissionsBitField.Flags.AddReactions)) {
+            throw new MissingPermissionError('Cannot add reactions');
+        }
         let message = await this._client.channels.cache.get(this._message.chanId).messages.fetch(this._message.messageId);
         try {
             await Promise.all(this._reactions.map(rrEmoji => message.react(rrEmoji.emoji)));
