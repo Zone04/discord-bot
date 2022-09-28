@@ -1,4 +1,6 @@
 const { PermissionsBitField } = require("discord.js");
+const NoReactionRoleError = require("../../../errors/NoReactionRoleError");
+const RRIgnoreUserError = require("../../../errors/RRIgnoreUserError");
 
 let settings = {
     name: 'addIgnore',
@@ -64,6 +66,8 @@ module.exports = {
             } catch (error) {
                 if (error instanceof NoReactionRoleError) {
                     return message.reply('Pas de ReactionRole trouvé pour ce message');
+                } else if (error instanceof RRIgnoreUserError) {
+                    return message.reply('Cet utilisateur est déjà ignoré');
                 } else {
                     throw error;
                 }

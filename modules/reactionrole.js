@@ -5,6 +5,7 @@ const MissingPermissionError = require('../errors/MissingPermissionError');
 const NoReactionRoleError = require('../errors/NoReactionRoleError');
 const ReactionRoleDuplicateError = require('../errors/ReactionRoleDuplicateError');
 const RoleNotFoundError = require('../errors/RoleNotFoundError');
+const RRIgnoreUserError = require('../errors/RRIgnoreUserError');
 const TooManyReactionsError = require('../errors/TooManyReactionsError');
 const UnassignableRoleError = require('../errors/UnassignableRoleError');
 
@@ -24,8 +25,12 @@ class ReactionRole {
     }
 
     async addIgnore(userId) {
-        let rrI = await this._message.createReactionRoleIgnore({userId: userId});
-        this._ignores.set(userId, rrI);
+        if (!this._ignores.has(userId)) {
+            let rrI = await this._message.createReactionRoleIgnore({userId: userId});
+            this._ignores.set(userId, rrI);
+        } else {
+            throw new RRIgnoreUserError('User already ignored');
+        }
     }
 
     async removeIgnore(userId) {
@@ -33,6 +38,8 @@ class ReactionRole {
             let rrI = this._ignores.get(userId);
             await rrI.destroy();
             this._ignores.delete(userId);
+        } else {
+            throw new RRIgnoreUserError('User not ignored');
         }
     }
 
