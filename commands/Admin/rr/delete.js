@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require("discord.js");
+const { PermissionsBitField, DiscordAPIError } = require("discord.js");
 const NoReactionRoleError = require("../../../errors/NoReactionRoleError");
 
 let settings = {
@@ -22,14 +22,17 @@ module.exports = {
     usage: settings.usage,
     check_args: async (message, args) => {
         if (args.length != 2) return false;
+        let chan = await message.client.utils.getChan(message, args[0]);
+        if (chan.guild.id != message.guild.id) return false;
         try {
-            let chan = await message.client.utils.getChan(message, args[0]);
-            if (chan.guild.id != message.guild.id) return false;
             await chan.messages.fetch(args[1]);
-            return true;
         } catch (error) {
-            return false;
+            if (error instanceof DiscordAPIError && error.code == 10008) {
+                return false
+            }
+            throw error;
         }
+        return true;
     },
     permitted: (client, message) => {
         return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);

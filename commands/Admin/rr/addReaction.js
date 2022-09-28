@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require("discord.js");
+const { PermissionsBitField, DiscordAPIError } = require("discord.js");
 const MissingPermissionError = require("../../../errors/MissingPermissionError");
 const NoReactionRoleError = require("../../../errors/NoReactionRoleError"); 
 const RoleNotFoundError = require("../../../errors/RoleNotFoundError");
@@ -34,43 +34,45 @@ module.exports = {
     usage: settings.usage,
     check_args: async (message, args) => {
         if (args.length != 4) return false;
+        let chan = await message.client.utils.getChan(message, args[0]);
+        if (chan.guild.id != message.guild.id) return false;
         try {
-            let chan = await message.client.utils.getChan(message, args[0]);
-            if (chan.guild.id != message.guild.id) return false;
             await chan.messages.fetch(args[1]);
-            // Check emote
-            if (!message.client.utils.isUnicodeEmoji(args[2])){ //not unicode, check if it is an emote from the guild
-                let eId;
-                if (!isNaN(args[2]) && parseInt(args[2]) >= 0) { // arg is only the emote ID
-                    eId = args[2];
-                } else {
-                    let match = args[2].match(/^<a?:\w+:([0-9]+)>$/);
-                    if (match == null) return false;
-                    eId = match[1];
-                }
-                try { await chan.guild.emojis.fetch(eId) } catch (error) {
-                    if (error instanceof DiscordAPIError && (error.code == 10014 || error.code == 50001)) { // Unknown message / Missing permission
-                        return false;
-                    } else {
-                        throw error;
-                    }
-                }
-            }
-            // Emote is OK
-            // Check role
-            let rId;
-            if (!isNaN(args[3]) && parseInt(args[3]) >= 0) { // arg is only the role ID
-                rId = args[3];
-            } else {
-                let match = args[3].match(/^<@&([0-9]+)>$/);
-                if (match == null) return false;
-                rId = match[1];
-            }
-            return await message.guild.roles.fetch(rId) != null;
         } catch (error) {
-            console.error(error);
-            return false;
+            if (error instanceof DiscordAPIError && error.code == 10008) {
+                return false
+            }
+            throw error;
         }
+        // Check emote
+        if (!message.client.utils.isUnicodeEmoji(args[2])){ //not unicode, check if it is an emote from the guild
+            let eId;
+            if (!isNaN(args[2]) && parseInt(args[2]) >= 0) { // arg is only the emote ID
+                eId = args[2];
+            } else {
+                let match = args[2].match(/^<a?:\w+:([0-9]+)>$/);
+                if (match == null) return false;
+                eId = match[1];
+            }
+            try { await chan.guild.emojis.fetch(eId) } catch (error) {
+                if (error instanceof DiscordAPIError && (error.code == 10014 || error.code == 50001)) { // Unknown message / Missing permission
+                    return false;
+                } else {
+                    throw error;
+                }
+            }
+        }
+        // Emote is OK
+        // Check role
+        let rId;
+        if (!isNaN(args[3]) && parseInt(args[3]) >= 0) { // arg is only the role ID
+            rId = args[3];
+        } else {
+            let match = args[3].match(/^<@&([0-9]+)>$/);
+            if (match == null) return false;
+            rId = match[1];
+        }
+        return await message.guild.roles.fetch(rId) != null;
     },
     permitted: (client, message) => {
         return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);

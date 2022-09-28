@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require("discord.js");
+const { PermissionsBitField, DiscordAPIError } = require("discord.js");
 const NoReactionRoleError = require("../../../errors/NoReactionRoleError");
 const RRIgnoreUserError = require("../../../errors/RRIgnoreUserError");
 
@@ -27,20 +27,22 @@ module.exports = {
     usage: settings.usage,
     check_args: async (message, args) => {
         if (args.length != 3) return false;
+        let chan = await message.client.utils.getChan(message, args[0]);
+        if (chan.guild.id != message.guild.id) return false;
         try {
-            let chan = await message.client.utils.getChan(message, args[0]);
-            if (chan.guild.id != message.guild.id) return false;
             await chan.messages.fetch(args[1]);
-            // Check user
-            if (!isNaN(args[2]) && parseInt(args[2]) >= 0) { // arg is only the user ID
-                return true
-            } else {
-                let match = args[2].match(/^<@!?([0-9]+)>$/);
-                return match != null;
-            }
         } catch (error) {
-            console.error(error);
-            return false;
+            if (error instanceof DiscordAPIError && error.code == 10008) {
+                return false
+            }
+            throw error;
+        }
+        // Check user
+        if (!isNaN(args[2]) && parseInt(args[2]) >= 0) { // arg is only the user ID
+            return true
+        } else {
+            let match = args[2].match(/^<@!?([0-9]+)>$/);
+            return match != null;
         }
     },
     permitted: (client, message) => {

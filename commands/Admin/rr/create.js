@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require("discord.js");
+const { PermissionsBitField, DiscordAPIError } = require("discord.js");
 const ReactionRoleDuplicateError = require("../../../errors/ReactionRoleDuplicateError");
 
 let settings = {
@@ -26,14 +26,17 @@ module.exports = {
     usage: settings.usage,
     check_args: async (message, args) => {
         if (args.length != 3) return false;
+        let chan = await message.client.utils.getChan(message, args[0]);
+        if (chan.guild.id != message.guild.id) return false;
         try {
-            let chan = await message.client.utils.getChan(message, args[0]);
-            if (chan.guild.id != message.guild.id) return false;
             await chan.messages.fetch(args[1]);
-            return (args[2] == 'single' || args[2] == 'multiple');
         } catch (error) {
-            return false;
+            if (error instanceof DiscordAPIError && error.code == 10008) {
+                return false
+            }
+            throw error;
         }
+        return (args[2] == 'single' || args[2] == 'multiple');
     },
     permitted: (client, message) => {
         return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);

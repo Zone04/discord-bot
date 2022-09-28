@@ -30,15 +30,16 @@ module.exports = {
             }
             command = command.subcommands.get(subcommandName);
         }
-        if (!(await client.utils.permitted(message, command))) return;
-    
-        if (!(await command.check_args?.(message, args) ?? args.length==0)) {
-            reply = client.utils.getHelpMessage(message, command);
-    
-            return message.reply(reply);
-        }
-    
+
         try {
+            if (!(await client.utils.permitted(message, command))) return;
+        
+            if (!(await command.check_args?.(message, args) ?? args.length==0)) {
+                reply = client.utils.getHelpMessage(message, command);
+        
+                return message.reply(reply);
+            }
+    
             await command.execute(message, args)
         } catch(error) {
             console.error(error);
