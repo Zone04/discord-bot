@@ -12,7 +12,8 @@ module.exports = {
         console.log('Running git fetch --tags');
         console.log(execSync('git fetch --tags').toString());
         msg = await msg.edit(msg.content + '\nGit fetch done');
-        let version = execSync('git describe --abbrev=0').toString();
+        let commit = execSync('git rev-list --tags --max-count=1').toString();
+        let version = execSync(`git describe --tags ${commit}`).toString();
         msg = await msg.edit(msg.content + '\nLatest version: ' + version);
         console.log('Running git checkout');
         console.log(execSync(`git checkout ${version}`).toString());
