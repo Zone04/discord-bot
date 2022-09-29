@@ -1,18 +1,20 @@
 const cron = require('node-cron');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
     name: 'reload',
     description: 'Rafraichit une partie du bot',
     usage: [
         {
-            name: 'commands|config|cron|handlers|modules|utils',
+            name: 'commands|config|cron|handlers|models|modules|utils',
             description: 'Partie à rafraichir',
             optional: false
         }
     ],
     check_args: (message, args) => {
         if (args.length != 1) return false;
-        return ['commands', 'config', 'cron', 'handlers', 'modules', 'utils'].includes(args[0]);
+        return ['commands', 'config', 'cron', 'handlers', 'models', 'modules', 'utils'].includes(args[0]);
     },
     permitted: (client, message) => {
         return client.config.owner_id == message.author.id;
@@ -41,6 +43,26 @@ module.exports = {
         if (args[0] == 'handlers') {
             message.client.handlersManager.load();
             return message.reply('Handlers rafraichis !');
+        }
+        if (args[0] == 'models') {
+            fs
+            .readdirSync(__dirname + '/../../database/models/')
+            .filter(file => {
+                return (file.indexOf('.') !== 0) && (file.slice(-3) === '.js');
+            })
+            .forEach(file => {
+                delete require.cache[require.resolve(path.join(__dirname + '/../../database/models/', file))];
+                const model = require(path.join(__dirname + '/../../database/models/', file))(message.client.db.sequelize, message.client.db.Sequelize.DataTypes);
+                message.client.db[model.name] = model;
+            });
+
+            Object.keys(message.client.db).forEach(modelName => {
+            if (message.client.db[modelName].associate) {
+                message.client.db[modelName].associate(message.client.db);
+            }
+            });
+
+            message.reply('Modèles rafraichis !');
         }
         if (args[0] == 'modules') {
             message.client.modulesManager.load();
