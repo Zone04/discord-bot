@@ -5,14 +5,14 @@ module.exports = {
     description: 'Rafraichit une partie du bot',
     usage: [
         {
-            name: 'commands|config|cron|handlers|utils',
+            name: 'commands|config|cron|handlers|modules|utils',
             description: 'Partie à rafraichir',
             optional: false
         }
     ],
     check_args: (message, args) => {
         if (args.length != 1) return false;
-        return ['commands', 'config', 'cron', 'handlers', 'utils'].includes(args[0]);
+        return ['commands', 'config', 'cron', 'handlers', 'modules', 'utils'].includes(args[0]);
     },
     permitted: (client, message) => {
         return client.config.owner_id == message.author.id;
@@ -41,6 +41,10 @@ module.exports = {
         if (args[0] == 'handlers') {
             message.client.handlersManager.load();
             return message.reply('Handlers rafraichis !');
+        }
+        if (args[0] == 'modules') {
+            message.client.modulesManager.load();
+            return message.reply('Modules rafraichis !');
         }
         if (args[0] == 'utils') {
             delete require.cache[require.resolve('../../utils.js')];
