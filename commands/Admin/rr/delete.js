@@ -38,11 +38,11 @@ module.exports = {
         return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);
     },
     execute: async (message, args) => {
-        if (message.client.modules.has('ReactionRoleManager')) {
+        if (message.client.modulesManager.modules.has('ReactionRoleManager')) {
             let chan = await message.client.utils.getChan(message, args[0]);
             let m = await chan.messages.fetch(args[1]);
             try {
-                await message.client.modules.get('ReactionRoleManager').delete(m)
+                await message.client.modulesManager.modules.get('ReactionRoleManager').delete(m)
             } catch (error) {
                 if (error instanceof NoReactionRoleError) {
                     return message.reply('Pas de ReactionRole trouvé pour ce message');

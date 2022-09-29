@@ -39,7 +39,7 @@ module.exports = {
         return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);
     },
     execute: async (message, args) => {
-        if (message.client.modules.has('ReactionRoleManager')) {
+        if (message.client.modulesManager.modules.has('ReactionRoleManager')) {
             let chan = await message.client.utils.getChan(message, args[0]);
             let m = await chan.messages.fetch(args[1]);
 
@@ -48,7 +48,7 @@ module.exports = {
                 if (permManageMessage) {
                     await m.reactions.removeAll();
                 }
-                let rrM = await message.client.modules.get('ReactionRoleManager').search(m);
+                let rrM = await message.client.modulesManager.modules.get('ReactionRoleManager').search(m);
                 await rrM.createReact();
                 return message.reply('Réactions réinitialisées');
             } catch (error) {

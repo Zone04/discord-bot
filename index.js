@@ -3,12 +3,12 @@
 const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 const { CommandsManager } = require('./commands');
 const { HandlersManager } = require('./handlers');
+const { ModulesManager } = require('./modules');
 const config = require('./config.json');
 const startupScripts = require('./startup');
 const cronScripts = require('./cron')
 const db = require('./database');
 const cron = require('node-cron');
-const { ReactionRoleManager } = require('./modules/reactionrole.js');
 
 const utils = require('./utils.js');
 
@@ -27,8 +27,7 @@ client.config = config;
 client.db = db;
 client.utils = utils;
 
-client.modules = new Collection();
-client.modules.set('ReactionRoleManager', new ReactionRoleManager(client));
+client.modulesManager = new ModulesManager(client);
 client.commandsManager = new CommandsManager(client);
 client.handlersManager = new HandlersManager(client);
 

@@ -42,11 +42,11 @@ module.exports = {
         return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);
     },
     execute: async (message, args) => {
-        if (message.client.modules.has('ReactionRoleManager')) {
+        if (message.client.modulesManager.modules.has('ReactionRoleManager')) {
             let chan = await message.client.utils.getChan(message, args[0]);
             let m = await chan.messages.fetch(args[1]);
             try {
-                await message.client.modules.get('ReactionRoleManager').create(m,args[2])
+                await message.client.modulesManager.modules.get('ReactionRoleManager').create(m,args[2])
             } catch (error) {
                 if (error instanceof ReactionRoleDuplicateError) {
                     return message.reply('Ce message a déjà été initialisé');

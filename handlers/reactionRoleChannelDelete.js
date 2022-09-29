@@ -2,7 +2,7 @@ module.exports = {
     name: 'Role Reaction Delete Channel',
     event: 'channelDelete',
     callback: async (channel) => {
-        if (channel.client.modules.has('ReactionRoleManager')) {
+        if (channel.client.modulesManager.modules.has('ReactionRoleManager')) {
             try {
                 let rrMessages = await channel.client.db.ReactionRoleMessage.findAll({where:{chanId:channel.id}});
                 await Promise.all(rrMessages.map(async rrM => {

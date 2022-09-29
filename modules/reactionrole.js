@@ -213,4 +213,4 @@ class ReactionRoleManager {
 }
 
 
-module.exports = { ReactionRole: ReactionRole, ReactionRoleManager: ReactionRoleManager };
+module.exports = { ReactionRoleManager: ReactionRoleManager };

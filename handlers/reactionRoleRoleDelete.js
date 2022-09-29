@@ -2,7 +2,7 @@ module.exports = {
     name: 'Role Reaction Delete Role',
     event: 'roleDelete',
     callback: async (role) => {
-        if (role.client.modules.has('ReactionRoleManager')) {
+        if (role.client.modulesManager.modules.has('ReactionRoleManager')) {
             try {
                 let rrEmojis = await role.client.db.ReactionRoleEmoji.findAll({where:{roleId:role.id}});
                 await Promise.all(rrEmojis.map(async rrE => {

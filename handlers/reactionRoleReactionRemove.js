@@ -34,9 +34,9 @@ module.exports = {
             }
         }
     
-        if (reaction.client.modules.has('ReactionRoleManager')) {
+        if (reaction.client.modulesManager.modules.has('ReactionRoleManager')) {
             try {
-                let rr = await reaction.client.modules.get('ReactionRoleManager').search(reaction.message);
+                let rr = await reaction.client.modulesManager.modules.get('ReactionRoleManager').search(reaction.message);
                 await rr.unreact(reaction, user);
             } catch (error) {
                 if (error instanceof NoReactionRoleError) {}
