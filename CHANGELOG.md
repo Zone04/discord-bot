@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0]
+
+### Added
+ - Handlers system for all events, with reload capabilities
+ - ReactionRole (see dedicated section)
+ - `logChanSpam` setting
+ - Reloadable database models
+ - ModulesManager with reload capabilities
+
+### Changed
+ - `update` command also update npm dependencies and execute migrations
+ - Updated to discord.js v14
+ - Moved Spam logs from `logChan` to `logChanSpam`
+
+### ReactionRole
+ - system to give roles based on reactions on a message
+ - `rr create` `rr addReaction` for creation
+ - `rr delete` `rr removeReaction` for deletion
+ - `rr resetReact` if reactions have been accidentally removed
+ - `rr addIgnore` `rr removeIgnore` `rr viewIgnore` to manage users that shouldn't interact
+ - logs role claims and unclaims in `logChan`
+
 ## [1.0.2]
 
 ### Fixed
@@ -178,6 +200,7 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
+[1.1.0]: https://github.com/Zone04/discord-bot/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/Zone04/discord-bot/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/Zone04/discord-bot/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Zone04/discord-bot/compare/v0.0.6...v1.0.0
