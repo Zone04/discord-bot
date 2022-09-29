@@ -33,6 +33,7 @@ module.exports = {
             }
             throw error;
         }
+        return true;
     },
     permitted: (client, message) => {
         return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);

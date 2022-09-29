@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1]
+
+### Fixed
+ - `rr resetReact` and `rr viewIgnore` missing return values for args check
+
 ## [1.1.0]
 
 ### Added
@@ -200,6 +205,7 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
+[1.1.0]: https://github.com/Zone04/discord-bot/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Zone04/discord-bot/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/Zone04/discord-bot/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/Zone04/discord-bot/compare/v1.0.0...v1.0.1
