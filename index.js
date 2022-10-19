@@ -9,6 +9,7 @@ const startupScripts = require('./startup');
 const cronScripts = require('./cron')
 const db = require('./database');
 const cron = require('node-cron');
+const snoowrap = require('snoowrap');
 
 const utils = require('./utils.js');
 
@@ -30,6 +31,13 @@ client.utils = utils;
 client.modulesManager = new ModulesManager(client);
 client.commandsManager = new CommandsManager(client);
 client.handlersManager = new HandlersManager(client);
+
+client.r = new snoowrap({
+  userAgent: client.config.userAgent,
+  clientId: client.config.clientId,
+  clientSecret: client.config.clientSecret,
+  refreshToken: client.config.refreshToken
+});
 
 client.once('ready', c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);

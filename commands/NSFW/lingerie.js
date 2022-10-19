@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 let settings = {
     name: 'lingerie',
     description: 'De belles lingeries...',
@@ -26,15 +24,12 @@ module.exports = {
     execute: async(message, args) => {
         let number = 1;
         
-        let res = await axios.get('https://reddit.com/r/lingerie/top.json?limit=100');
+        let posts = (await message.client.r.getSubreddit('lingerie').getTop({limit:100})).filter(post=>!post.stickied).map(post=>post.url);
         
         if (args.length) {
-            number = Math.min(parseInt(args[0]), res.data.data.children.length);
+            number = Math.min(parseInt(args[0]), posts.length);
         }
-        let bucket = [];
-        for (let i=0;i<=res.data.data.children.length;i++) {
-            bucket.push(i);
-        }
+        let bucket = [...Array(posts.length).keys()];
         function getRandomFromBucket() {
             var randomIndex = Math.floor(Math.random()*bucket.length);
             return bucket.splice(randomIndex, 1)[0];
@@ -42,7 +37,7 @@ module.exports = {
 
         let ans = '';
         for (let i=0;i<number;i++) {
-            ans += res.data.data.children[getRandomFromBucket()].data.url + `\n`;
+            ans += posts[getRandomFromBucket()] + `\n`;
         }
 
         message.channel.send(ans);

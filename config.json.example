@@ -1,5 +1,10 @@
 {
 	"prefix": ".",
 	"token": "your-token-here",
-	"owner_id": "your-discord-id-here"
+	"owner_id": "your-discord-id-here",
+
+	"userAgent": "put your user-agent string here",
+  	"clientId": "put your client id here",
+  	"clientSecret": "put your client secret here",
+  	"refreshToken": "put your refresh token here"
 }

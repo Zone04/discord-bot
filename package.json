@@ -14,7 +14,8 @@
     "emoji-regex": "^10.1.0",
     "mariadb": "^2.5.5",
     "node-cron": "^3.0.0",
-    "sequelize": "^6.20.1"
+    "sequelize": "^6.20.1",
+    "snoowrap": "^1.23.0"
   },
   "devDependencies": {
     "sequelize-cli": "^6.3.0"
