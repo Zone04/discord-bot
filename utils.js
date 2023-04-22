@@ -65,7 +65,9 @@ module.exports = {
         if (!setting.logChan) return;
 
         let chan = client.channels.cache.get(setting.logChan);
-        chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
+        if (chan) {
+            chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
+        }
     },
 
     sendLogSpamMessage: async function (client, guildId, text) {
@@ -76,7 +78,9 @@ module.exports = {
         if (!setting.logChanSpam) return;
 
         let chan = client.channels.cache.get(setting.logChanSpam);
-        chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
+        if (chan) {
+            chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
+        }
     },
 
     getChan: async function (message, arg) {

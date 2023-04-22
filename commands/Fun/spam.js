@@ -1,4 +1,3 @@
-const utils = require('../../utils.js');
 const UserNotFoundError = require('../../errors/UserNotFoundError.js');
 const { Message } = require('discord.js');
 const TooManyUsersError = require('../../errors/TooManyUsersError.js');
@@ -88,6 +87,7 @@ let cron = [
 
 let execute = async (message, args) => {
 
+    const utils = message.client.utils;
     let start = 1;
     let setting = await getSetting(message.client, message.guild.id);
     let limit = setting?.spamLimit ?? LIMIT
