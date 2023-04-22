@@ -12,13 +12,40 @@ module.exports = {
             return message.reply({ content: 'Je suis un bot. Je ne répondrais pas ici !', allowedMentions: { repliedUser: false }})
         }
         // Ignore all channels that are not guild text or thread
-        if (!([ChannelType.GuildText, ChannelType.GuildPublicThread, ChannelType.GuildPrivateThread].includes(message.channel.type))) return;
+        if (!([ChannelType.GuildText, ChannelType.PublicThread, ChannelType.PrivateThread].includes(message.channel.type))) return;
         if (!message.content.startsWith(client.config.prefix)) return;
     
         const args = message.content.slice(client.config.prefix.length).replace(/ +$/,'').split(/ +/);
         const commandName = args.shift();
     
-        if (!client.commandsManager.commands.has(commandName)) return;
+        if (!client.commandsManager.commands.has(commandName)) {
+            // Command does not exist, checking customcommands
+            const cc = await client.db.CustomCommand.findOne(
+                {
+                    where: {
+                        guildId: message.guildId,
+                        name: commandName
+                    }
+                }
+            );
+            if (cc) {
+                return message.channel.send(cc.content);
+            }
+            if (message.channel.nsfw) {
+                const cc2 = await client.db.CustomCommand2.findOne(
+                    {
+                        where: {
+                            guildId: message.guildId,
+                            name: commandName
+                        }
+                    }
+                );
+                if (cc2) {
+                    return message.channel.send(cc2.content);
+                }
+            }
+            return;
+        };
     
         let command = client.commandsManager.commands.get(commandName);
     
