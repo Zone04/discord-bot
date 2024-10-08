@@ -103,17 +103,15 @@ class ReactionRole {
                     }
                     return Promise.all(
                         [
-                            (()=>{
+                            (async ()=>{
                                 if (member.roles.resolve(rrEmoji.roleId)) {
                                     this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] User ${member.user} removed role ${role}`);
-                                    return member.roles.remove(rrEmoji.roleId);
+                                    await member.roles.remove(rrEmoji.roleId);
                                 }
-                            })(),
-                            (()=>{
                                 if (permManageMessage) {
-                                    return reaction.message.reactions.resolve(rrEmoji.emoji)?.users.remove(user);
+                                    await reaction.message.reactions.resolve(rrEmoji.emoji)?.users.remove(user);
                                 }
-                            })(),
+                            })()
                         ]
                     );
                 }));
@@ -141,15 +139,23 @@ class ReactionRole {
             emoji = reaction.emoji.name;
         }
         if (reaction.message.id == this._message.messageId && this._reactions.has(emoji)) {
-            let role = await guild.roles.fetch(this._reactions.get(emoji).roleId);
-            if (role == null) {throw new RoleNotFoundError('Error fetching role', this._reactions.get(emoji).roleId)}
-            if (role.managed) {throw new UnassignableRoleError('Role managed by an external service', role)}
-            if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high', role)}
             let member = await reaction.message.guild.members.fetch(user.id);
-            if (member.roles.resolve(role.id)) {
-                this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] User ${member.user} removed role ${role}`);
-                await member.roles.remove(role.id);
-            }
+            await Promise.all(this._reactions.map(async rrEmoji => {
+                let role = await guild.roles.fetch(rrEmoji.roleId);
+                if (role == null) {throw new RoleNotFoundError('Error fetching role', rrEmoji.roleId)}
+                if (role.managed) {throw new UnassignableRoleError('Role managed by an external service', role)}
+                if (role.comparePositionTo(guild.members.me.roles.highest) >= 0) {throw new UnassignableRoleError('Role position too high', role)}
+                return Promise.all(
+                    [
+                        (async ()=>{
+                            if (member.roles.resolve(rrEmoji.roleId) && (await (await reaction.message.reactions.resolve(rrEmoji.emoji))?.users.fetch({'after':user.id, 'limit':1})).length > 0) {
+                                this._client.utils.sendLogMessage(this._client, guild.id, `[REACTION ROLE] User ${member.user} removed role ${role}`);
+                                return member.roles.remove(rrEmoji.roleId);
+                            }
+                        })()
+                    ]
+                );
+            }));
         }
     }
 
