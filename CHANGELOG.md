@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.3]
+
+### Fixed
+ - Missing error code verification in cronjob for `bl chan`
+
 ## [1.1.2]
 
 ### Fixed

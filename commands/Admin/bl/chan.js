@@ -56,7 +56,7 @@ module.exports = {
                 let c = 0;
                 for (entry of blacklist){
                     try { await client.guilds.fetch(entry.guildId) } catch (error) {
-                        if (error instanceof DiscordAPIError && error.code == 50001) { // Missing permission
+                        if (error instanceof DiscordAPIError && (error.code == 10004 || error.code == 50001)) { // Unknown Guild / Missing permission
                             entry.destroy();
                             c += 1;
                         } else {
