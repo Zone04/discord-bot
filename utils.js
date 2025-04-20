@@ -1,6 +1,7 @@
 const UserNotFoundError = require('./errors/UserNotFoundError.js');
 const TooManyUsersError = require('./errors/TooManyUsersError.js');
 const emojiregex = require('emoji-regex');
+const { PermissionsBitField } = require("discord.js");
 
 module.exports = {
     convertUser: async function (message, arg) {
@@ -79,6 +80,14 @@ module.exports = {
         chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
     },
 
+    getRole: async function (message, arg) {
+        if (arg.startsWith('<@&') && arg.endsWith('>')) {
+            arg = arg.slice(3, -1);
+        }
+        let role = await message.guild.roles.fetch(arg);
+        return role;
+    },
+
     getChan: async function (message, arg) {
         if (arg.startsWith('<#') && arg.endsWith('>')) {
             arg = arg.slice(2, -1);
@@ -143,7 +152,7 @@ module.exports = {
         let blacklistUser = await message.client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
 
         // Guild owner and admins not affected by blacklist
-        if (message.author.id !== message.guild.ownerId || message.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+        if (message.author.id !== message.guild.ownerId && !message.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
             // Check blacklistChan
             let name = command.parent ?? command.name;
             if (blacklistGuild.some(entry => entry.command == 'all commands' || entry.command == name)){
