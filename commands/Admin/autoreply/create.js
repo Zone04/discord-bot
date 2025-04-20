@@ -2,7 +2,7 @@ const { PermissionsBitField } = require("discord.js");
 
 let settings = {
     name: 'create',
-    description: 'Créer un nouvel autoping',
+    description: 'Créer un nouvel autoreply',
     usage: [
         {
             name: 'RoleMention|RoleID',
@@ -32,8 +32,8 @@ module.exports = {
         let role = await message.client.utils.getRole(message, args[0]);
         let toSend = args.slice(1).join(' ');
         
-        await message.client.db.AutoPing.create({role: role.id, message:toSend});
+        await message.client.db.AutoReply.create({role: role.id, message:toSend});
 
-        message.reply("AutoPing créé !");
+        message.reply("AutoReply créé !");
     }
 };

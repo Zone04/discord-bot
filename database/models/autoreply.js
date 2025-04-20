@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class AutoPing extends Model {
+  class AutoReply extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  AutoPing.init({
+  AutoReply.init({
     role: DataTypes.STRING,
     message: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'AutoPing',
+    modelName: 'AutoReply',
   });
-  return AutoPing;
+  return AutoReply;
 };

@@ -1,3 +1,5 @@
+const { PermissionsBitField } = require("discord.js");
+
 let settings = {
     name: 'settings',
     description: 'Voir/Modifier un paramètre spécifique au serveur',

@@ -1,3 +1,4 @@
+const { PermissionsBitField } = require("discord.js");
 const { Op } = require("sequelize");
 
 let settings = {

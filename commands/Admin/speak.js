@@ -1,3 +1,5 @@
+const { PermissionsBitField } = require("discord.js");
+
 let settings = {
     name: 'speak',
     description: 'Fait parler le bot dans un chan spécifique.',
