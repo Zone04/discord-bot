@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.4.2]
+
+### Fixed
+ - AutoReply Description
+
+### Added
+ - AutoReply List
 
 ## [1.1.4.1]
 

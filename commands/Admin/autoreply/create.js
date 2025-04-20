@@ -5,12 +5,12 @@ let settings = {
     description: 'Créer un nouvel autoreply',
     usage: [
         {
-            name: 'RoleMention|RoleID',
-            description: 'Rôle pour lequel les mentions seront étendues'
+            name: 'trigger',
+            description: 'Mot auquel le bot répondra'
         },
         {
             name: 'Message',
-            description: 'Message à envoyer lors de la mention du rôle'
+            description: 'Message à envoyer lors de la détection du mot trigger'
         },
     ],
 }
