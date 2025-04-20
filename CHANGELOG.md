@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.1.4.1]
+
+### Fixed
+ - Missing import
+ - Update function
+
+### Changed
+ - Refactored AutoPing into AutoReply
+
 ## [1.1.4]
 
 ### Added
@@ -224,6 +233,7 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
+[1.1.4.1]: https://github.com/Zone04/discord-bot/compare/v1.1.4...v1.1.4.1
 [1.1.4]: https://github.com/Zone04/discord-bot/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/Zone04/discord-bot/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/Zone04/discord-bot/compare/v1.1.1...v1.1.2
