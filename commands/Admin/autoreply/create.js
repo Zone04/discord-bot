@@ -20,19 +20,15 @@ module.exports = {
     description: settings.description,
     usage: settings.usage,
     check_args: async (message, args) => {
-        if (args.length < 2) return false;
-        let role = await message.client.utils.getRole(message, args[0]);
-        if (!role) return false;
-        return true;
+        return args.length >= 2;
     },
     permitted: (client, message) => {
-        return message.member.permissions.has(PermissionsBitField.Flags.ManageRoles);
+        return message.guild.ownerId == message.author.id || message.member.permissions.has(PermissionsBitField.Flags.Administrator);
     },
     execute: async (message, args) => {
-        let role = await message.client.utils.getRole(message, args[0]);
         let toSend = args.slice(1).join(' ');
         
-        await message.client.db.AutoReply.create({role: role.id, message:toSend});
+        await message.client.db.AutoReply.create({role: args[0], guild: message.guild.id, message:toSend});
 
         message.reply("AutoReply créé !");
     }

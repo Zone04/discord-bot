@@ -80,14 +80,6 @@ module.exports = {
         chan.send({"content":text,"allowedMentions": { "users" : []}}).catch(console.error);
     },
 
-    getRole: async function (message, arg) {
-        if (arg.startsWith('<@&') && arg.endsWith('>')) {
-            arg = arg.slice(3, -1);
-        }
-        let role = await message.guild.roles.fetch(arg);
-        return role;
-    },
-
     getChan: async function (message, arg) {
         if (arg.startsWith('<#') && arg.endsWith('>')) {
             arg = arg.slice(2, -1);

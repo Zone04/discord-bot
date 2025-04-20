@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   AutoReply.init({
     role: DataTypes.STRING,
+    guild: DataTypes.STRING,
     message: DataTypes.STRING
   }, {
     sequelize,
