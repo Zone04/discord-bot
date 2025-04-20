@@ -17,7 +17,7 @@ module.exports = {
     description: settings.description,
     usage: settings.usage,
     permitted: (client, message) => {
-        return message.guild.ownerId == message.author.id;
+        return message.guild.ownerId == message.author.id || message.member.permissions.has(PermissionsBitField.Flags.Administrator);
     },
     check_args: (message, args) => {
         args = [...args]; // copy array

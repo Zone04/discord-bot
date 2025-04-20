@@ -98,7 +98,7 @@ module.exports = {
 
     },
     permitted: (client, message) => {
-        return message.guild.ownerId == message.author.id;
+        return message.guild.ownerId == message.author.id || message.member.permissions.has(PermissionsBitField.Flags.Administrator);
     },
     execute: async (message, args) => {
         // Check the action

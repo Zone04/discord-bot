@@ -142,8 +142,8 @@ module.exports = {
         let blacklistChan = await message.client.db.BlacklistChan.findAll({where: {chan: message.channel.id}});
         let blacklistUser = await message.client.db.BlacklistUser.findAll({where: {guild_id: message.guild.id}});
 
-        // Guild owner not affected by blacklist
-        if (message.author.id !== message.guild.ownerId) {
+        // Guild owner and admins not affected by blacklist
+        if (message.author.id !== message.guild.ownerId || message.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
             // Check blacklistChan
             let name = command.parent ?? command.name;
             if (blacklistGuild.some(entry => entry.command == 'all commands' || entry.command == name)){
