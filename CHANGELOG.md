@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.4.3]
+
+### Fixed
+ - Column type for auto replies -> longer messages
+
 ## [1.1.4.2]
 
 ### Fixed
@@ -240,6 +245,8 @@ All notable changes to this project will be documented in this file.
 - userinfo command
 
 
+[1.1.4.3]: https://github.com/Zone04/discord-bot/compare/v1.1.4.2...v1.1.4.3
+[1.1.4.2]: https://github.com/Zone04/discord-bot/compare/v1.1.4.1...v1.1.4.2
 [1.1.4.1]: https://github.com/Zone04/discord-bot/compare/v1.1.4...v1.1.4.1
 [1.1.4]: https://github.com/Zone04/discord-bot/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/Zone04/discord-bot/compare/v1.1.2...v1.1.3
